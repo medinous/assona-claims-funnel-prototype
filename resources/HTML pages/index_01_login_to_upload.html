@@ -1,0 +1,2403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Assona — MVP Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════════════ */
+/* Reset browser-native :invalid field styling */
+input:invalid, select:invalid, textarea:invalid { box-shadow: none; }
+
+:root {
+  /* Primary Teal */
+  --p50:#F0F9FA; --p100:#D9F1F4; --p200:#B3E3E9; --p300:#80CFD9;
+  --p400:#4DB5C4; --p500:#2896AA; --p600:#144F56; --p700:#0F3A3F;
+
+  /* Accent Lime */
+  --a200:#F1F9B8; --a300:#EAF68F; --a400:#E4EC84; --a500:#D8E554;
+  --a700:#A0AE1F;
+
+  /* Neutral Green-Gray */
+  --n0:#FFFFFF; --n50:#FAFBFA; --n100:#F4F6F4; --n200:#E8EBE8;
+  --n300:#D4D9D4; --n400:#B8BFB8; --n500:#9BA29B; --n600:#7A827A;
+  --n700:#5C635C; --n800:#3F443F; --n900:#282B28; --n1000:#0D0F0D;
+
+  /* Error Coral */
+  --e50:#FEF5F3; --e100:#FEEAE5; --e300:#FCB5A0; --e600:#E64E2E; --e700:#C73715;
+
+  /* Success */
+  --s500:#22C55E; --s600:#16A34A; --s700:#15803D;
+
+  /* Pastel Petrol */
+  --petrol100:#EDF5F5; --petrol200:#DBEAEA;
+
+  /* Pastel Yellow */
+  --pastelY200:#eaeed9;
+
+  /* Typography */
+  --ff-heading: 'Inter', sans-serif; /* fallback for Uni Neue */
+  --ff-body: 'Inter', sans-serif;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.07);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 20px rgba(0,0,0,0.10), 0 3px 6px rgba(0,0,0,0.05);
+  --shadow-overlay: 0 20px 40px rgba(0,0,0,0.15);
+
+  /* Radii */
+  --r-xs: 4px; --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-xl: 20px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESET + BASE
+═══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #fafbf7; font-family: var(--ff-body); }
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN SYSTEM
+═══════════════════════════════════════════════════════ */
+.screen {
+  position: fixed; inset: 8px;
+  display: flex; align-items: stretch; justify-content: stretch;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.16,1,0.3,1), transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  transform: translateX(24px);
+}
+.screen.active {
+  opacity: 1; pointer-events: all; transform: translateX(0);
+}
+.screen.exit {
+  opacity: 0; transform: translateX(-24px);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 1 — LOG IN
+═══════════════════════════════════════════════════════ */
+#s-login { align-items: stretch; }
+
+.login-shell {
+  width: 100%; height: 100%;
+  background: var(--n0);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  display: flex; gap: 24px; padding: 24px;
+  overflow: hidden;
+}
+
+/* Left */
+.login-left {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; position: relative;
+}
+.login-logo {
+  position: absolute; top: 0; left: 0;
+  display: flex; align-items: center; gap: 8px;
+}
+.login-logo-word { font-weight: 700; font-size: 15px; letter-spacing: -0.3px; color: var(--n1000); }
+.login-logo-sep { width: 1px; height: 22px; background: var(--n300); }
+.login-logo-sub { font-size: 10px; color: var(--n600); line-height: 1.3; }
+
+.login-form-wrap { width: 360px; display: flex; flex-direction: column; gap: 64px; position: relative; }
+.login-grad {
+  position: absolute; width: 355px; height: 241px; left: 5px; top: 95px;
+  opacity: 0.35; pointer-events: none; z-index: 0;
+}
+.login-grad::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(125.5deg, rgba(228,236,132,.6) 18.7%, rgba(90,237,185,.6) 68.7%);
+  filter: blur(50px);
+}
+.login-heading { display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 1; }
+.login-title { font-weight: 800; font-size: 32px; line-height: 40px; letter-spacing: -0.19px; color: var(--n1000); }
+.login-sub { font-size: 16px; font-weight: 400; color: var(--n700); line-height: 20px; }
+.login-card {
+  background: var(--n0); border-radius: var(--r-lg);
+  padding: 24px; box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; gap: 24px; position: relative; z-index: 1;
+}
+.field-group { display: flex; flex-direction: column; gap: 6px; }
+.field-label { font-size: 14px; font-weight: 500; color: var(--n1000); line-height: 20px; }
+.field-wrap { position: relative; }
+.field-input {
+  width: 100%; height: 36px;
+  background: #fafbf7; border: 1px solid transparent;
+  border-radius: var(--r-sm); padding: 8px 40px 8px 12px;
+  font-family: var(--ff-body); font-size: 14px; color: var(--n900);
+  outline: none; transition: border-color .15s, background .15s, box-shadow .15s;
+}
+.field-input::placeholder { color: var(--n600); }
+
+.field-input.err { border-color: var(--e600); background: var(--e100); }
+.field-input.err::placeholder { color: var(--e300); }
+.eye-btn {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; color: var(--n500);
+  display: flex; align-items: center; padding: 2px;
+}
+.eye-btn:hover { color: var(--n700); }
+.err-msg {
+  background: var(--e100); border: 1px solid var(--e300); border-radius: var(--r-sm);
+  padding: 10px 12px; font-size: 13px; color: var(--e700); line-height: 1.4;
+  display: none;
+}
+.err-msg.vis { display: block; }
+.login-actions { display: flex; flex-direction: column; gap: 16px; align-items: center; }
+.btn-primary {
+  width: 100%; height: 36px; border-radius: var(--r-sm);
+  border: none; border-bottom: 2px solid rgba(5,8,16,.20);
+  background: var(--a300); font-family: var(--ff-body); font-size: 14px;
+  font-weight: 500; color: var(--n500);
+  cursor: default; transition: all .2s; letter-spacing: -0.04em;
+  pointer-events: none;
+}
+.btn-primary.on { color: var(--n900); cursor: pointer; pointer-events: all; }
+.btn-primary.on:hover { background: var(--a500); transform: translateY(-1px); }
+.btn-primary.on:active { transform: none; box-shadow: none; }
+.forgot-row { display: flex; gap: 4px; align-items: center; justify-content: center; }
+.forgot-text { font-size: 14px; color: var(--n700); }
+.forgot-link { font-size: 14px; font-weight: 500; color: var(--n1000); cursor: pointer; text-decoration: none; }
+.forgot-link:hover { text-decoration: underline; }
+
+/* Right hero */
+.login-right {
+  flex: 1; border-radius: var(--r-lg); overflow: hidden;
+  box-shadow: var(--shadow-sm); position: relative;
+}
+.login-hero-grad {
+  position: absolute; inset: 0;
+  background: linear-gradient(145deg, #D9F1F4 0%, #F0F9FA 30%, #C3DDDD 60%, #EDF5F5 100%);
+}
+.login-hero-bikes {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: .08;
+}
+.login-hero-bikes svg { width: 280px; height: 280px; }
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 2 — WELCOME
+═══════════════════════════════════════════════════════ */
+#s-welcome { align-items: stretch; }
+.welcome-shell {
+  width: 540px; display: flex; flex-direction: column; gap: 0; align-items: center;
+  position: relative;
+}
+.welcome-logo {
+  position: absolute; top: -40px; left: 0;
+  display: flex; align-items: center; gap: 8px;
+}
+.welcome-form-area { width: 360px; display: flex; flex-direction: column; gap: 64px; position: relative; }
+.welcome-grad {
+  position: absolute; width: 355px; height: 220px; left: 5px; top: 98px;
+  opacity: 0.35; pointer-events: none;
+}
+.welcome-grad::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(125.5deg, rgba(228,236,132,.6) 18.7%, rgba(90,237,185,.6) 68.7%);
+  filter: blur(50px);
+}
+.welcome-heading { position: relative; z-index: 1; }
+.welcome-title { font-weight: 800; font-size: 32px; line-height: 40px; letter-spacing: -0.19px; color: var(--n1000); }
+.welcome-card {
+  background: var(--n0); border-radius: var(--r-lg); padding: 24px;
+  box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 24px;
+  position: relative; z-index: 1;
+}
+.welcome-signed { font-size: 16px; color: var(--n1000); line-height: 24px; }
+.welcome-signed a { text-decoration: underline; color: inherit; }
+.welcome-ctas { display: flex; flex-direction: column; gap: 12px; }
+.btn-cta-primary {
+  width: 100%; height: 36px; border-radius: var(--r-sm);
+  border: none; border-bottom: 2px solid rgba(0,0,0,.20);
+  background: var(--a300); font-family: var(--ff-body); font-size: 14px;
+  font-weight: 500; color: var(--n1000); cursor: pointer; transition: all .2s;
+}
+.btn-cta-primary:hover { background: var(--a500); transform: translateY(-1px); }
+.btn-cta-secondary {
+  width: 100%; height: 36px; border-radius: var(--r-sm);
+  border: none; border-bottom: 2px solid rgba(0,0,0,.20);
+  background: var(--pastelY200); font-family: var(--ff-body); font-size: 14px;
+  font-weight: 500; color: var(--n1000); cursor: pointer; transition: all .2s;
+}
+.btn-cta-secondary:hover { background: #d6d9c0; transform: translateY(-1px); }
+.btn-logout {
+  width: 100%; height: 36px; border-radius: var(--r-sm);
+  border: none; background: none; font-family: var(--ff-body); font-size: 14px;
+  font-weight: 500; color: var(--n1000); cursor: pointer; display: flex;
+  align-items: center; justify-content: center; gap: 8px;
+  transition: background .15s;
+}
+.btn-logout:hover { background: var(--n100); }
+
+/* ═══════════════════════════════════════════════════════
+   MODAL SHELL — shared by Upload/Damage/Validate/Review
+═══════════════════════════════════════════════════════ */
+#s-upload, #s-validate, #s-damage, #s-review { align-items: stretch; }
+
+.modal-shell {
+  width: 100%; height: 100%;
+  background: var(--n0);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Nav Header ── */
+.nav-header {
+  background: var(--n0); height: 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  border-bottom: 1px solid #f0f0f3;
+  flex-shrink: 0;
+}
+.nav-breadcrumb { display: flex; align-items: center; gap: 6px; }
+.nav-logo-dot {
+  width: 20px; height: 20px; border-radius: 4px;
+  background: var(--n1000); display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: white; letter-spacing: -0.5px;
+}
+.nav-crumb-sep { color: var(--n400); font-size: 13px; }
+.nav-crumb { font-size: 14px; color: var(--n600); }
+.nav-crumb.active { color: var(--n1000); }
+.nav-close {
+  width: 20px; height: 20px; cursor: pointer; color: var(--n500);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; transition: background .15s, color .15s;
+}
+.nav-close:hover { background: var(--n100); color: var(--n900); }
+
+/* ── Stepper ── */
+.stepper-wrap {
+  height: 80px; display: flex; align-items: center; justify-content: center;
+  padding: 16px; flex-shrink: 0;
+  border-bottom: 1px solid var(--n100);
+}
+.stepper {
+  display: flex; align-items: flex-start;
+  width: 640px;
+}
+.step-item {
+  flex: 1; display: flex; flex-direction: column; gap: 4px; align-items: center;
+}
+.step-inline {
+  display: flex; align-items: center; width: 100%; gap: 8px;
+}
+.step-line {
+  flex: 1; height: 1px; background: var(--n200); min-width: 0;
+}
+.step-line.done { background: var(--a400); }
+.step-line.hidden { background: transparent; }
+.step-dot {
+  width: 28px; height: 28px; border-radius: 999px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600;
+  background: var(--n100); color: var(--n500);
+  box-shadow: none;
+}
+.step-dot.active {
+  width: 28px; height: 28px;
+  background: var(--a400); color: var(--n1000);
+  box-shadow: var(--shadow-xs);
+}
+.step-dot.done {
+  background: var(--a400); color: var(--n1000);
+}
+.step-dot.done::after { content: none; }
+.step-label {
+  font-size: 14px; color: var(--n500); text-align: center;
+  white-space: nowrap;
+}
+.step-label.active { color: var(--n1000); font-weight: 500; }
+.step-label.done { color: var(--n700); }
+
+/* ── Modal Content ── */
+.modal-content {
+  flex: 1; display: flex; align-items: stretch;
+  overflow: visible; position: relative;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 3 — UPLOAD
+═══════════════════════════════════════════════════════ */
+.upload-content {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  background: var(--n0); padding: 24px;
+}
+.upload-card {
+  width: 448px; background: var(--n0); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm); padding: 40px 32px 32px;
+  display: flex; flex-direction: column; gap: 24px; align-items: center;
+  position: relative; z-index: 1;
+}
+.upload-grad {
+  position: absolute; width: 560px; height: 320px;
+  left: 50%; top: 50%; transform: translate(-50%,-50%);
+  opacity: 0.35; pointer-events: none; z-index: 0;
+}
+.upload-grad::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(125.5deg, rgba(228,236,132,.6) 18.7%, rgba(90,237,185,.6) 68.7%);
+  filter: blur(50px); border-radius: 50%;
+}
+.upload-header { text-align: center; display: flex; flex-direction: column; gap: 8px; }
+.upload-title { font-weight: 800; font-size: 24px; line-height: 28px; letter-spacing: -0.14px; color: var(--n1000); }
+.upload-sub { font-size: 16px; color: var(--n700); }
+.upload-zone { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.btn-upload {
+  height: 44px; padding: 0 20px; border-radius: var(--r-sm);
+  border: none; border-bottom: 2px solid rgba(5,8,16,.20);
+  background: var(--a300); font-family: var(--ff-body); font-size: 16px;
+  font-weight: 500; color: var(--n1000); cursor: pointer;
+  display: flex; align-items: center; gap: 8px; transition: all .2s;
+}
+.btn-upload:hover { background: var(--a500); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+.upload-or { font-size: 12px; color: var(--n700); }
+.upload-drag { font-size: 14px; color: var(--n1000); }
+
+/* Drop zone highlight */
+.upload-drop-area {
+  position: absolute; inset: 0; border: 2px dashed var(--n300);
+  border-radius: var(--r-lg); opacity: 0; transition: opacity .2s;
+  pointer-events: none;
+}
+.upload-drop-area.drag { opacity: 1; background: rgba(77,181,196,.04); }
+
+/* ═══════════════════════════════════════════════════════
+   UPLOAD — ALL STATES (idle → loading-preview → agent)
+═══════════════════════════════════════════════════════ */
+
+/* Hidden file input */
+#pdf-file-input { display: none; }
+
+/* ─── State A: Idle upload card ─── */
+/* (uses existing .upload-content, .upload-card, .upload-grad rules) */
+
+/* ─── State B: Loading preview ─── */
+.upload-preview-loading {
+  display: none; flex: 1; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.upload-preview-loading.active { display: flex; }
+
+/* reuse .upload-grad for blob behind card */
+.upload-preview-loading .upload-grad {
+  position: absolute; width: 640px; height: 380px;
+  left: 50%; top: 50%; transform: translate(-50%, -52%);
+  pointer-events: none; z-index: 0;
+}
+.upload-preview-loading .upload-grad::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 40%, rgba(228,236,132,.55) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 65%, rgba(90,237,185,.45) 0%, transparent 55%),
+              radial-gradient(ellipse at 55% 20%, rgba(180,240,220,.35) 0%, transparent 50%);
+  filter: blur(48px); border-radius: 50%;
+}
+
+.loading-preview-card {
+  position: relative; z-index: 1;
+  width: 340px; background: #ffffff; border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.06);
+  padding: 36px 32px 32px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.loading-preview-text {
+  font-size: 14px; font-weight: 400; color: #5c635c; line-height: 20px;
+}
+.loading-spinner {
+  width: 22px; height: 22px;
+  border: 2px solid #e8ebe8;
+  border-top-color: #5c635c;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+/* ─── State C: Agent split (PDF left, steps right) ─── */
+.upload-agent {
+  display: none; flex: 1;
+  padding: 24px 16px;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: visible;
+}
+.upload-agent.active { display: flex; }
+
+/* Left: fixed 416px = PDF card width, shadow can overflow */
+.upload-agent-left {
+  width: 416px; flex-shrink: 0;
+  display: flex; align-items: flex-start; justify-content: flex-end;
+  overflow: visible;
+}
+
+/* Right: 208px fixed width, steps start from top, left-aligned */
+.upload-agent-right {
+  width: 208px; flex-shrink: 0;
+  display: flex; flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0;
+  gap: 4px;
+}
+
+
+
+/* ─────────────────────────────────────────────────────────
+   PDF CARD — shared across Upload agent, Damage, Validate,
+   Review. Fixed 416 × 474 px, elevated shadow, warm body.
+───────────────────────────────────────────────────────── */
+.pdf-card {
+  width: 416px; height: 474px; flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.08), 0 4px 6px rgba(0,0,0,.05);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+
+/* Toolbar: nav left, zoom right */
+.pdf-toolbar {
+  height: 40px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 14px;
+  border-bottom: 0.833px solid #e8ebe8;
+  background: #ffffff;
+}
+.pdf-nav { display: flex; align-items: center; gap: 7px; }
+.pdf-nav-btn {
+  width: 24px; height: 24px;
+  border-radius: 6.75px; border: 0.833px solid rgba(0,0,0,.10);
+  background: #ffffff; opacity: .5;
+  font-size: 15px; line-height: 1; color: #282b28;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: opacity .15s;
+}
+.pdf-nav-btn:hover { opacity: .8; }
+.pdf-page-info {
+  font-size: 12.25px; color: #5c635c; margin: 0 4px; white-space: nowrap;
+}
+.pdf-zoom { display: flex; align-items: center; gap: 7px; }
+.pdf-zoom-btn {
+  width: 24px; height: 24px;
+  border-radius: 6.75px; border: 0.833px solid rgba(0,0,0,.10);
+  background: #ffffff;
+  font-size: 15px; line-height: 1; color: #282b28;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.pdf-zoom-btn:hover { background: #f4f6f4; }
+.pdf-zoom span { font-size: 12.25px; color: #5c635c; min-width: 32px; text-align: center; }
+
+/* Body: warm pastel-yellow bg; fills remaining height */
+.pdf-body {
+  flex: 1; min-height: 0; overflow: hidden;
+  display: flex; flex-direction: column;
+  background: #f5f7ed;
+}
+.pdf-real-iframe {
+  width: 100%; flex: 1; border: none; display: block;
+}
+.pdf-fallback {
+  display: block; flex: 1; overflow: auto;
+  padding: 12px; font-size: 8px; color: #5c635c; line-height: 1.5;
+  background: #ffffff;
+}
+
+/* Filename bar: centered, 32 px tall */
+.pdf-filename {
+  height: 32px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 0 12px;
+  border-top: 0.833px solid #e8ebe8;
+  background: #ffffff;
+  font-size: 12px; color: #5c635c;
+}
+.pdf-filename-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pdf-filename-refresh { cursor: pointer; color: #9ba29b; flex-shrink: 0; }
+.pdf-filename-refresh:hover { color: #282b28; }
+
+/* ─── Agent step items ─── */
+/* Base: no explicit height — content + padding determines 52 px */
+.agent-step {
+  width: 100%;
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 20px;
+  border-radius: 6px;
+  font-size: 14px; line-height: 20px;
+  color: #0d0f0d;
+  transition: background .3s ease;
+}
+
+/* Pending: no background, disabled text, circle-dashed icon */
+.agent-step.pending {
+  background: transparent;
+  color: #9ba29b;
+}
+
+/* Checking: light n50 fill, primary text, animated spinner */
+.agent-step.checking {
+  background: #fafbfa;
+  color: #0d0f0d;
+}
+
+/* Done: transparent bg, primary text, green check icon */
+.agent-step.done {
+  background: transparent;
+  color: #0d0f0d;
+}
+
+.agent-step-icon {
+  width: 20px; height: 20px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Rotating › chevron for checking state */
+.agent-chevron {
+  display: flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px;
+  font-size: 18px; font-style: normal; line-height: 1;
+  color: #0d0f0d;
+  animation: spin 1s linear infinite;
+}
+
+/* ─── Left panels for subsequent screens: white, no divider ─── */
+.damage-left,
+.validate-left,
+.review-left {
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  /* No background override — inherits white from modal */
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 4 — VALIDATE (Form)
+═══════════════════════════════════════════════════════ */
+.validate-content {
+  flex: 1; display: flex; gap: 0; overflow: hidden;
+}
+.validate-left { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; padding: 24px; overflow: hidden; }
+.validate-right {
+  width: 440px; flex-shrink: 0; display: flex; flex-direction: column; overflow: hidden;
+}
+.validate-right-scroll {
+  flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 20px;
+}
+/* Warning alert */
+.val-alert {
+  background: #FFFBEB; border: 1px solid #FCD34D; border-radius: var(--r-sm);
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;
+}
+.val-alert-top { display: flex; align-items: flex-start; gap: 8px; }
+.val-alert-icon { color: #D97706; flex-shrink: 0; margin-top: 1px; }
+.val-alert-text { flex: 1; font-size: 13px; font-weight: 600; color: #92400E; line-height: 20px; }
+.val-alert-sub { font-size: 12px; color: #B45309; padding-left: 24px; }
+.val-alert-actions { display: flex; gap: 8px; padding-left: 24px; }
+.btn-check-fields {
+  height: 28px; padding: 0 12px; border-radius: var(--r-sm);
+  border: 1px solid #D97706; background: #FFFBEB;
+  font-family: var(--ff-body); font-size: 12px; font-weight: 500; color: #92400E;
+  cursor: pointer; transition: background .15s;
+}
+.btn-check-fields:hover { background: #FEF3C7; }
+.btn-expand-all {
+  height: 28px; padding: 0 12px; border-radius: var(--r-sm);
+  border: 1px solid var(--n300); background: var(--n0);
+  font-family: var(--ff-body); font-size: 12px; font-weight: 500; color: var(--n700);
+  cursor: pointer; transition: background .15s;
+}
+.btn-expand-all:hover { background: var(--n50); }
+/* Sections */
+.val-section { display: flex; flex-direction: column; gap: 0; }
+.val-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0 8px; border-bottom: 1px solid var(--n200); margin-bottom: 4px;
+}
+.val-section-title { font-size: 14px; font-weight: 600; color: var(--n1000); }
+.val-section-action {
+  width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--n200);
+  background: var(--n0); cursor: pointer; color: var(--n600);
+  display: flex; align-items: center; justify-content: center; transition: background .15s;
+}
+.val-section-action:hover { background: var(--n50); }
+/* Form fields */
+.val-field {
+  display: flex; align-items: center; gap: 10px;
+  padding: 5px 0; border-bottom: 1px solid var(--n100);
+}
+.val-field:last-child { border-bottom: none; }
+.val-field-label { font-size: 12px; color: var(--n600); width: 112px; flex-shrink: 0; }
+.val-field-input {
+  flex: 1; height: 28px; border: 1px solid transparent; border-radius: var(--r-xs);
+  padding: 0 8px; font-family: var(--ff-body); font-size: 12px; color: var(--n900);
+  background: var(--n0); outline: none; transition: border-color .15s, box-shadow .15s;
+}
+.val-field-/* input states — see global rules below */
+.val-field-textarea {
+  flex: 1; min-height: 52px; border: 1px solid transparent; border-radius: var(--r-xs);
+  padding: 6px 8px; font-family: var(--ff-body); font-size: 12px; color: var(--n900);
+  background: var(--n0); outline: none; resize: none; transition: border-color .15s, box-shadow .15s; line-height: 1.5;
+}
+
+/* Items controller */
+.val-controller {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 0 8px; border-bottom: 1px solid var(--n100);
+}
+.val-switcher { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--n700); }
+.switcher-group { display: flex; border: 1px solid var(--n200); border-radius: var(--r-xs); overflow: hidden; }
+.switcher-btn {
+  height: 24px; padding: 0 10px; border: none; background: var(--n0);
+  font-family: var(--ff-body); font-size: 12px; color: var(--n600); cursor: pointer; transition: all .15s;
+}
+
+/* ─── Select / Dropdown ─── */
+select, .field-select {
+  width: 100%; height: 36px;
+  background: #fafbf7; border: 1px solid transparent;
+  border-radius: var(--r-sm); padding: 0 32px 0 12px;
+  font-family: var(--ff-body); font-size: 14px; color: var(--n900);
+  appearance: none; outline: none;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+  cursor: pointer;
+}
+
+.switcher-btn.active { background: var(--a300); color: var(--n900); font-weight: 500; }
+.val-tax { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--n700); }
+.val-tax-input {
+  width: 48px; height: 24px; border: 1px solid transparent; border-radius: var(--r-xs);
+  padding: 0 6px; font-family: var(--ff-body); font-size: 12px; text-align: right; outline: none;
+  background: #fafbf7; transition: border-color .15s, box-shadow .15s, background .15s;
+}
+
+/* Item rows */
+.val-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 0; border-bottom: 1px solid var(--n100); cursor: pointer; transition: background .1s;
+}
+.val-item:last-child { border-bottom: none; }
+.val-item:hover { background: var(--n50); margin: 0 -4px; padding: 7px 4px; border-radius: 4px; }
+.val-item-status { flex-shrink: 0; width: 16px; display: flex; align-items: center; }
+.val-item-name { flex: 1; font-size: 12px; color: var(--n900); line-height: 1.3; }
+.val-item-price { font-size: 12px; font-weight: 500; color: var(--n900); white-space: nowrap; margin-right: 4px; }
+.val-item-chevron { color: var(--n400); font-size: 11px; flex-shrink: 0; }
+/* Total */
+.val-total-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+.val-total-label { color: var(--n700); }
+.val-total-value { color: var(--n900); font-weight: 500; }
+.val-grand { font-weight: 700; color: var(--n1000); padding-top: 8px; border-top: 1px solid var(--n200); margin-top: 4px; }
+/* Footer */
+.validate-footer {
+  border-top: 1px solid var(--n100); padding: 12px 24px;
+  display: flex; align-items: center; gap: 10px; background: var(--n0); flex-shrink: 0;
+}
+.btn-back {
+  height: 36px; padding: 0 16px; border-radius: var(--r-sm);
+  border: 1px solid var(--n200); background: var(--n0);
+  font-family: var(--ff-body); font-size: 14px; font-weight: 500; color: var(--n700);
+  cursor: pointer; transition: background .15s;
+}
+.btn-back:hover { background: var(--n50); }
+/* Reused check animation items (now in upload loading panel) */
+.validate-check-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: var(--r-sm);
+  border: 1px solid var(--n200); background: var(--n0);
+  font-size: 14px; color: var(--n900); font-weight: 500; transition: all .4s;
+}
+.validate-check-item.checking { color: var(--n700); }
+.validate-check-item.done { color: var(--n900); }
+.validate-check-item.pending { color: var(--n400); background: var(--n50); }
+.check-icon { width: 20px; height: 20px; flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 5 — CONFIRM DAMAGE
+═══════════════════════════════════════════════════════ */
+.damage-content {
+  flex: 1; display: flex; gap: 0; overflow: hidden;
+}
+.damage-left { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; padding: 24px; overflow: hidden; }
+.damage-right {
+  width: 480px; flex-shrink: 0; padding: 24px;
+  display: flex; flex-direction: column; gap: 24px; overflow-y: auto;
+}
+
+/* Alert banner */
+.alert-banner {
+  background: #f5f7ed;
+  border: none; border-bottom: 2px solid rgba(5,8,16,0.10);
+  border-radius: var(--r-sm); padding: 16px 20px;
+  display: flex; flex-direction: column; gap: 4px; flex-shrink: 0;
+  max-width: 416px; width: 100%;
+}
+.alert-top { display: flex; align-items: center; justify-content: space-between; }
+.alert-title-row { display: flex; align-items: center; gap: 12px; }
+.alert-icon { color: var(--n1000); flex-shrink: 0; }
+.alert-body { flex: 1; }
+.alert-title { font-size: 14px; font-weight: 500; color: var(--n1000); }
+.alert-title .alert-filename { font-weight: 500; }
+.alert-sub { font-size: 14px; color: var(--n700); padding-left: 28px; line-height: 20px; }
+.alert-action { padding-left: 28px; padding-top: 8px; }
+.alert-close { cursor: pointer; color: var(--n500); flex-shrink: 0; }
+.btn-reupload {
+  height: 36px; padding: 0 16px; border-radius: var(--r-sm);
+  border: 1px solid var(--n100); background: var(--n0);
+  font-family: var(--ff-body); font-size: 14px; font-weight: 500;
+  color: var(--n1000); cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+  transition: background .15s;
+}
+.btn-reupload:hover { background: var(--n50); }
+.btn-reupload:hover { background: var(--n50); }
+
+/* Damage section */
+.damage-section { display: flex; flex-direction: column; gap: 12px; }
+.damage-section-title { font-size: 16px; font-weight: 700; color: var(--n1000); letter-spacing: -0.1px; }
+.tags-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag {
+  height: 28px; padding: 0 10px; border-radius: 999px;
+  border: 1px solid var(--n300); background: var(--n0);
+  font-size: 13px; font-weight: 500; color: var(--n700);
+  cursor: pointer; display: flex; align-items: center; gap: 6px;
+  transition: all .15s;
+}
+.tag:hover { border-color: var(--n400); color: var(--n900); background: var(--n50); }
+.tag.selected {
+  background: var(--a300); border-color: transparent;
+  color: var(--n900);
+}
+.tag.selected .tag-x { display: flex; }
+.tag-x { display: none; align-items: center; cursor: pointer; color: var(--n700); }
+
+/* Continue bar */
+.damage-footer {
+  border-top: 1px solid var(--n100); padding: 16px 24px;
+  display: flex; align-items: center; gap: 16px; background: var(--n0);
+  flex-shrink: 0;
+}
+.btn-continue {
+  height: 36px; padding: 0 20px; border-radius: var(--r-sm);
+  border: none; border-bottom: 2px solid rgba(5,8,16,.20);
+  background: var(--a300); font-family: var(--ff-body); font-size: 14px;
+  font-weight: 500; color: var(--n500); cursor: default;
+  display: flex; align-items: center; gap: 6px;
+  transition: all .2s; pointer-events: none;
+}
+.btn-continue.on { color: var(--n900); cursor: pointer; pointer-events: all; }
+.btn-continue.on:hover { background: var(--a500); transform: translateY(-1px); }
+.continue-hint { font-size: 13px; color: var(--n600); }
+
+/* ═══════════════════════════════════════════════════════
+   SCREEN 6 — REVIEW
+═══════════════════════════════════════════════════════ */
+.review-content {
+  flex: 1; display: flex; gap: 0; overflow: hidden;
+}
+.review-left { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; padding: 24px; overflow: hidden; }
+.review-right {
+  width: 420px; flex-shrink: 0; padding: 24px;
+  display: flex; flex-direction: column; gap: 16px; overflow-y: auto;
+}
+
+.review-header-card {
+  background: var(--n0); border: 1px solid var(--n200);
+  border-radius: var(--r-sm); padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.review-claim-id { font-size: 12px; color: var(--n600); font-weight: 500; }
+.review-title { font-size: 20px; font-weight: 700; color: var(--n1000); letter-spacing: -0.1px; }
+.review-desc { font-size: 14px; color: var(--n700); line-height: 20px; }
+
+.btn-submit-claim {
+  width: 100%; height: 40px; border-radius: var(--r-sm);
+  border: none; border-bottom: 2px solid rgba(5,8,16,.20);
+  background: var(--a400); font-family: var(--ff-body); font-size: 15px;
+  font-weight: 600; color: var(--n1000); cursor: pointer; transition: all .2s;
+}
+.btn-submit-claim:hover { background: var(--a500); transform: translateY(-1px); }
+
+.review-section { display: flex; flex-direction: column; gap: 8px; }
+.review-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.review-section-title { font-size: 15px; font-weight: 600; color: var(--n1000); }
+.review-edit-btn {
+  width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--n200);
+  background: var(--n0); cursor: pointer; color: var(--n600);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.review-edit-btn:hover { background: var(--n100); }
+
+.review-field { display: flex; align-items: flex-start; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--n100); gap: 16px; }
+.review-field:last-child { border-bottom: none; }
+.review-field-label { font-size: 13px; color: var(--n700); flex-shrink: 0; }
+.review-field-value { font-size: 13px; color: var(--n1000); font-weight: 500; text-align: right; }
+
+.review-item-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0; border-bottom: 1px solid var(--n100); cursor: pointer;
+}
+.review-item-row:last-child { border-bottom: none; }
+.review-item-row:hover { background: var(--n50); margin: 0 -4px; padding: 10px 4px; border-radius: 4px; }
+.review-item-name { font-size: 13px; color: var(--n900); }
+.review-item-right { display: flex; align-items: center; gap: 8px; }
+.review-item-price { font-size: 13px; font-weight: 500; color: var(--n900); }
+.review-item-chevron { color: var(--n400); }
+
+.review-total-section { display: flex; flex-direction: column; gap: 4px; padding: 12px 0; }
+.review-total-row { display: flex; justify-content: space-between; padding: 4px 0; }
+.review-total-label { font-size: 13px; color: var(--n700); }
+.review-total-value { font-size: 13px; color: var(--n900); }
+.review-grand-total { font-size: 16px; font-weight: 700; color: var(--n1000); }
+
+/* ═══════════════════════════════════════════════════════
+   MODAL OVERLAYS — Additional Comments + Submit
+═══════════════════════════════════════════════════════ */
+.modal-overlay {
+  position: absolute; inset: 0;
+  background: rgba(13,15,13,.4); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 50; opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+
+.modal-dialog {
+  background: var(--n0); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-overlay);
+  display: flex; flex-direction: column;
+  transform: translateY(8px) scale(.98);
+  transition: transform .3s cubic-bezier(0.16,1,0.3,1);
+}
+.modal-overlay.open .modal-dialog { transform: none; }
+
+.modal-header {
+  padding: 20px 24px 0; display: flex; align-items: center; justify-content: space-between;
+}
+.modal-title { font-size: 18px; font-weight: 700; color: var(--n1000); }
+.modal-close {
+  width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--n200);
+  background: var(--n0); cursor: pointer; color: var(--n600);
+  display: flex; align-items: center; justify-content: center; transition: background .15s;
+}
+.modal-close:hover { background: var(--n100); }
+.modal-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 20px; }
+
+/* Comments modal */
+#modal-comments .modal-dialog { width: 360px; }
+.field-label-sm { font-size: 13px; font-weight: 500; color: var(--n1000); margin-bottom: 6px; }
+.textarea-field {
+  width: 100%; min-height: 100px; border: 1px solid transparent;
+  border-radius: var(--r-sm); padding: 10px 12px;
+  font-family: var(--ff-body); font-size: 14px; color: var(--n900);
+  resize: vertical; outline: none; transition: border-color .15s, box-shadow .15s, background .15s;
+  background: #fafbf7;
+}
+.textarea-field::placeholder { color: var(--n500); }
+
+/* ══════════════════════════════════════════════════
+   GLOBAL INPUT / SELECT / TEXTAREA STATES
+   All interactive fields — hover, focus (mouse), focus-visible (keyboard)
+   ══════════════════════════════════════════════════ */
+
+/* — Base (shared transition) — */
+.field-input,
+.val-field-input,
+.val-tax-input,
+select, .field-select,
+textarea, .val-field-textarea, .textarea-field {
+  outline: none;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+
+/* HOVER: show border, keep background — default fields only */
+.field-input:hover:not(:focus),
+.val-field-input:hover:not(:focus),
+.val-tax-input:hover:not(:focus),
+select:hover:not(:focus), .field-select:hover:not(:focus),
+textarea:hover:not(:focus),
+.val-field-textarea:hover:not(:focus),
+.textarea-field:hover:not(:focus) {
+  background: #fafbf7;
+  border-color: rgba(5,8,16,0.10);
+}
+
+/* HOVER on error fields: keep red colors, don't let the generic hover override them */
+.field-input.err:hover:not(:focus) {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+/* FOCUS — all devices (mouse, touch, keyboard): lime border + yellow-green glow, white bg */
+.field-input:focus,
+.val-field-input:focus,
+.val-tax-input:focus,
+select:focus, .field-select:focus,
+textarea:focus,
+.val-field-textarea:focus,
+.textarea-field:focus {
+  outline: 0 !important;
+  -webkit-appearance: none;
+  border: 2px solid #e4ec84;
+  box-shadow: 0 0 0 4px #f8fcdb;
+  background: #ffffff;
+}
+
+/* KEYBOARD TAB FOCUS — same lime style as mouse, no extra ring */
+.field-input:focus-visible,
+.val-field-input:focus-visible,
+.val-tax-input:focus-visible,
+select:focus-visible, .field-select:focus-visible,
+textarea:focus-visible,
+.val-field-textarea:focus-visible,
+.textarea-field:focus-visible {
+  outline: 0 !important;
+}
+
+/* ERROR — only when JS adds .err class (after failed submit, not on hover) */
+.field-input.err {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+}
+.field-input.err:focus {
+  border: 2px solid #ef4444;
+  box-shadow: 0 0 0 4px #fee2e2;
+  background: #fef2f2;
+}
+
+
+.upload-media-row {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.upload-media-info { display: flex; flex-direction: column; gap: 2px; }
+.upload-media-label { font-size: 13px; font-weight: 500; color: var(--n1000); }
+.upload-media-sub { font-size: 12px; color: var(--n700); }
+.btn-upload-sm {
+  height: 32px; padding: 0 12px; border-radius: var(--r-sm);
+  border: 1px solid var(--n300); background: var(--n0);
+  font-family: var(--ff-body); font-size: 13px; font-weight: 500;
+  color: var(--n900); cursor: pointer; display: flex; align-items: center; gap: 6px;
+  transition: background .15s;
+}
+.btn-upload-sm:hover { background: var(--n50); }
+.checkbox-row { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.checkbox-box {
+  width: 18px; height: 18px; border-radius: 4px;
+  border: 2px solid var(--n400); background: var(--n0);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.checkbox-box.checked { background: var(--p600); border-color: var(--p600); }
+.checkbox-label { font-size: 13px; color: var(--n900); user-select: none; }
+.modal-footer {
+  padding: 0 24px 20px; display: flex; align-items: center; gap: 8px; justify-content: flex-end;
+}
+.btn-not-yet {
+  height: 36px; padding: 0 16px; border-radius: var(--r-sm);
+  border: 1px solid var(--n200); background: var(--n0);
+  font-family: var(--ff-body); font-size: 14px; font-weight: 500; color: var(--n700);
+  cursor: pointer; transition: background .15s;
+}
+.btn-not-yet:hover { background: var(--n50); }
+.btn-submit-modal {
+  height: 36px; padding: 0 16px; border-radius: var(--r-sm);
+  border: none; border-bottom: 2px solid rgba(5,8,16,.20);
+  background: var(--a300); font-family: var(--ff-body); font-size: 14px;
+  font-weight: 500; color: var(--n1000); cursor: pointer;
+  display: flex; align-items: center; gap: 6px; transition: all .2s;
+}
+.btn-submit-modal:hover { background: var(--a500); transform: translateY(-1px); }
+
+/* Submit success modal */
+#modal-submit .modal-dialog { width: 512px; }
+.submit-success-body {
+  padding: 40px 24px; display: flex; flex-direction: column;
+  align-items: center; gap: 16px; text-align: center;
+}
+.submit-check-icon { width: 52px; height: 52px; color: var(--n1000); }
+.submit-success-title { font-size: 20px; font-weight: 700; color: var(--n1000); letter-spacing: -0.1px; }
+.submit-success-desc { font-size: 14px; color: var(--n700); line-height: 20px; }
+.btn-finish {
+  width: 100%; height: 40px; border-radius: var(--r-sm);
+  border: none; border-bottom: 2px solid rgba(5,8,16,.20);
+  background: var(--a300); font-family: var(--ff-body); font-size: 15px;
+  font-weight: 600; color: var(--n1000); cursor: pointer; transition: all .2s;
+  margin-top: 4px;
+}
+.btn-finish:hover { background: var(--a500); transform: translateY(-1px); }
+
+/* ═══════════════════════════════════════════════════════
+   NAV BAR (screen switcher for prototype)
+═══════════════════════════════════════════════════════ */
+.proto-nav {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: rgba(13,15,13,.88); backdrop-filter: blur(12px);
+  border-radius: 100px; padding: 6px 10px;
+  display: flex; align-items: center; gap: 4px; z-index: 999;
+  box-shadow: var(--shadow-lg);
+}
+.proto-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,.35); letter-spacing: .8px; text-transform: uppercase; padding: 0 6px; }
+.proto-btn {
+  height: 26px; padding: 0 10px; border-radius: 100px;
+  border: 1px solid rgba(255,255,255,.1); background: transparent;
+  font-family: var(--ff-body); font-size: 11px; font-weight: 500;
+  color: rgba(255,255,255,.5); cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.proto-btn:hover { background: rgba(255,255,255,.1); color: white; }
+.proto-btn.cur { background: var(--a300); border-color: transparent; color: var(--n900); }
+
+/* ═══════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════ */
+.toast {
+  position: fixed; top: 16px; right: 16px; z-index: 9999;
+  background: var(--n900); color: white; font-size: 13px; font-weight: 500;
+  padding: 10px 16px; border-radius: var(--r-sm);
+  opacity: 0; transform: translateY(-6px);
+  transition: all .3s cubic-bezier(0.16,1,0.3,1); pointer-events: none;
+}
+.toast.show { opacity: 1; transform: none; }
+
+/* ─── PDF Error Popover ─── */
+.pdf-error-overlay {
+  display: none;
+  position: absolute; inset: 0; z-index: 100;
+  background: rgba(63,63,70,.20);
+  backdrop-filter: blur(3px);
+  align-items: center; justify-content: center;
+}
+.pdf-error-overlay.open { display: flex; }
+
+.pdf-error-dialog {
+  background: #fff;
+  border: 1px solid rgba(5,8,16,.10);
+  border-radius: 20px;
+  box-shadow: 0 4px 4px rgba(0,0,0,.08);
+  width: 512px;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  animation: popover-in .2s cubic-bezier(.16,1,.3,1);
+}
+@keyframes popover-in {
+  from { opacity:0; transform: scale(.96) translateY(6px); }
+  to   { opacity:1; transform: none; }
+}
+
+.pdf-error-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px 19px;
+  border-bottom: 1px solid rgba(5,8,16,.10);
+}
+.pdf-error-title-row {
+  display: flex; align-items: center; gap: 8px; flex: 1;
+}
+.pdf-error-title {
+  font-family: 'Uni Neue', 'Uni Neue-Trial', Georgia, serif;
+  font-size: 18px; font-weight: 700; line-height: 24px;
+  letter-spacing: -0.1px;
+  color: #c73715;
+}
+.pdf-error-close {
+  width: 28px; height: 28px; flex-shrink: 0;
+  border-radius: 8px; border: none; background: transparent;
+  color: #7a827a; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.pdf-error-close:hover { background: #f4f6f4; }
+
+.pdf-error-body {
+  padding: 20px 24px;
+}
+.pdf-error-text {
+  font-size: 14px; font-weight: 400; color: #0d0f0d; line-height: 20px;
+}
+
+.pdf-error-footer {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+}
+.pdf-error-btn-secondary {
+  height: 36px; padding: 0 16px;
+  display: flex; align-items: center; gap: 8px;
+  border-radius: 6px;
+  border: none; border-bottom: 2px solid rgba(0,0,0,.20);
+  background: #f4f6f4;
+  font-family: var(--ff-body); font-size: 14px; font-weight: 500; color: #0d0f0d;
+  cursor: pointer; transition: background .15s;
+}
+.pdf-error-btn-secondary:hover { background: #e8ebe8; }
+.pdf-error-btn-primary {
+  height: 36px; padding: 0 16px;
+  display: flex; align-items: center; gap: 8px;
+  border-radius: 6px;
+  border: none; border-bottom: 2px solid rgba(5,8,16,.20);
+  background: #eaf68f;
+  font-family: var(--ff-body); font-size: 14px; font-weight: 500; color: #0d0f0d;
+  cursor: pointer; transition: background .15s;
+}
+.pdf-error-btn-primary:hover { background: #e4ec84; }
+
+ 
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--n200); border-radius: 2px; }
+
+/* Svgs inline */
+svg { display: block; }
+
+
+/* ══════════════════════════════════════════════════
+   INPUT STATES — hover / focused / focus-visible
+   Tokens:
+     hover border:    #9ba29b  (n500)
+     focus border:    #e4ec84  (lime/border-focus)
+     focus glow:      0 0 0 4px #f8fcdb (yellow-green/100)
+     focus-visible:   outline 2px #0d0f0d (text-primary)
+   ══════════════════════════════════════════════════ */
+.field-input:hover,
+.val-field-input:hover,
+.val-field-textarea:hover,
+.textarea-field:hover,
+.val-tax-input:hover,
+select:hover {
+  border-color: #9ba29b;
+}
+
+.field-input:focus,
+.val-field-input:focus,
+.val-field-textarea:focus,
+.textarea-field:focus,
+.val-tax-input:focus,
+select:focus {
+  border: 1.5px solid #e4ec84;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px #f8fcdb;
+  outline: none;
+}
+
+.field-input:focus-visible,
+.val-field-input:focus-visible,
+.val-field-textarea:focus-visible,
+.textarea-field:focus-visible,
+.val-tax-input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #0d0f0d;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px #f8fcdb;
+}
+</style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  SCREEN 1 — LOG IN                               ║
+     ╚══════════════════════════════════════════════════╝ -->
+<div class="screen active" id="s-login">
+  <div class="login-shell">
+    <!-- Left -->
+    <div class="login-left">
+      <div class="login-logo">
+        <span class="login-logo-word">assona</span>
+        <div class="login-logo-sep"></div>
+        <div class="login-logo-sub">Insurance<br>Solutions</div>
+      </div>
+      <div class="login-form-wrap">
+        <div class="login-grad"></div>
+        <div class="login-heading">
+          <h1 class="login-title">Welcome!</h1>
+          <p class="login-sub">Sign in with your assona account</p>
+        </div>
+        <div class="login-card">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="field-group">
+              <label class="field-label" for="l-email">Email</label>
+              <div class="field-wrap">
+                <input id="l-email" class="field-input" type="text" inputmode="email" placeholder="john.smith@email.com" autocomplete="email" oninput="loginInput()"/>
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="l-pass">Password</label>
+              <div class="field-wrap">
+                <input id="l-pass" class="field-input" type="password" placeholder="Password" autocomplete="current-password" oninput="loginInput()"/>
+                <button class="eye-btn" id="l-eye" style="display:none" onclick="togglePass()">
+                  <svg id="l-eye-off" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17.94 17.94A10 10 0 0 1 12 20c-7 0-11-8-11-8a18 18 0 0 1 5.06-5.94M9.9 4.24A9 9 0 0 1 12 4c7 0 11 8 11 8a18 18 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                  <svg id="l-eye-on" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="display:none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="err-msg" id="l-err">The email or password you entered is incorrect. Please double-check and try again.</div>
+          </div>
+          <div class="login-actions">
+            <button class="btn-primary" id="l-btn" onclick="doLogin()">Log in</button>
+            <div class="forgot-row">
+              <span class="forgot-text">Forgot password?</span>
+              <a class="forgot-link" href="#">Reset here</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Right hero -->
+    <div class="login-right">
+      <div class="login-hero-grad"></div>
+      <div class="login-hero-bikes">
+        <svg viewBox="0 0 200 140" fill="none">
+          <!-- Stylised bike outline -->
+          <circle cx="50" cy="95" r="35" stroke="#144F56" stroke-width="4"/>
+          <circle cx="50" cy="95" r="5" fill="#144F56"/>
+          <circle cx="150" cy="95" r="35" stroke="#144F56" stroke-width="4"/>
+          <circle cx="150" cy="95" r="5" fill="#144F56"/>
+          <path d="M50 95 L85 40 L110 40 L150 95" stroke="#144F56" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M85 40 L95 95" stroke="#144F56" stroke-width="4" stroke-linecap="round"/>
+          <path d="M75 40 L95 40" stroke="#144F56" stroke-width="5" stroke-linecap="round"/>
+          <path d="M100 95 L110 70 L130 70" stroke="#144F56" stroke-width="3.5" stroke-linecap="round"/>
+          <ellipse cx="100" cy="30" rx="10" ry="14" stroke="#144F56" stroke-width="3" fill="none"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  SCREEN 2 — WELCOME                              ║
+     ╚══════════════════════════════════════════════════╝ -->
+<div class="screen" id="s-welcome">
+  <div class="login-shell">
+    <!-- Left -->
+    <div class="login-left">
+      <div class="login-logo">
+        <span class="login-logo-word">assona</span>
+        <div class="login-logo-sep"></div>
+        <div class="login-logo-sub">Insurance<br>Solutions</div>
+      </div>
+      <div class="login-form-wrap">
+        <div class="login-grad"></div>
+        <div class="login-heading">
+          <h1 class="login-title">Welcome,<br>Bike Shop Berlin!</h1>
+        </div>
+        <div class="login-card">
+          <p class="welcome-signed">You're signed in as <a href="#">admin&#64;bikeshopberlin.de</a></p>
+          <div class="welcome-ctas">
+            <button class="btn-cta-primary" onclick="go('s-upload')">Versicherungsfall melden</button>
+            <button class="btn-cta-secondary">Diebstahl melden</button>
+            <button class="btn-logout" onclick="go('s-login')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Log out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Right hero — same gradient panel as login -->
+    <div class="login-right">
+      <div class="login-hero-grad"></div>
+      <div class="login-hero-bikes">
+        <svg viewBox="0 0 200 160" fill="none">
+          <!-- Person with tablet, stylised -->
+          <ellipse cx="100" cy="130" rx="60" ry="20" fill="#144F56" opacity=".06"/>
+          <circle cx="100" cy="52" r="22" fill="none" stroke="#144F56" stroke-width="3.5"/>
+          <path d="M78 74 C78 74 72 100 72 115 L128 115 C128 100 122 74 122 74 Q100 82 78 74Z" fill="none" stroke="#144F56" stroke-width="3.5" stroke-linejoin="round"/>
+          <!-- tablet -->
+          <rect x="84" y="88" width="36" height="26" rx="3" fill="none" stroke="#144F56" stroke-width="2.5"/>
+          <line x1="84" y1="94" x2="120" y2="94" stroke="#144F56" stroke-width="1.5" opacity=".4"/>
+          <!-- stylus -->
+          <line x1="118" y1="86" x2="128" y2="76" stroke="#144F56" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="128" cy="76" r="2" fill="#144F56"/>
+          <!-- accent dots -->
+          <circle cx="155" cy="40" r="4" fill="#E4EC84" opacity=".7"/>
+          <circle cx="48" cy="110" r="3" fill="#E4EC84" opacity=".5"/>
+          <circle cx="162" cy="105" r="5" fill="#D9F1F4" opacity=".8"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  SCREEN 3 — UPLOAD                               ║
+     ╚══════════════════════════════════════════════════╝ -->
+<!-- Hidden file input for real PDF upload -->
+<input type="file" id="pdf-file-input" accept=".pdf,application/pdf" onchange="handleFileSelected(this)">
+
+<div class="screen" id="s-upload">
+  <div class="modal-shell">
+    <div class="nav-header">
+      <div class="nav-breadcrumb">
+        <div class="nav-logo-dot">a</div>
+        <span class="nav-crumb">Homepage</span>
+        <span class="nav-crumb-sep">›</span>
+        <span class="nav-crumb active">New Claim</span>
+      </div>
+      <div class="nav-close" onclick="go('s-welcome')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+      </div>
+    </div>
+    <div class="stepper-wrap">
+      <div class="stepper">
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line hidden"></div><div class="step-dot active">1</div><div class="step-line"></div></div>
+          <span class="step-label active">Upload</span>
+        </div>
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line"></div><div class="step-dot">2</div><div class="step-line"></div></div>
+          <span class="step-label">Confirm Damage</span>
+        </div>
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line"></div><div class="step-dot">3</div><div class="step-line"></div></div>
+          <span class="step-label">Validate</span>
+        </div>
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line"></div><div class="step-dot">4</div><div class="step-line hidden"></div></div>
+          <span class="step-label">Review</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-content" id="upload-modal-content">
+
+      <!-- STATE A: Idle — upload card -->
+      <div class="upload-content" id="upload-idle" style="position:relative">
+        <div class="upload-drop-area" id="drop-area"></div>
+        <div class="upload-grad"></div>
+        <div class="upload-card">
+          <div class="upload-header">
+            <div class="upload-title">Upload Invoice or Cost Estimate</div>
+            <div class="upload-sub">We'll extract the data automatically for you</div>
+          </div>
+          <div class="upload-zone">
+            <button class="btn-upload" onclick="triggerFileInput()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              Select a file
+            </button>
+            <span class="upload-or">or</span>
+            <span class="upload-drag" onclick="triggerFileInput()" style="cursor:pointer">Drag and drop a file here</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATE B: Loading preview -->
+      <div class="upload-preview-loading" id="upload-preview-loading">
+        <div class="upload-grad"></div>
+        <div class="loading-preview-card">
+          <span class="loading-preview-text">Loading preview...</span>
+          <div class="loading-spinner"></div>
+        </div>
+      </div>
+
+      <!-- STATE C: Agent — PDF left + steps right -->
+      <div class="upload-agent" id="upload-agent">
+        <div class="upload-agent-left">
+            <div class="pdf-card" id="pdf-card-upload">
+              <div class="pdf-toolbar">
+                <div class="pdf-nav">
+                  <button class="pdf-nav-btn">‹</button>
+                  <button class="pdf-nav-btn">›</button>
+                  <span class="pdf-page-info">1 / 1</span>
+                </div>
+                <div class="pdf-zoom">
+                  <button class="pdf-zoom-btn">−</button>
+                  <span>125%</span>
+                  <button class="pdf-zoom-btn">+</button>
+                </div>
+              </div>
+              <div class="pdf-body">
+                <!-- PDF rendered as HTML fallback (embed blocked in sandbox) -->
+                <div class="pdf-fallback all-pdf-fallbacks">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                    <div><b style="font-size:9px;color:#282b28">Bike Shop Berlin</b><br>www.bikeshopberlin.com<br>+49 30 99999999</div>
+                    <div style="text-align:right">Sonnenallee 221, 12059 Berlin<br>Tax ID: 45DC2200787</div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                    <span><b style="color:#282b28">Firma</b><br>AGL Activ Services GmbH<br>Georgstraße 42, 30159 Hannover</span>
+                    <span style="text-align:right"><b style="color:#282b28">Datum</b><br>20.09.2025<br><b style="color:#282b28">Fahrzeug</b><br>E-Bike, 2.900€</span>
+                  </div>
+                  <div style="font-size:9px;font-weight:700;color:#282b28;margin:6px 0 2px">Rechnung (#A3452-53)</div>
+                  <div style="margin-bottom:6px">Nutzer in Kurve wegeschlittert und Fahrrad ist seitlich gegen Bordstein gerutscht.</div>
+                  <div style="font-size:7px;color:#282b28;margin-bottom:2px">Schadennummer: 13876439<br>Assona Versicherungsnummer: 637883873-MAD-4766357</div>
+                  <table style="width:100%;border-collapse:collapse;margin-top:4px">
+                    <tr style="border-bottom:1px solid #e8ebe8"><th style="text-align:left;padding:2px 0;color:#282b28">ARTIKEL</th><th style="text-align:left">BEZEICHNUNG</th><th>ANZ</th><th style="text-align:right">EINZELPREIS</th><th style="text-align:right">GESAMTPREIS</th></tr>
+                    <tr><td>10045638</td><td>KETTE CN-M6100 126 GLIED HC 12-FACH</td><td style="text-align:center">1</td><td style="text-align:right">49,95€</td><td style="text-align:right">49,95€</td></tr>
+                    <tr><td>10045650</td><td>Kassette SLX CS-M7100 13-fach 10-12-14</td><td style="text-align:center">1</td><td style="text-align:right">129,95€</td><td style="text-align:right">129,95€</td></tr>
+                    <tr><td>10045725</td><td>Kettenblatt</td><td style="text-align:center">1</td><td style="text-align:right">48,99€</td><td style="text-align:right">48,99€</td></tr>
+                    <tr><td>90033352</td><td>Montage (Kette, Kassette, Kettenblatt)</td><td style="text-align:center">1</td><td style="text-align:right">100,00€</td><td style="text-align:right">100,00€</td></tr>
+                    <tr><td>10034576</td><td>Griffe</td><td style="text-align:center">1</td><td style="text-align:right">29,95€</td><td style="text-align:right">29,95€</td></tr>
+                    <tr><td>90032873</td><td>Montage Griffe</td><td style="text-align:center">1</td><td style="text-align:right">20,00€</td><td style="text-align:right">20,00€</td></tr>
+                    <tr><td>90032948</td><td>Montage Pedale</td><td style="text-align:center">1</td><td style="text-align:right">20,00€</td><td style="text-align:right">20,00€</td></tr>
+                    <tr><td>10057622</td><td>Reifen Hinten</td><td style="text-align:center">1</td><td style="text-align:right">45,00€</td><td style="text-align:right">45,00€</td></tr>
+                    <tr><td>90053175</td><td>Montage Reifen Hinten</td><td style="text-align:center">1</td><td style="text-align:right">50,00€</td><td style="text-align:right">50,00€</td></tr>
+                    <tr><td>100399864</td><td>Bremsscheibe Vorn</td><td style="text-align:center">1</td><td style="text-align:right">52,99€</td><td style="text-align:right">52,99€</td></tr>
+                    <tr><td>90053175</td><td>Montage Bremsscheibe Vorn</td><td style="text-align:center">1</td><td style="text-align:right">50,00€</td><td style="text-align:right">50,00€</td></tr>
+                  </table>
+                  <div style="margin-top:8px;text-align:right;font-size:8px;border-top:1px solid #e8ebe8;padding-top:4px">
+                    <div>Gesamt Netto: 677,28€</div><div>MwSt: 19%</div><div><b>Gesamt: 805,98€</b></div>
+                  </div>
+                  <div style="margin-top:8px;color:#9ba29b;border-top:1px solid #e8ebe8;padding-top:6px">Bei diesem Einkauf sparen Sie 10,50€.<br>Wir danken für Ihren Auftrag.</div>
+                </div>
+              </div>
+              <div class="pdf-filename">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <span class="pdf-filename-name all-pdf-filenames">Rechnung-003.pdf</span>
+                <svg class="pdf-filename-refresh" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              </div>
+            </div>
+        </div>
+        <div class="upload-agent-right">
+          <div class="agent-step checking" id="vc-1">
+            <div class="agent-step-icon"><span class="agent-chevron">›</span></div>
+            <span>Analysing file...</span>
+          </div>
+          <div class="agent-step pending" id="vc-2">
+            <div class="agent-step-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d4d9d4" stroke-width="1.8"/></svg>
+            </div>
+            <span>Extract data</span>
+          </div>
+          <div class="agent-step pending" id="vc-3">
+            <div class="agent-step-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d4d9d4" stroke-width="1.8"/></svg>
+            </div>
+            <span>Check frame ID</span>
+          </div>
+          <div class="agent-step pending" id="vc-4">
+            <div class="agent-step-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d4d9d4" stroke-width="1.8"/></svg>
+            </div>
+            <span>Check address</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ PDF ERROR POPOVER (shown when PDF fails to load) ══ -->
+    <div class="pdf-error-overlay" id="pdf-error-overlay">
+      <div class="pdf-error-dialog">
+        <div class="pdf-error-header">
+          <div class="pdf-error-title-row">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c73715" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span class="pdf-error-title">We could not extract data from your Invoice</span>
+          </div>
+          <button class="pdf-error-close" onclick="closePdfError()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="pdf-error-body">
+          <p class="pdf-error-text">Please try again a new file upload, or continue with the manual process via the current portal.</p>
+        </div>
+        <div class="pdf-error-footer">
+          <button class="pdf-error-btn-secondary" onclick="closePdfError(); resetUploadScreen(); triggerFileInput()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            Upload new invoice
+          </button>
+          <button class="pdf-error-btn-primary" onclick="closePdfError(); skipToManual()">
+            Continue with manual process
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  SCREEN 4 — VALIDATE (Form)                      ║
+     ╚══════════════════════════════════════════════════╝ -->
+<div class="screen" id="s-validate">
+  <div class="modal-shell">
+    <div class="nav-header">
+      <div class="nav-breadcrumb">
+        <div class="nav-logo-dot">a</div>
+        <span class="nav-crumb">Homepage</span>
+        <span class="nav-crumb-sep">›</span>
+        <span class="nav-crumb active">New Claim</span>
+      </div>
+      <div class="nav-close" onclick="go('s-welcome')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+      </div>
+    </div>
+    <div class="stepper-wrap">
+      <div class="stepper">
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line hidden"></div><div class="step-dot done">✓</div><div class="step-line done"></div></div>
+          <span class="step-label done">Upload</span>
+        </div>
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line done"></div><div class="step-dot done">✓</div><div class="step-line done"></div></div>
+          <span class="step-label done">Confirm Damage</span>
+        </div>
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line done"></div><div class="step-dot active">3</div><div class="step-line"></div></div>
+          <span class="step-label active">Validate</span>
+        </div>
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line"></div><div class="step-dot">4</div><div class="step-line hidden"></div></div>
+          <span class="step-label">Review</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-content" style="flex-direction:column; overflow:hidden;">
+      <div class="validate-content" style="flex:1;overflow:hidden;">
+        <!-- Left: PDF preview -->
+        <div class="validate-left">
+          <div class="pdf-card" id="pdf-card-validate">
+              <div class="pdf-toolbar">
+                <div class="pdf-nav">
+                  <button class="pdf-nav-btn">‹</button>
+                  <button class="pdf-nav-btn">›</button>
+                  <span class="pdf-page-info">1 / 1</span>
+                </div>
+                <div class="pdf-zoom">
+                  <button class="pdf-zoom-btn">−</button>
+                  <span>125%</span>
+                  <button class="pdf-zoom-btn">+</button>
+                </div>
+              </div>
+              <div class="pdf-body">
+                <!-- PDF rendered as HTML fallback (embed blocked in sandbox) -->
+                <div class="pdf-fallback all-pdf-fallbacks">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                    <div><b style="font-size:9px;color:#282b28">Bike Shop Berlin</b><br>www.bikeshopberlin.com<br>+49 30 99999999</div>
+                    <div style="text-align:right">Sonnenallee 221, 12059 Berlin<br>Tax ID: 45DC2200787</div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                    <span><b style="color:#282b28">Firma</b><br>AGL Activ Services GmbH<br>Georgstraße 42, 30159 Hannover</span>
+                    <span style="text-align:right"><b style="color:#282b28">Datum</b><br>20.09.2025<br><b style="color:#282b28">Fahrzeug</b><br>E-Bike, 2.900€</span>
+                  </div>
+                  <div style="font-size:9px;font-weight:700;color:#282b28;margin:6px 0 2px">Rechnung (#A3452-53)</div>
+                  <div style="margin-bottom:4px">Nutzer in Kurve wegeschlittert und Fahrrad gegen Bordstein gerutscht.</div>
+                  <div style="font-size:7px;color:#282b28;margin-bottom:4px">Schadennummer: 13876439<br>Assona Vers.-Nr.: 637883873-MAD-4766357</div>
+                  <table style="width:100%;border-collapse:collapse">
+                    <tr style="border-bottom:1px solid #e8ebe8"><th style="text-align:left;padding:2px 0;color:#282b28">ART.</th><th style="text-align:left">BEZEICHNUNG</th><th>ANZ</th><th style="text-align:right">PREIS</th><th style="text-align:right">GESAMT</th></tr>
+                    <tr><td>10045638</td><td>KETTE CN-M6100 126 GLIED</td><td>1</td><td style="text-align:right">49,95€</td><td style="text-align:right">49,95€</td></tr>
+                    <tr><td>10045650</td><td>Kassette SLX CS-M7100</td><td>1</td><td style="text-align:right">129,95€</td><td style="text-align:right">129,95€</td></tr>
+                    <tr><td>10045725</td><td>Kettenblatt</td><td>1</td><td style="text-align:right">48,99€</td><td style="text-align:right">48,99€</td></tr>
+                    <tr><td>90033352</td><td>Montage Kette+Kassette</td><td>1</td><td style="text-align:right">100,00€</td><td style="text-align:right">100,00€</td></tr>
+                    <tr><td>10034576</td><td>Griffe</td><td>1</td><td style="text-align:right">29,95€</td><td style="text-align:right">29,95€</td></tr>
+                    <tr><td>90032873</td><td>Montage Griffe</td><td>1</td><td style="text-align:right">20,00€</td><td style="text-align:right">20,00€</td></tr>
+                    <tr><td>10057622</td><td>Reifen Hinten</td><td>1</td><td style="text-align:right">45,00€</td><td style="text-align:right">45,00€</td></tr>
+                    <tr><td>90053175</td><td>Montage Reifen</td><td>1</td><td style="text-align:right">50,00€</td><td style="text-align:right">50,00€</td></tr>
+                    <tr><td>100399864</td><td>Bremsscheibe Vorn</td><td>1</td><td style="text-align:right">52,99€</td><td style="text-align:right">52,99€</td></tr>
+                    <tr><td>90053175</td><td>Montage Bremsscheibe</td><td>1</td><td style="text-align:right">50,00€</td><td style="text-align:right">50,00€</td></tr>
+                  </table>
+                  <div style="margin-top:8px;text-align:right;font-size:8px;border-top:1px solid #e8ebe8;padding-top:4px">
+                    <div>Gesamt Netto: 677,28€</div><div>MwSt: 19%</div><div><b>Gesamt: 805,98€</b></div>
+                  </div>
+                  <div style="margin-top:8px;color:#9ba29b;border-top:1px solid #e8ebe8;padding-top:6px;font-size:7px">Wir danken für Ihren Auftrag.</div>
+                </div>
+              </div>
+              <div class="pdf-filename">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <span class="pdf-filename-name all-pdf-filenames">Rechnung-003.pdf</span>
+              </div>
+            </div>
+        <div class="validate-right">
+          <div class="validate-right-scroll">
+            <!-- Warning alert -->
+            <div class="val-alert">
+              <div class="val-alert-top">
+                <div class="val-alert-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <div class="val-alert-text">2 fields are missing, 4 fields to validate</div>
+              </div>
+              <div class="val-alert-sub">Complete all missing fields to continue.</div>
+              <div class="val-alert-actions">
+                <button class="btn-check-fields">Check fields</button>
+                <button class="btn-expand-all">Expand all</button>
+              </div>
+            </div>
+            <!-- Invoice Details -->
+            <div class="val-section">
+              <div class="val-section-header">
+                <div class="val-section-title">Invoice Details</div>
+                <button class="val-section-action">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+              </div>
+              <div class="val-field">
+                <span class="val-field-label">Frame ID</span>
+                <input class="val-field-input" value="00RDL598221" type="text"/>
+              </div>
+              <div class="val-field">
+                <span class="val-field-label">Invoice Date</span>
+                <input class="val-field-input" value="20/09/2025" type="text"/>
+                <div class="val-field-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              </div>
+              <div class="val-field">
+                <span class="val-field-label">Damage Date</span>
+                <input class="val-field-input" value="20/09/2025" type="text"/>
+                <div class="val-field-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              </div>
+              <div class="val-field" style="align-items:flex-start;padding-top:8px">
+                <span class="val-field-label" style="margin-top:4px">Damage description</span>
+                <textarea class="val-field-textarea">Lenker gebrochen nach Sturz durch verklemmte Kette</textarea>
+              </div>
+            </div>
+            <!-- Invoice Items -->
+            <div class="val-section">
+              <div class="val-section-header">
+                <div class="val-section-title">Invoice Items: 12</div>
+                <button class="val-section-action">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+              </div>
+              <!-- Net/Gross switcher -->
+              <div class="val-controller">
+                <div class="val-switcher">
+                  Display amounts as
+                  <div class="switcher-group">
+                    <button class="switcher-btn">Net</button>
+                    <button class="switcher-btn active">Gross</button>
+                  </div>
+                </div>
+                <div class="val-tax">
+                  Tax Rate
+                  <input class="val-tax-input" value="19,00"/>
+                  <span style="font-size:11px;color:#9ba29b">%</span>
+                </div>
+              </div>
+              <!-- Items: mix of validated ✓ and warning ⚠ -->
+              <div class="val-item">
+                <div class="val-item-status"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="val-item-name">SRAM XG-1299 12-fach 10-12-...</span>
+                <span class="val-item-price">28,45 EUR</span>
+                <span class="val-item-chevron">›</span>
+              </div>
+              <div class="val-item">
+                <div class="val-item-status"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="val-item-name">KETTE CN-M6100 126 GLIEDER...</span>
+                <span class="val-item-price">28,45 EUR</span>
+                <span class="val-item-chevron">›</span>
+              </div>
+              <div class="val-item" style="background:#FFFBEB;border-radius:4px;padding:7px 4px;margin:0 -4px;border-bottom:1px solid #FCD34D">
+                <div class="val-item-status"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                <span class="val-item-name" style="color:#92400E">Shimano Deore XT M8100 12-...</span>
+                <span class="val-item-price" style="color:#92400E">28,45 EUR</span>
+                <span class="val-item-chevron" style="color:#D97706">›</span>
+              </div>
+              <div class="val-item">
+                <div class="val-item-status"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="val-item-name">Shimano Dura-Ace R9100 11-fac...</span>
+                <span class="val-item-price">45,99 EUR</span>
+                <span class="val-item-chevron">›</span>
+              </div>
+              <div class="val-item">
+                <div class="val-item-status"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="val-item-name">Campagnolo Record 12-fach 11-...</span>
+                <span class="val-item-price">52,50 EUR</span>
+                <span class="val-item-chevron">›</span>
+              </div>
+              <div class="val-item">
+                <div class="val-item-status"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="val-item-name">SRAM Force 1 11-fach 10-12-14-...</span>
+                <span class="val-item-price">39,00 EUR</span>
+                <span class="val-item-chevron">›</span>
+              </div>
+              <div class="val-item" style="background:#FFFBEB;border-radius:4px;padding:7px 4px;margin:0 -4px;border-bottom:1px solid #FCD34D">
+                <div class="val-item-status"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                <span class="val-item-name" style="color:#92400E">SRAM PC 12 Speed Chain 126 L...</span>
+                <span class="val-item-price" style="color:#92400E">28,45 EUR</span>
+                <span class="val-item-chevron" style="color:#D97706">›</span>
+              </div>
+              <div class="val-item">
+                <div class="val-item-status"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="val-item-name">KMC X12 12 Speed Chain with...</span>
+                <span class="val-item-price">28,45 EUR</span>
+                <span class="val-item-chevron">›</span>
+              </div>
+              <div class="val-item">
+                <div class="val-item-status"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5"><polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="val-item-name">KMC X12 12 Speed Chain with...</span>
+                <span class="val-item-price">28,45 EUR</span>
+                <span class="val-item-chevron">›</span>
+              </div>
+            </div>
+            <!-- Total -->
+            <div class="val-section">
+              <div class="val-section-header">
+                <div class="val-section-title">Total Amount</div>
+                <span style="font-size:15px;font-weight:700;color:var(--n1000)">805,69 EUR</span>
+              </div>
+              <div class="val-total-row"><span class="val-total-label">Net Amount</span><span class="val-total-value">677,28 EUR</span></div>
+              <div class="val-total-row"><span class="val-total-label">Tax Rate</span><span class="val-total-value">19,00 %</span></div>
+              <div class="val-total-row val-grand"><span>Gross Amount</span><span>805,69 EUR</span></div>
+            </div>
+          </div>
+          <!-- Footer -->
+          <div class="validate-footer">
+            <button class="btn-back" onclick="go('s-damage')">Back</button>
+            <button class="btn-continue on" onclick="go('s-review')">
+              Continue
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+            <span style="font-size:12px;color:var(--n600)">Fill all missing fields to proceed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  SCREEN 5 — CONFIRM DAMAGE                       ║
+     ╚══════════════════════════════════════════════════╝ -->
+<div class="screen" id="s-damage">
+  <div class="modal-shell">
+    <div class="nav-header">
+      <div class="nav-breadcrumb">
+        <div class="nav-logo-dot">a</div>
+        <span class="nav-crumb">Homepage</span>
+        <span class="nav-crumb-sep">›</span>
+        <span class="nav-crumb active">New Claim</span>
+      </div>
+      <div class="nav-close" onclick="go('s-welcome')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+      </div>
+    </div>
+    <div class="stepper-wrap">
+      <div class="stepper">
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line hidden"></div><div class="step-dot done">✓</div><div class="step-line done"></div></div>
+          <span class="step-label done">Upload</span>
+        </div>
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line done"></div><div class="step-dot active">2</div><div class="step-line"></div></div>
+          <span class="step-label active">Confirm Damage</span>
+        </div>
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line"></div><div class="step-dot">3</div><div class="step-line"></div></div>
+          <span class="step-label">Validate</span>
+        </div>
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line"></div><div class="step-dot">4</div><div class="step-line hidden"></div></div>
+          <span class="step-label">Review</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-content" style="flex-direction:column">
+      <div class="damage-content" style="flex:1;overflow:hidden">
+        <!-- Left: PDF -->
+        <div class="damage-left">
+          <div class="pdf-card" id="pdf-card-damage">
+              <div class="pdf-toolbar">
+                <div class="pdf-nav">
+                  <button class="pdf-nav-btn">‹</button>
+                  <button class="pdf-nav-btn">›</button>
+                  <span class="pdf-page-info">1 / 1</span>
+                </div>
+                <div class="pdf-zoom">
+                  <button class="pdf-zoom-btn">−</button>
+                  <span>125%</span>
+                  <button class="pdf-zoom-btn">+</button>
+                </div>
+              </div>
+              <div class="pdf-body">
+                <!-- PDF rendered as HTML fallback (embed blocked in sandbox) -->
+                <div class="pdf-fallback all-pdf-fallbacks">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                    <div><b style="font-size:9px;color:#282b28">Bike Shop Berlin</b><br>www.bikeshopberlin.com<br>+49 30 99999999</div>
+                    <div style="text-align:right">Sonnenallee 221, 12059 Berlin<br>Tax ID: 45DC2200787</div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                    <span><b style="color:#282b28">Firma</b><br>AGL Activ Services GmbH<br>Georgstraße 42, 30159 Hannover</span>
+                    <span style="text-align:right"><b style="color:#282b28">Datum</b><br>20.09.2025<br><b style="color:#282b28">Fahrzeug</b><br>E-Bike, 2.900€</span>
+                  </div>
+                  <div style="font-size:9px;font-weight:700;color:#282b28;margin:6px 0 2px">Rechnung (#A3452-53)</div>
+                  <div style="margin-bottom:4px">Nutzer in Kurve wegeschlittert und Fahrrad gegen Bordstein gerutscht.</div>
+                  <div style="font-size:7px;color:#282b28;margin-bottom:4px">Schadennummer: 13876439<br>Assona Vers.-Nr.: 637883873-MAD-4766357</div>
+                  <table style="width:100%;border-collapse:collapse">
+                    <tr style="border-bottom:1px solid #e8ebe8"><th style="text-align:left;padding:2px 0;color:#282b28">ART.</th><th style="text-align:left">BEZEICHNUNG</th><th>ANZ</th><th style="text-align:right">PREIS</th><th style="text-align:right">GESAMT</th></tr>
+                    <tr><td>10045638</td><td>KETTE CN-M6100 126 GLIED</td><td>1</td><td style="text-align:right">49,95€</td><td style="text-align:right">49,95€</td></tr>
+                    <tr><td>10045650</td><td>Kassette SLX CS-M7100</td><td>1</td><td style="text-align:right">129,95€</td><td style="text-align:right">129,95€</td></tr>
+                    <tr><td>10045725</td><td>Kettenblatt</td><td>1</td><td style="text-align:right">48,99€</td><td style="text-align:right">48,99€</td></tr>
+                    <tr><td>90033352</td><td>Montage Kette+Kassette</td><td>1</td><td style="text-align:right">100,00€</td><td style="text-align:right">100,00€</td></tr>
+                    <tr><td>10034576</td><td>Griffe</td><td>1</td><td style="text-align:right">29,95€</td><td style="text-align:right">29,95€</td></tr>
+                    <tr><td>90032873</td><td>Montage Griffe</td><td>1</td><td style="text-align:right">20,00€</td><td style="text-align:right">20,00€</td></tr>
+                    <tr><td>10057622</td><td>Reifen Hinten</td><td>1</td><td style="text-align:right">45,00€</td><td style="text-align:right">45,00€</td></tr>
+                    <tr><td>90053175</td><td>Montage Reifen</td><td>1</td><td style="text-align:right">50,00€</td><td style="text-align:right">50,00€</td></tr>
+                    <tr><td>100399864</td><td>Bremsscheibe Vorn</td><td>1</td><td style="text-align:right">52,99€</td><td style="text-align:right">52,99€</td></tr>
+                    <tr><td>90053175</td><td>Montage Bremsscheibe</td><td>1</td><td style="text-align:right">50,00€</td><td style="text-align:right">50,00€</td></tr>
+                  </table>
+                  <div style="margin-top:8px;text-align:right;font-size:8px;border-top:1px solid #e8ebe8;padding-top:4px">
+                    <div>Gesamt Netto: 677,28€</div><div>MwSt: 19%</div><div><b>Gesamt: 805,98€</b></div>
+                  </div>
+                  <div style="margin-top:8px;color:#9ba29b;border-top:1px solid #e8ebe8;padding-top:6px;font-size:7px">Wir danken für Ihren Auftrag.</div>
+                </div>
+              </div>
+              <div class="pdf-filename">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <span class="pdf-filename-name all-pdf-filenames">Rechnung-003.pdf</span>
+              </div>
+            </div>
+        <div class="damage-right">
+          <!-- Alert -->
+          <div class="alert-banner">
+            <div class="alert-top">
+              <div class="alert-title-row">
+                <div class="alert-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="alert-title">Invoice uploaded: <span class="alert-filename all-alert-filenames">Rechnung-003.pdf</span></div>
+              </div>
+              <div class="alert-close">
+                <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+              </div>
+            </div>
+            <div class="alert-sub">Please confirm the details below.</div>
+            <div class="alert-action">
+              <button class="btn-reupload" onclick="triggerFileInput()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                Upload a new file
+              </button>
+            </div>
+          </div>
+          <!-- Damage Type -->
+          <div class="damage-section">
+            <div class="damage-section-title">Confirm Damage Type</div>
+            <div class="tags-wrap">
+              <div class="tag selected" id="dt-partial" onclick="toggleDmgType('dt-partial')">Partial Damage <span class="tag-x">×</span></div>
+              <div class="tag" id="dt-uvv" onclick="toggleDmgType('dt-uvv')">UVV</div>
+              <div class="tag" id="dt-insp" onclick="toggleDmgType('dt-insp')">Inspection</div>
+            </div>
+          </div>
+          <!-- Damage Causes -->
+          <div class="damage-section">
+            <div class="damage-section-title">Confirm Damage Causes</div>
+            <div class="tags-wrap" id="causes-wrap">
+              <div class="tag" onclick="toggleCause(this)">Feuchtigkeit</div>
+              <div class="tag" onclick="toggleCause(this)">Abnutzung, Verschleiss</div>
+              <div class="tag" onclick="toggleCause(this)">Bedienfehler/Ungeschicklichkeit</div>
+              <div class="tag" onclick="toggleCause(this)">Elektronikschäden</div>
+              <div class="tag" onclick="toggleCause(this)">Fall/Sturz/Unfall mit Beteiligung</div>
+              <div class="tag" onclick="toggleCause(this)">Fall/Sturz/Unfall ohne Beteiligung</div>
+              <div class="tag" onclick="toggleCause(this)">Material-, Konstruktions-, Herstell- und Produktionsfehler an Sonstigen Teilen</div>
+              <div class="tag" onclick="toggleCause(this)">Vandalismus/Vorsatz/Sabotage</div>
+              <div class="tag" onclick="toggleCause(this)">Garantie/Gewährleistung</div>
+              <div class="tag" onclick="toggleCause(this)">Teilediebstahl</div>
+              <div class="tag" onclick="toggleCause(this)">nicht bestimmungsgemäßer Gebrauch, (z.B. Reinigung, Reparatur)</div>
+              <div class="tag" onclick="toggleCause(this)">Sonstige/unbekannt</div>
+              <div class="tag" onclick="toggleCause(this)">Reifenpanne durch Fremdkörper</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="damage-footer">
+        <button class="btn-continue" id="btn-continue" onclick="go('s-validate')">
+          Continue
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <span class="continue-hint" id="continue-hint">Select at least 1 cause to proceed</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════╗
+     ║  SCREEN 6 — REVIEW                               ║
+     ╚══════════════════════════════════════════════════╝ -->
+<div class="screen" id="s-review">
+  <div class="modal-shell" style="position:relative">
+    <div class="nav-header">
+      <div class="nav-breadcrumb">
+        <div class="nav-logo-dot">a</div>
+        <span class="nav-crumb">Homepage</span>
+        <span class="nav-crumb-sep">›</span>
+        <span class="nav-crumb active">New Claim</span>
+      </div>
+      <div class="nav-close" onclick="go('s-welcome')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+      </div>
+    </div>
+    <div class="stepper-wrap">
+      <div class="stepper">
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line hidden"></div><div class="step-dot done">✓</div><div class="step-line done"></div></div>
+          <span class="step-label done">Upload</span>
+        </div>
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line done"></div><div class="step-dot done">✓</div><div class="step-line done"></div></div>
+          <span class="step-label done">Confirm Damage</span>
+        </div>
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line done"></div><div class="step-dot done">✓</div><div class="step-line done"></div></div>
+          <span class="step-label done">Validate</span>
+        </div>
+        <div class="step-item">
+          <div class="step-inline"><div class="step-line done"></div><div class="step-dot active">4</div><div class="step-line hidden"></div></div>
+          <span class="step-label active">Review</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-content">
+      <div class="review-content">
+        <!-- Left: PDF -->
+        <div class="review-left">
+          <div class="pdf-card" id="pdf-card-review">
+              <div class="pdf-toolbar">
+                <div class="pdf-nav">
+                  <button class="pdf-nav-btn">‹</button>
+                  <button class="pdf-nav-btn">›</button>
+                  <span class="pdf-page-info">1 / 1</span>
+                </div>
+                <div class="pdf-zoom">
+                  <button class="pdf-zoom-btn">−</button>
+                  <span>125%</span>
+                  <button class="pdf-zoom-btn">+</button>
+                </div>
+              </div>
+              <div class="pdf-body">
+                <!-- PDF rendered as HTML fallback (embed blocked in sandbox) -->
+                <div class="pdf-fallback all-pdf-fallbacks">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                    <div><b style="font-size:9px;color:#282b28">Bike Shop Berlin</b><br>www.bikeshopberlin.com<br>+49 30 99999999</div>
+                    <div style="text-align:right">Sonnenallee 221, 12059 Berlin<br>Tax ID: 45DC2200787</div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                    <span><b style="color:#282b28">Firma</b><br>AGL Activ Services GmbH<br>Georgstraße 42, 30159 Hannover</span>
+                    <span style="text-align:right"><b style="color:#282b28">Datum</b><br>20.09.2025<br><b style="color:#282b28">Fahrzeug</b><br>E-Bike, 2.900€</span>
+                  </div>
+                  <div style="font-size:9px;font-weight:700;color:#282b28;margin:6px 0 2px">Rechnung (#A3452-53)</div>
+                  <div style="margin-bottom:4px">Nutzer in Kurve wegeschlittert und Fahrrad gegen Bordstein gerutscht.</div>
+                  <div style="font-size:7px;color:#282b28;margin-bottom:4px">Schadennummer: 13876439<br>Assona Vers.-Nr.: 637883873-MAD-4766357</div>
+                  <table style="width:100%;border-collapse:collapse">
+                    <tr style="border-bottom:1px solid #e8ebe8"><th style="text-align:left;padding:2px 0;color:#282b28">ART.</th><th style="text-align:left">BEZEICHNUNG</th><th>ANZ</th><th style="text-align:right">PREIS</th><th style="text-align:right">GESAMT</th></tr>
+                    <tr><td>10045638</td><td>KETTE CN-M6100 126 GLIED</td><td>1</td><td style="text-align:right">49,95€</td><td style="text-align:right">49,95€</td></tr>
+                    <tr><td>10045650</td><td>Kassette SLX CS-M7100</td><td>1</td><td style="text-align:right">129,95€</td><td style="text-align:right">129,95€</td></tr>
+                    <tr><td>10045725</td><td>Kettenblatt</td><td>1</td><td style="text-align:right">48,99€</td><td style="text-align:right">48,99€</td></tr>
+                    <tr><td>90033352</td><td>Montage Kette+Kassette</td><td>1</td><td style="text-align:right">100,00€</td><td style="text-align:right">100,00€</td></tr>
+                    <tr><td>10034576</td><td>Griffe</td><td>1</td><td style="text-align:right">29,95€</td><td style="text-align:right">29,95€</td></tr>
+                    <tr><td>90032873</td><td>Montage Griffe</td><td>1</td><td style="text-align:right">20,00€</td><td style="text-align:right">20,00€</td></tr>
+                    <tr><td>10057622</td><td>Reifen Hinten</td><td>1</td><td style="text-align:right">45,00€</td><td style="text-align:right">45,00€</td></tr>
+                    <tr><td>90053175</td><td>Montage Reifen</td><td>1</td><td style="text-align:right">50,00€</td><td style="text-align:right">50,00€</td></tr>
+                    <tr><td>100399864</td><td>Bremsscheibe Vorn</td><td>1</td><td style="text-align:right">52,99€</td><td style="text-align:right">52,99€</td></tr>
+                    <tr><td>90053175</td><td>Montage Bremsscheibe</td><td>1</td><td style="text-align:right">50,00€</td><td style="text-align:right">50,00€</td></tr>
+                  </table>
+                  <div style="margin-top:8px;text-align:right;font-size:8px;border-top:1px solid #e8ebe8;padding-top:4px">
+                    <div>Gesamt Netto: 677,28€</div><div>MwSt: 19%</div><div><b>Gesamt: 805,98€</b></div>
+                  </div>
+                  <div style="margin-top:8px;color:#9ba29b;border-top:1px solid #e8ebe8;padding-top:6px;font-size:7px">Wir danken für Ihren Auftrag.</div>
+                </div>
+              </div>
+              <div class="pdf-filename">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <span class="pdf-filename-name all-pdf-filenames">Rechnung-003.pdf</span>
+              </div>
+            </div>
+        <div class="review-right">
+          <div class="review-header-card">
+            <div class="review-claim-id">Claim: CLM-12345</div>
+            <div class="review-title">Review Claim</div>
+            <div class="review-desc">Review the claim information below before submitting your claim.</div>
+            <button class="btn-submit-claim" onclick="openComments()">Submit claim to assona</button>
+          </div>
+          <!-- Invoice Data -->
+          <div class="review-section">
+            <div class="review-section-header">
+              <div class="review-section-title">Invoice Data</div>
+              <button class="review-edit-btn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+            </div>
+            <div class="review-field"><span class="review-field-label">Bike Frame ID</span><span class="review-field-value">00RDLS98221</span></div>
+            <div class="review-field"><span class="review-field-label">Invoice Date</span><span class="review-field-value">20/09/2025</span></div>
+            <div class="review-field"><span class="review-field-label">Damage Date</span><span class="review-field-value">20/09/2025</span></div>
+            <div class="review-field"><span class="review-field-label">Description</span><span class="review-field-value" style="max-width:200px">Lenker gebrochen nach Sturz durch verklemmte Kette</span></div>
+          </div>
+          <!-- Invoice Items -->
+          <div class="review-section">
+            <div class="review-section-header">
+              <div class="review-section-title">12 Invoice Items</div>
+              <button class="review-edit-btn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+            </div>
+            <div class="review-item-row"><span class="review-item-name">Campagnolo Record 12-fach 11-12-...</span><div class="review-item-right"><span class="review-item-price">52,50 EUR</span><span class="review-item-chevron">›</span></div></div>
+            <div class="review-item-row"><span class="review-item-name">Shimano Dura-Ace R9100 11-12-13-...</span><div class="review-item-right"><span class="review-item-price">55,00 EUR</span><span class="review-item-chevron">›</span></div></div>
+            <div class="review-item-row"><span class="review-item-name">SRAM Red 22 11-12-13-14-15-16-17-...</span><div class="review-item-right"><span class="review-item-price">53,00 EUR</span><span class="review-item-chevron">›</span></div></div>
+            <div class="review-item-row"><span class="review-item-name">Campagnolo Super Record 12-fach...</span><div class="review-item-right"><span class="review-item-price">60,00 EUR</span><span class="review-item-chevron">›</span></div></div>
+            <div class="review-item-row"><span class="review-item-name">Shimano Ultegra R8000 11-12-13-14-...</span><div class="review-item-right"><span class="review-item-price">47,50 EUR</span><span class="review-item-chevron">›</span></div></div>
+          </div>
+          <!-- Total -->
+          <div class="review-section">
+            <div class="review-section-header">
+              <div class="review-section-title">Total Amount</div>
+              <button class="review-edit-btn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+            </div>
+            <div class="review-total-section">
+              <div class="review-total-row"><span class="review-total-label">Net Amount</span><span class="review-total-value">677,28 EUR</span></div>
+              <div class="review-total-row"><span class="review-total-label">Tax Rate</span><span class="review-total-value">19,00 %</span></div>
+              <div class="review-total-row"><span class="review-total-label review-grand-total">Gross Amount</span><span class="review-total-value review-grand-total">805,69 EUR</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Additional Comments -->
+    <div class="modal-overlay" id="modal-comments">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title">Submit claim</div>
+          <button class="modal-close" onclick="closeComments()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="field-label-sm">Additional comments</div>
+            <textarea class="textarea-field" placeholder="Please use this text box to provide us with any additional information." rows="4"></textarea>
+          </div>
+          <div class="upload-media-row">
+            <div class="upload-media-info">
+              <div class="upload-media-label">Upload media</div>
+              <div class="upload-media-sub">Up to 9 images(s) or video(s)</div>
+            </div>
+            <button class="btn-upload-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              Upload
+            </button>
+          </div>
+          <label class="checkbox-row" onclick="toggleCheck()">
+            <div class="checkbox-box checked" id="chk-box">
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg>
+            </div>
+            <span class="checkbox-label">I confirm that all information is correct and complete</span>
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-not-yet" onclick="closeComments()">Not yet</button>
+          <button class="btn-submit-modal" onclick="doSubmit()">
+            Submit
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Submit Success -->
+    <div class="modal-overlay" id="modal-submit">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title">Submit to assona</div>
+          <button class="modal-close" onclick="document.getElementById('modal-submit').classList.remove('open')">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/></svg>
+          </button>
+        </div>
+        <div class="submit-success-body">
+          <div class="submit-check-icon">
+            <svg viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="26" cy="26" r="24"/>
+              <polyline points="14 27 22 35 38 19" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="submit-success-title">Sent to manual processing</div>
+          <div class="submit-success-desc">Your request will be processed within 3 working days.</div>
+          <button class="btn-finish" onclick="go('s-welcome')">Finish</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     PROTOTYPE NAV BAR
+════════════════════════════════════════════════════ -->
+<div class="proto-nav">
+  <span class="proto-label">Flow</span>
+  <button class="proto-btn cur" id="pn-s-login" onclick="go('s-login')">Log in</button>
+  <button class="proto-btn" id="pn-s-welcome" onclick="go('s-welcome')">Welcome</button>
+  <button class="proto-btn" id="pn-s-upload" onclick="go('s-upload')">Upload</button>
+  <button class="proto-btn" id="pn-s-damage" onclick="go('s-damage')">Confirm Damage</button>
+  <button class="proto-btn" id="pn-s-validate" onclick="go('s-validate')">Validate</button>
+  <button class="proto-btn" id="pn-s-review" onclick="go('s-review')">Review</button>
+  <button class="proto-btn" id="pn-modal" onclick="go('s-review');setTimeout(openComments,300)">Comments</button>
+  <button class="proto-btn" id="pn-submit" onclick="go('s-review');setTimeout(()=>{openComments();setTimeout(doSubmit,400)},300)">Submit ✓</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════ */
+let current = 's-login';
+
+function go(id) {
+  if (id === current) return;
+  const from = document.getElementById(current);
+  const to   = document.getElementById(id);
+  if (!from || !to) return;
+
+  from.classList.add('exit');
+  setTimeout(() => { from.classList.remove('active','exit'); }, 350);
+
+  to.classList.add('active');
+  current = id;
+
+  // Reset login form when navigating back to it
+  if (id === 's-login') {
+    document.getElementById('l-email').value = '';
+    document.getElementById('l-pass').value = '';
+    document.getElementById('l-email').classList.remove('err');
+    document.getElementById('l-pass').classList.remove('err');
+    document.getElementById('l-err').classList.remove('vis');
+    document.getElementById('l-btn').classList.remove('on');
+    document.getElementById('l-eye').style.display = 'none';
+  }
+
+  // Update proto nav
+  document.querySelectorAll('.proto-btn').forEach(b => b.classList.remove('cur'));
+  const navBtn = document.getElementById('pn-' + id);
+  if (navBtn) navBtn.classList.add('cur');
+}
+
+/* ═══════════════════════════════════════
+   LOGIN LOGIC
+═══════════════════════════════════════ */
+function loginInput() {
+  const emailVal = document.getElementById('l-email').value.trim();
+  const passVal  = document.getElementById('l-pass').value;
+  const btn      = document.getElementById('l-btn');
+  const eye      = document.getElementById('l-eye');
+  const errEl    = document.getElementById('l-err');
+
+  // Show/hide eye toggle whenever password field has content
+  eye.style.display = passVal.length > 0 ? 'flex' : 'none';
+
+  // Always clear error state on any keystroke
+  document.getElementById('l-email').classList.remove('err');
+  document.getElementById('l-pass').classList.remove('err');
+  errEl.classList.remove('vis');
+
+  // Enable button only when both fields are non-empty
+  if (emailVal.length > 0 && passVal.length > 0) {
+    btn.classList.add('on');
+  } else {
+    btn.classList.remove('on');
+  }
+}
+
+function togglePass() {
+  const inp = document.getElementById('l-pass');
+  const on  = inp.type === 'password';
+  inp.type = on ? 'text' : 'password';
+  document.getElementById('l-eye-off').style.display = on ? 'none' : 'block';
+  document.getElementById('l-eye-on').style.display  = on ? 'block' : 'none';
+}
+
+function doLogin() {
+  const btn = document.getElementById('l-btn');
+  if (!btn.classList.contains('on')) return;
+  const e = document.getElementById('l-email').value.trim();
+  const p = document.getElementById('l-pass').value.trim();
+  if (e === 'admin' + '@' + 'bikeshopberlin.de' && p.length > 0) {
+    go('s-welcome');
+  } else {
+    document.getElementById('l-email').classList.add('err');
+    document.getElementById('l-pass').classList.add('err');
+    document.getElementById('l-err').classList.add('vis');
+    btn.classList.remove('on');
+    toast('Tip: use admin' + '@' + 'bikeshopberlin.de + any password');
+  }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+/* ═══════════════════════════════════════
+   UPLOAD — FILE INPUT + AGENT ANIMATION
+═══════════════════════════════════════ */
+
+let uploadedPDFUrl = null;
+
+function triggerFileInput() {
+  document.getElementById('pdf-file-input').click();
+}
+
+function handleFileSelected(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+
+  // Validate: must be PDF
+  const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+  if (!isPdf) { showPdfError(); input.value = ''; return; }
+
+  const fname = file.name;
+
+  // Update displayed filename across all cards (fallback HTML invoice stays visible)
+  document.querySelectorAll('.all-pdf-filenames').forEach(el => { el.textContent = fname; });
+  document.querySelectorAll('.all-alert-filenames').forEach(el => { el.textContent = fname; });
+
+  // Reset file input so the same file can be re-selected later
+  input.value = '';
+
+  // Transition: idle → loading preview
+  document.getElementById('upload-idle').style.display = 'none';
+  document.getElementById('upload-preview-loading').classList.add('active');
+
+  // After 1.4s → agent split + animation
+  setTimeout(() => {
+    document.getElementById('upload-preview-loading').classList.remove('active');
+    document.getElementById('upload-agent').classList.add('active');
+    startAgentAnim();
+  }, 1400);
+}
+
+function showPdfError() {
+  // Reset to idle state first
+  document.getElementById('upload-idle').style.display = '';
+  document.getElementById('upload-preview-loading').classList.remove('active');
+  document.getElementById('upload-agent').classList.remove('active');
+  // Show popover
+  document.getElementById('pdf-error-overlay').classList.add('open');
+}
+
+function closePdfError() {
+  document.getElementById('pdf-error-overlay').classList.remove('open');
+}
+
+function skipToManual() {
+  // Continue to damage screen without PDF extraction
+  go('s-damage');
+}
+
+let agentAnimating = false;
+
+function startAgentAnim() {
+  if (agentAnimating) return;
+  agentAnimating = true;
+
+  const steps = [
+    { id: 'vc-1', activeLabel: 'Analysing file...',    doneLabel: 'File analysed'    },
+    { id: 'vc-2', activeLabel: 'Extracting data...',   doneLabel: 'Data extracted'   },
+    { id: 'vc-3', activeLabel: 'Checking frame ID...', doneLabel: 'Frame ID checked' },
+    { id: 'vc-4', activeLabel: 'Checking address...', doneLabel:  'Address verified' },
+  ];
+
+  // Start all as pending
+  steps.forEach(s => setStepPending(s.id, s.doneLabel.replace('File analysed','Analysing file...').replace('Data extracted','Extract data').replace('Frame ID checked','Check frame ID').replace('Address verified','Check address')));
+  setStepPending('vc-1', 'Analysing file...');
+  setStepPending('vc-2', 'Extract data');
+  setStepPending('vc-3', 'Check frame ID');
+  setStepPending('vc-4', 'Check address');
+
+  // Sequential: step i starts at delays[i], previous step goes done
+  const delays = [0, 1300, 2500, 3600];
+  steps.forEach((s, i) => {
+    setTimeout(() => {
+      if (i > 0) setStepDone(steps[i-1].id, steps[i-1].doneLabel);
+      setStepChecking(s.id, s.activeLabel);
+    }, delays[i]);
+  });
+
+  // All done → navigate to Confirm Damage
+  setTimeout(() => {
+    setStepDone('vc-4', 'Address verified');
+    // Brief pause so user sees all 4 done, then navigate
+    setTimeout(() => {
+      agentAnimating = false;
+      go('s-damage');
+      setTimeout(resetUploadScreen, 600);
+    }, 800);
+  }, 4800);
+}
+
+function resetUploadScreen() {
+  document.getElementById('upload-idle').style.display = '';
+  document.getElementById('upload-preview-loading').classList.remove('active');
+  document.getElementById('upload-agent').classList.remove('active');
+  // Reset steps
+  setStepPending('vc-1', 'Analysing file...');
+  setStepPending('vc-2', 'Extract data');
+  setStepPending('vc-3', 'Check frame ID');
+  setStepPending('vc-4', 'Check address');
+  // Re-set vc-1 to checking for next run
+  setStepChecking('vc-1', 'Analysing file...');
+}
+
+function setStepChecking(id, label) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'agent-step checking';
+  el.innerHTML = `<div class="agent-step-icon"><span class="agent-chevron">›</span></div><span>${label}</span>`;
+}
+function setStepDone(id, label) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'agent-step done';
+  el.innerHTML = `<div class="agent-step-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><span>${label}</span>`;
+}
+function setStepPending(id, label) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'agent-step pending';
+  el.innerHTML = `<div class="agent-step-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#d4d9d4" stroke-width="1.8"/></svg></div><span>${label}</span>`;
+}
+
+/* Legacy simulateUpload — now just triggers file input (kept for proto nav) */
+function simulateUpload() {
+  triggerFileInput();
+}
+
+/* ═══════════════════════════════════════
+   DAMAGE CAUSE SELECTION
+═══════════════════════════════════════ */
+function toggleCause(el) {
+  el.classList.toggle('selected');
+  updateContinueBtn();
+}
+function toggleDmgType(id) {
+  document.querySelectorAll('#s-damage .damage-section:first-of-type .tag').forEach(t => t.classList.remove('selected'));
+  document.getElementById(id).classList.add('selected');
+}
+function updateContinueBtn() {
+  const selected = document.querySelectorAll('#causes-wrap .tag.selected').length;
+  const btn = document.getElementById('btn-continue');
+  const hint = document.getElementById('continue-hint');
+  btn.classList.toggle('on', selected > 0);
+  hint.textContent = selected > 0 ? `${selected} cause${selected>1?'s':''} selected` : 'Select at least 1 cause to proceed';
+  hint.style.color = selected > 0 ? '#16A34A' : '';
+}
+
+/* ═══════════════════════════════════════
+   COMMENTS + SUBMIT MODALS
+═══════════════════════════════════════ */
+function openComments() {
+  document.getElementById('modal-comments').classList.add('open');
+}
+function closeComments() {
+  document.getElementById('modal-comments').classList.remove('open');
+}
+function toggleCheck() {
+  const box = document.getElementById('chk-box');
+  box.classList.toggle('checked');
+}
+function doSubmit() {
+  document.getElementById('modal-comments').classList.remove('open');
+  setTimeout(() => { document.getElementById('modal-submit').classList.add('open'); }, 200);
+}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+/* spin animation */
+const style = document.createElement('style');
+style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+document.head.appendChild(style);
+</script>
+</body>
+</html>

@@ -1,0 +1,707 @@
+/* Step 1 – Upload (idle → loading → agent + PDF card).
+ * Shared: PDF card, agent steps, PDF error overlay. Icons: Tabler (tabler.io/icons).
+ */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+#pdf-file-input {
+  display: none;
+}
+
+/* ─── Upload content & card (Figma: node 4390-131586) ─── */
+.upload-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  padding: 24px;
+  position: relative;
+}
+/* Soft gradient behind upload card (Figma: depth behind card) */
+.upload-content .upload-grad {
+  position: absolute;
+  width: 560px;
+  height: 320px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+.upload-content .upload-grad::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125.5deg, rgba(234, 246, 143, 0.6) 18.7%, rgba(144, 214, 218, 0.5) 68.7%);
+  filter: blur(55px);
+  border-radius: 50%;
+}
+.upload-card {
+  width: 448px;
+  background: #ffffff;
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06));
+  padding: 40px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.upload-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.upload-title {
+  font-family: var(--ff-heading);
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 28px;
+  letter-spacing: -0.14px;
+  color: var(--n1000);
+}
+.upload-sub {
+  font-size: 16px;
+  color: var(--n700);
+}
+.upload-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+.btn-upload {
+  height: 44px;
+  padding: 0 20px;
+  border-radius: var(--r-sm);
+  border: none;
+  border-bottom: 2px solid rgba(5, 8, 16, 0.2);
+  background: var(--a300);
+  font-family: var(--ff-body);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--n1000);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+.btn-upload:hover {
+  background: var(--a500);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.upload-or {
+  font-size: 12px;
+  color: var(--n700);
+}
+.upload-drag {
+  font-size: 14px;
+  color: var(--n1000);
+  cursor: pointer;
+}
+.upload-drag:hover {
+  text-decoration: underline;
+}
+
+.upload-drop-area {
+  position: absolute;
+  inset: 0;
+  border: 2px dashed var(--n300);
+  border-radius: var(--r-lg);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.upload-drop-area.drag {
+  opacity: 1;
+  background: rgba(77, 181, 196, 0.04);
+}
+
+/* ─── Loading preview (Figma: 4390-131598) ─── */
+.upload-preview-loading {
+  display: none;
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: #ffffff;
+  overflow: hidden;
+}
+/* Gradient behind loading preview card */
+.upload-preview-loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse 70% 60% at 50% 45%, rgba(234, 246, 143, 0.35) 0%, transparent 55%),
+              radial-gradient(ellipse 60% 50% at 50% 55%, rgba(144, 214, 218, 0.25) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+.upload-preview-loading.active {
+  display: flex !important;
+}
+/* Loading preview card (Figma: node 4390-131598) */
+.loading-preview-card {
+  position: relative;
+  z-index: 1;
+  width: 340px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06));
+  padding: 36px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.loading-preview-text {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--n700, #5c635c);
+  line-height: 20px;
+}
+.loading-spinner {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--n200, #e8ebe8);
+  border-top-color: var(--n700, #5c635c);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+/* ─── Agent split: 50% left, 50% right, fixed 24px gutter; PDF right-aligned, steps left-aligned ─── */
+.upload-agent {
+  display: none;
+  position: absolute;
+  inset: 0;
+  padding: 24px 16px;
+  gap: 24px;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: visible;
+  background: #ffffff;
+}
+.upload-agent.active {
+  display: flex !important;
+  z-index: 1;
+}
+
+/* Left panel: 50%. PDF card anchored to the right edge; overflow: visible so shadow is not clipped. */
+.upload-agent-left {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 0;
+  overflow: visible;
+  position: relative;
+  transition: padding 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.upload-agent-left .pdf-card {
+  margin-left: auto;
+}
+.upload-agent-left.pdf-expanded {
+  align-items: stretch;
+  justify-content: stretch;
+}
+/* Expand from top-right: card stays anchored at top-right and grows left/down. */
+.upload-agent-left.pdf-expanded .pdf-card {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  margin-left: 0;
+}
+.upload-agent-right-inner {
+  width: 100%;
+  max-width: 208px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Right panel: 50%. Steps block anchored to the left edge (align-items: flex-start). */
+.upload-agent-right {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0;
+  overflow: auto;
+}
+
+/* ─── PDF card (same as index_03: expand/collapse) ─── */
+.pdf-card {
+  width: 416px;
+  height: 474px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              height 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.pdf-card.expanded {
+  border-radius: 10px;
+}
+.pdf-toolbar {
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-bottom: 0.833px solid #e8ebe8;
+  background: #ffffff;
+}
+.pdf-nav {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.pdf-nav-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 6.75px;
+  border: 0.833px solid rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  opacity: 0.5;
+  font-size: 15px;
+  line-height: 1;
+  color: #282b28;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s;
+}
+.pdf-nav-btn:hover {
+  opacity: 0.8;
+}
+.pdf-page-info {
+  font-size: 12.25px;
+  color: #5c635c;
+  margin: 0 4px;
+  white-space: nowrap;
+}
+.pdf-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+.pdf-toolbar-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(5, 8, 16, 0.1);
+  flex-shrink: 0;
+}
+.pdf-expand-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 6.75px;
+  border: 0.833px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+  color: var(--n700);
+}
+.pdf-expand-btn:hover {
+  background: var(--n100);
+}
+.pdf-expand-btn.active {
+  background: var(--pastelY100, #f5f7ed);
+  border-color: var(--a400);
+  color: var(--n900);
+}
+.pdf-zoom {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.pdf-zoom-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 6.75px;
+  border: 0.833px solid rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  font-size: 15px;
+  line-height: 1;
+  color: #282b28;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.pdf-zoom-btn:hover {
+  background: #f4f6f4;
+}
+.pdf-zoom span {
+  font-size: 12.25px;
+  color: #5c635c;
+  min-width: 32px;
+  text-align: center;
+}
+.pdf-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #f5f7ed;
+}
+
+/* PDF.js canvas viewer (shown when a PDF is loaded) */
+.pdf-canvas-wrap {
+  flex: 1;
+  overflow: scroll;
+  display: none;
+  background: #f5f7ed;
+  padding: 12px;
+  box-sizing: border-box;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.pdf-canvas-wrap.loaded {
+  display: flex;
+}
+.pdf-canvas-wrap::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+#pdf-canvas {
+  display: block;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+  max-width: none;
+}
+
+.pdf-real-iframe {
+  width: 100%;
+  flex: 1;
+  border: none;
+  display: block;
+}
+.pdf-fallback {
+  display: block;
+  flex: 1;
+  overflow: auto;
+  padding: 12px;
+  font-size: 8px;
+  color: #5c635c;
+  line-height: 1.5;
+  background: #ffffff;
+  /* Hide scrollbar, keep scroll behaviour */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.pdf-fallback::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.pdf-filename {
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 12px;
+  border-top: 0.833px solid #e8ebe8;
+  background: #ffffff;
+  font-size: 12px;
+  color: #5c635c;
+}
+.pdf-filename-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pdf-filename-refresh {
+  cursor: pointer;
+  color: #9ba29b;
+  flex-shrink: 0;
+}
+.pdf-filename-refresh:hover {
+  color: #282b28;
+}
+
+/* ─── Agent steps (Figma: 4390-131948 – colors and spacing) ─── */
+.agent-step {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-neutral-1000, #0d0f0d);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.agent-step.pending {
+  background: transparent;
+  color: var(--color-neutral-500, #9ba29b);
+}
+.agent-step.checking {
+  background: var(--color-neutral-50, #fafbfa);
+  color: var(--color-neutral-1000, #0d0f0d);
+}
+.agent-step.done {
+  background: transparent;
+  color: var(--color-neutral-1000, #0d0f0d);
+}
+.agent-step-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.agent-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 18px;
+  font-style: normal;
+  line-height: 1;
+  color: var(--color-neutral-1000, #0d0f0d);
+  animation: spin 1s linear infinite;
+}
+
+/* ─── PDF error overlay ─── */
+.pdf-error-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  background: rgba(63, 63, 70, 0.2);
+  backdrop-filter: blur(3px);
+  align-items: center;
+  justify-content: center;
+}
+.pdf-error-overlay.open {
+  display: flex;
+}
+.pdf-error-dialog {
+  background: #fff;
+  border: 1px solid rgba(5, 8, 16, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.08);
+  width: 512px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: popover-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes popover-in {
+  from { opacity: 0; transform: scale(0.96) translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.pdf-error-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px 19px;
+  border-bottom: 1px solid rgba(5, 8, 16, 0.1);
+}
+.pdf-error-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+.pdf-error-title {
+  font-family: var(--ff-heading);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.1px;
+  color: #c73715;
+}
+.pdf-error-close {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #7a827a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.pdf-error-close:hover {
+  background: #f4f6f4;
+}
+.pdf-error-body {
+  padding: 20px 24px;
+}
+.pdf-error-text {
+  font-size: 14px;
+  font-weight: 400;
+  color: #0d0f0d;
+  line-height: 20px;
+}
+.pdf-error-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+}
+.pdf-error-btn-secondary {
+  height: 36px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  border: none;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+  background: #f4f6f4;
+  font-family: var(--ff-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: #0d0f0d;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.pdf-error-btn-secondary:hover {
+  background: #e8ebe8;
+}
+.pdf-error-btn-primary {
+  height: 36px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  border: none;
+  border-bottom: 2px solid rgba(5, 8, 16, 0.2);
+  background: #eaf68f;
+  font-family: var(--ff-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: #0d0f0d;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.pdf-error-btn-primary:hover {
+  background: #e4ec84;
+}
+
+/* ─── Responsive breakpoints ─── */
+
+/* Tablet: keep two columns but slightly tighter padding */
+@media (max-width: 1023px) {
+  .upload-content {
+    padding: 20px;
+  }
+
+  .upload-card {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .upload-agent {
+    padding: 20px 12px;
+  }
+
+  .upload-agent-left,
+  .upload-agent-right {
+    flex: 0 0 50%;
+  }
+
+  .pdf-card {
+    width: 380px;
+    max-width: 100%;
+  }
+}
+
+/* Mobile: stack content and PDF vertically */
+@media (max-width: 1023px) {
+  .upload-content {
+    padding: 16px;
+    align-items: stretch;
+  }
+
+  .upload-card {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    padding: 28px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .upload-agent {
+    position: static;
+    inset: auto;
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .upload-agent-left {
+    display: none;
+  }
+
+  .upload-agent-right {
+    flex: none;
+    width: 100%;
+    padding: 0;
+  }
+
+  .upload-agent-right-inner {
+    max-width: 100%;
+  }
+
+  .pdf-canvas-wrap {
+    padding: 8px;
+  }
+
+  .pdf-error-dialog {
+    width: 100%;
+    max-width: 360px;
+  }
+}

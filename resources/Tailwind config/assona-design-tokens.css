@@ -1,0 +1,527 @@
+/**
+ * ASSONA UI KIT - CSS CUSTOM PROPERTIES
+ * Complete design token system with light/dark theme support
+ */
+
+:root {
+  /* ===================================
+     PRIMARY COLORS (TEAL)
+     =================================== */
+  --color-primary-50: #F0F9FA;
+  --color-primary-100: #D9F1F4;
+  --color-primary-200: #B3E3E9;
+  --color-primary-300: #80CFD9;
+  --color-primary-400: #4DB5C4;
+  --color-primary-500: #2896AA;
+  --color-primary-600: #144F56;
+  --color-primary-700: #0F3A3F;
+  --color-primary-800: #0A282B;
+  --color-primary-900: #061A1C;
+  --color-primary-950: #030F10;
+  --color-primary: var(--color-primary-600);
+
+  /* ===================================
+     ACCENT COLORS (LIME)
+     =================================== */
+  --color-accent-50: #FBFDF0;
+  --color-accent-100: #F8FCDB;
+  --color-accent-200: #F1F9B8;
+  --color-accent-300: #EAF68F;
+  --color-accent-400: #E4EC84;
+  --color-accent-500: #D8E554;
+  --color-accent-600: #C5D62F;
+  --color-accent-700: #A0AE1F;
+  --color-accent-800: #757F17;
+  --color-accent-900: #4F5510;
+  --color-accent-950: #2D300A;
+  --color-accent: var(--color-accent-400);
+  --color-accent-brand: var(--color-accent-400);
+
+  /* ===================================
+     NEUTRAL COLORS (GREEN-GRAY)
+     =================================== */
+  --color-neutral-0: #FFFFFF;
+  --color-neutral-50: #FAFBFA;
+  --color-neutral-100: #F4F6F4;
+  --color-neutral-200: #E8EBE8;
+  --color-neutral-300: #D4D9D4;
+  --color-neutral-400: #B8BFB8;
+  --color-neutral-500: #9BA29B;
+  --color-neutral-600: #7A827A;
+  --color-neutral-700: #5C635C;
+  --color-neutral-800: #3F443F;
+  --color-neutral-900: #282B28;
+  --color-neutral-950: #181A18;
+  --color-neutral-1000: #0D0F0D;
+
+  /* ===================================
+     ERROR COLORS (CORAL-RED)
+     =================================== */
+  --color-error-50: #FEF5F3;
+  --color-error-100: #FEEAE5;
+  --color-error-200: #FDD4CA;
+  --color-error-300: #FCB5A0;
+  --color-error-400: #F99577;
+  --color-error-500: #EE735D;
+  --color-error-600: #E64E2E;
+  --color-error-700: #C73715;
+  --color-error-800: #962A11;
+  --color-error-900: #651C0B;
+  --color-error-950: #3A1006;
+  --color-error: var(--color-error-500);
+  --color-error-brand: var(--color-error-500);
+
+  /* ===================================
+     SUCCESS COLORS (GREEN)
+     =================================== */
+  --color-success-50: #F0FDF4;
+  --color-success-100: #DCFCE7;
+  --color-success-200: #BBF7D0;
+  --color-success-300: #86EFAC;
+  --color-success-400: #4ADE80;
+  --color-success-500: #22C55E;
+  --color-success-600: #16A34A;
+  --color-success-700: #15803D;
+  --color-success-800: #166534;
+  --color-success-900: #14532D;
+  --color-success-950: #0A2918;
+  --color-success: var(--color-success-500);
+
+  /* ===================================
+     WARNING COLORS (ORANGE)
+     =================================== */
+  --color-warning-50: #FFF8F0;
+  --color-warning-100: #FFF0DB;
+  --color-warning-200: #FFDEB8;
+  --color-warning-300: #FFC67D;
+  --color-warning-400: #FFAC42;
+  --color-warning-500: #FF9110;
+  --color-warning-600: #E67700;
+  --color-warning-700: #B35D00;
+  --color-warning-800: #804300;
+  --color-warning-900: #4D2900;
+  --color-warning-950: #261400;
+  --color-warning: var(--color-warning-500);
+
+  /* ===================================
+     PASTEL PETROL (COOL)
+     =================================== */
+  --color-petrol-50: #F7FBFB;
+  --color-petrol-100: #EDF5F5;
+  --color-petrol-200: #DBEAEA;
+  --color-petrol-300: #C3DDDD;
+  --color-petrol-400: #A8CDCD;
+  --color-petrol-500: #8DBDBD;
+  --color-petrol-600: #6FA5A5;
+  --color-petrol-700: #538484;
+  --color-petrol-800: #3E6464;
+  --color-petrol-900: #2A4444;
+  --color-petrol-950: #182929;
+  --color-petrol: var(--color-petrol-300);
+  --color-petrol-brand: var(--color-petrol-300);
+
+  /* ===================================
+     PASTEL BLUSH (WARM)
+     =================================== */
+  --color-blush-50: #FCFBFB;
+  --color-blush-100: #F9F5F5;
+  --color-blush-200: #EFE8E8;
+  --color-blush-300: #E5D8D8;
+  --color-blush-400: #D9C5C5;
+  --color-blush-500: #CCB2B2;
+  --color-blush-600: #B89797;
+  --color-blush-700: #9E7676;
+  --color-blush-800: #7D5757;
+  --color-blush-900: #5C3D3D;
+  --color-blush-950: #3B2424;
+  --color-blush: var(--color-blush-200);
+  --color-blush-brand: var(--color-blush-200);
+
+  /* ===================================
+     PASTEL SAGE (EARTHY)
+     =================================== */
+  --color-sage-50: #FAFBF7;
+  --color-sage-100: #F5F7ED;
+  --color-sage-200: #EAEED9;
+  --color-sage-300: #D1DCBA;
+  --color-sage-400: #BCC99E;
+  --color-sage-500: #A7B682;
+  --color-sage-600: #8D9C66;
+  --color-sage-700: #6F7C4D;
+  --color-sage-800: #535C39;
+  --color-sage-900: #383D26;
+  --color-sage-950: #20241A;
+  --color-sage: var(--color-sage-300);
+  --color-sage-brand: var(--color-sage-300);
+
+  /* ===================================
+     SEMANTIC TOKENS (LIGHT THEME)
+     =================================== */
+  
+  /* Base */
+  --color-base-foreground: var(--color-neutral-1000);
+  --color-base-background: var(--color-neutral-50);
+  --color-base-accent: var(--color-accent-400);
+  --color-base-stroke: rgba(13, 15, 13, 0.1);
+
+  /* Text */
+  --color-text-primary: var(--color-neutral-1000);
+  --color-text-secondary: var(--color-neutral-800);
+  --color-text-tertiary: var(--color-neutral-600);
+  --color-text-placeholder: var(--color-neutral-500);
+  --color-text-disabled: var(--color-neutral-400);
+  --color-text-on-accent: var(--color-neutral-1000);
+  --color-text-on-primary: var(--color-neutral-0);
+  --color-text-link: var(--color-primary-600);
+  --color-text-link-hover: var(--color-primary-700);
+
+  /* Interactive */
+  --color-interactive-primary: var(--color-primary-600);
+  --color-interactive-primary-hover: var(--color-primary-700);
+  --color-interactive-primary-pressed: var(--color-primary-800);
+  --color-interactive-accent: var(--color-accent-600);
+  --color-interactive-accent-hover: var(--color-accent-700);
+  --color-interactive-accent-pressed: var(--color-accent-800);
+  --color-interactive-hover: var(--color-neutral-100);
+  --color-interactive-pressed: var(--color-neutral-200);
+  --color-interactive-focus: var(--color-primary-600);
+  --color-interactive-disabled: var(--color-neutral-300);
+
+  /* Surfaces */
+  --color-surface-primary: var(--color-neutral-0);
+  --color-surface-secondary: var(--color-neutral-50);
+  --color-surface-tertiary: var(--color-neutral-100);
+  --color-surface-elevated: var(--color-neutral-0);
+  --color-surface-overlay: rgba(13, 15, 13, 0.5);
+  --color-surface-petrol: var(--color-petrol-100);
+  --color-surface-petrol-subtle: var(--color-petrol-50);
+  --color-surface-blush: var(--color-blush-200);
+  --color-surface-blush-subtle: var(--color-blush-50);
+  --color-surface-sage: var(--color-sage-100);
+  --color-surface-sage-subtle: var(--color-sage-50);
+
+  /* Borders */
+  --color-border-primary: var(--color-neutral-200);
+  --color-border-secondary: var(--color-neutral-300);
+  --color-border-focus: var(--color-primary-600);
+  --color-border-error: var(--color-error-600);
+  --color-border-success: var(--color-success-600);
+  --color-border-warning: var(--color-warning-600);
+
+  /* Error States */
+  --color-error-foreground: var(--color-error-700);
+  --color-error-background: var(--color-error-50);
+  --color-error-border: var(--color-error-300);
+  --color-error-hover: var(--color-error-100);
+  --color-error-strong: var(--color-error-600);
+
+  /* Success States */
+  --color-success-foreground: var(--color-success-700);
+  --color-success-background: var(--color-success-50);
+  --color-success-border: var(--color-success-300);
+  --color-success-hover: var(--color-success-100);
+  --color-success-strong: var(--color-success-600);
+
+  /* Warning States */
+  --color-warning-foreground: var(--color-warning-700);
+  --color-warning-background: var(--color-warning-50);
+  --color-warning-border: var(--color-warning-300);
+  --color-warning-hover: var(--color-warning-100);
+  --color-warning-strong: var(--color-warning-600);
+
+  /* ===================================
+     SPACING TOKENS
+     =================================== */
+  --space-0: 0px;
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-9: 2.25rem;  /* 36px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+  --space-14: 3.5rem;  /* 56px */
+  --space-16: 4rem;    /* 64px */
+  --space-20: 5rem;    /* 80px */
+  --space-24: 6rem;    /* 96px */
+  --space-28: 7rem;    /* 112px */
+  --space-32: 8rem;    /* 128px */
+  --space-40: 10rem;   /* 160px */
+  --space-48: 12rem;   /* 192px */
+  --space-56: 14rem;   /* 224px */
+  --space-64: 16rem;   /* 256px */
+  --space-80: 20rem;   /* 320px */
+  --space-96: 24rem;   /* 384px */
+
+  /* Semantic Spacing */
+  --spacing-component-xs: var(--space-2);
+  --spacing-component-sm: var(--space-3);
+  --spacing-component-md: var(--space-4);
+  --spacing-component-lg: var(--space-6);
+  --spacing-component-xl: var(--space-8);
+  --spacing-layout-xs: var(--space-4);
+  --spacing-layout-sm: var(--space-6);
+  --spacing-layout-md: var(--space-8);
+  --spacing-layout-lg: var(--space-12);
+  --spacing-layout-xl: var(--space-16);
+  --spacing-layout-2xl: var(--space-24);
+
+  /* ===================================
+     RADIUS TOKENS
+     =================================== */
+  --radius-none: 0px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-circle: 50px;
+  --radius-full: 9999px;
+
+  /* Semantic Radius */
+  --radius-interactive: var(--radius-sm);
+  --radius-input: var(--radius-sm);
+  --radius-surface: var(--radius-lg);
+  --radius-overlay: var(--radius-xl);
+  --radius-badge: var(--radius-circle);
+
+  /* ===================================
+     TYPOGRAPHY TOKENS
+     =================================== */
+  --font-family-heading: 'Uni-Neue', sans-serif;
+  --font-family-body: 'Inter', sans-serif;
+  --font-family-mono: 'SF Mono', monospace;
+
+  --font-weight-light: 200;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 32px;
+  --font-size-3xl: 40px;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  --letter-spacing-tight: -0.64px;
+  --letter-spacing-normal: -0.6%;
+  --letter-spacing-wide: -0.31px;
+
+  /* ===================================
+     SHADOW TOKENS
+     =================================== */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.15);
+
+  /* Semantic Shadows */
+  --shadow-card: var(--shadow-md);
+  --shadow-dropdown: var(--shadow-lg);
+  --shadow-modal: var(--shadow-xl);
+  --shadow-focus: 0 0 0 3px rgba(20, 79, 86, 0.2);
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+.dark,
+[data-theme="dark"] {
+  /* Primary (inverted for dark mode) */
+  --color-primary-50: #030F10;
+  --color-primary-100: #061A1C;
+  --color-primary-200: #0A282B;
+  --color-primary-300: #0F3A3F;
+  --color-primary-400: #144F56;
+  --color-primary-500: #2896AA;
+  --color-primary-600: #4DB5C4;
+  --color-primary-700: #80CFD9;
+  --color-primary-800: #B3E3E9;
+  --color-primary-900: #D9F1F4;
+  --color-primary-950: #F0F9FA;
+
+  /* Accent (inverted) */
+  --color-accent-50: #2D300A;
+  --color-accent-100: #4F5510;
+  --color-accent-200: #757F17;
+  --color-accent-300: #A0AE1F;
+  --color-accent-400: #C5D62F;
+  --color-accent-500: #D8E554;
+  --color-accent-600: #E4EC84;
+  --color-accent-700: #EAF68F;
+  --color-accent-800: #F1F9B8;
+  --color-accent-900: #F8FCDB;
+  --color-accent-950: #FBFDF0;
+
+  /* Neutral (inverted) */
+  --color-neutral-0: #0D0F0D;
+  --color-neutral-50: #181A18;
+  --color-neutral-100: #282B28;
+  --color-neutral-200: #3F443F;
+  --color-neutral-300: #5C635C;
+  --color-neutral-400: #7A827A;
+  --color-neutral-500: #9BA29B;
+  --color-neutral-600: #B8BFB8;
+  --color-neutral-700: #D4D9D4;
+  --color-neutral-800: #E8EBE8;
+  --color-neutral-900: #F4F6F4;
+  --color-neutral-950: #FAFBFA;
+  --color-neutral-1000: #FFFFFF;
+
+  /* Error (inverted) */
+  --color-error-50: #3A1006;
+  --color-error-100: #651C0B;
+  --color-error-200: #962A11;
+  --color-error-300: #C73715;
+  --color-error-400: #E64E2E;
+  --color-error-500: #EE735D;
+  --color-error-600: #F99577;
+  --color-error-700: #FCB5A0;
+  --color-error-800: #FDD4CA;
+  --color-error-900: #FEEAE5;
+  --color-error-950: #FEF5F3;
+
+  /* Success (inverted) */
+  --color-success-50: #0A2918;
+  --color-success-100: #14532D;
+  --color-success-200: #166534;
+  --color-success-300: #15803D;
+  --color-success-400: #16A34A;
+  --color-success-500: #22C55E;
+  --color-success-600: #4ADE80;
+  --color-success-700: #86EFAC;
+  --color-success-800: #BBF7D0;
+  --color-success-900: #DCFCE7;
+  --color-success-950: #F0FDF4;
+
+  /* Warning (inverted) */
+  --color-warning-50: #261400;
+  --color-warning-100: #4D2900;
+  --color-warning-200: #804300;
+  --color-warning-300: #B35D00;
+  --color-warning-400: #E67700;
+  --color-warning-500: #FF9110;
+  --color-warning-600: #FFAC42;
+  --color-warning-700: #FFC67D;
+  --color-warning-800: #FFDEB8;
+  --color-warning-900: #FFF0DB;
+  --color-warning-950: #FFF8F0;
+
+  /* Petrol (inverted) */
+  --color-petrol-50: #182929;
+  --color-petrol-100: #2A4444;
+  --color-petrol-200: #3E6464;
+  --color-petrol-300: #538484;
+  --color-petrol-400: #6FA5A5;
+  --color-petrol-500: #8DBDBD;
+  --color-petrol-600: #A8CDCD;
+  --color-petrol-700: #C3DDDD;
+  --color-petrol-800: #DBEAEA;
+  --color-petrol-900: #EDF5F5;
+  --color-petrol-950: #F7FBFB;
+
+  /* Blush (inverted) */
+  --color-blush-50: #3B2424;
+  --color-blush-100: #5C3D3D;
+  --color-blush-200: #7D5757;
+  --color-blush-300: #9E7676;
+  --color-blush-400: #B89797;
+  --color-blush-500: #CCB2B2;
+  --color-blush-600: #D9C5C5;
+  --color-blush-700: #E5D8D8;
+  --color-blush-800: #EFE8E8;
+  --color-blush-900: #F9F5F5;
+  --color-blush-950: #FCFBFB;
+
+  /* Sage (inverted) */
+  --color-sage-50: #20241A;
+  --color-sage-100: #383D26;
+  --color-sage-200: #535C39;
+  --color-sage-300: #6F7C4D;
+  --color-sage-400: #8D9C66;
+  --color-sage-500: #A7B682;
+  --color-sage-600: #BCC99E;
+  --color-sage-700: #D1DCBA;
+  --color-sage-800: #EAEED9;
+  --color-sage-900: #F5F7ED;
+  --color-sage-950: #FAFBF7;
+
+  /* Semantic Tokens (Dark Theme) */
+  --color-base-foreground: var(--color-neutral-0);
+  --color-base-background: var(--color-neutral-900);
+  --color-base-stroke: rgba(255, 255, 255, 0.15);
+
+  --color-text-primary: var(--color-neutral-0);
+  --color-text-secondary: var(--color-neutral-200);
+  --color-text-tertiary: var(--color-neutral-400);
+  --color-text-placeholder: var(--color-neutral-500);
+  --color-text-disabled: var(--color-neutral-600);
+  --color-text-link: var(--color-primary-400);
+  --color-text-link-hover: var(--color-primary-300);
+
+  --color-interactive-primary: var(--color-primary-500);
+  --color-interactive-primary-hover: var(--color-primary-400);
+  --color-interactive-primary-pressed: var(--color-primary-300);
+  --color-interactive-accent: var(--color-accent-500);
+  --color-interactive-accent-hover: var(--color-accent-400);
+  --color-interactive-accent-pressed: var(--color-accent-300);
+  --color-interactive-hover: var(--color-neutral-800);
+  --color-interactive-pressed: var(--color-neutral-700);
+  --color-interactive-focus: var(--color-primary-500);
+  --color-interactive-disabled: var(--color-neutral-600);
+
+  --color-surface-primary: var(--color-neutral-1000);
+  --color-surface-secondary: var(--color-neutral-900);
+  --color-surface-tertiary: var(--color-neutral-800);
+  --color-surface-elevated: var(--color-neutral-900);
+  --color-surface-overlay: rgba(255, 255, 255, 0.1);
+  --color-surface-petrol: var(--color-petrol-900);
+  --color-surface-petrol-subtle: var(--color-petrol-800);
+  --color-surface-blush: var(--color-blush-900);
+  --color-surface-blush-subtle: var(--color-blush-800);
+  --color-surface-sage: var(--color-sage-900);
+  --color-surface-sage-subtle: var(--color-sage-800);
+
+  --color-border-primary: var(--color-neutral-700);
+  --color-border-secondary: var(--color-neutral-600);
+  --color-border-focus: var(--color-primary-500);
+  --color-border-error: var(--color-error-500);
+  --color-border-success: var(--color-success-500);
+  --color-border-warning: var(--color-warning-500);
+
+  --color-error-foreground: var(--color-error-300);
+  --color-error-background: var(--color-error-950);
+  --color-error-border: var(--color-error-800);
+  --color-error-hover: var(--color-error-900);
+  --color-error-strong: var(--color-error-400);
+
+  --color-success-foreground: var(--color-success-300);
+  --color-success-background: var(--color-success-950);
+  --color-success-border: var(--color-success-800);
+  --color-success-hover: var(--color-success-900);
+  --color-success-strong: var(--color-success-400);
+
+  --color-warning-foreground: var(--color-warning-300);
+  --color-warning-background: var(--color-warning-950);
+  --color-warning-border: var(--color-warning-800);
+  --color-warning-hover: var(--color-warning-900);
+  --color-warning-strong: var(--color-warning-400);
+
+  /* Shadows (darker for dark mode) */
+  --shadow-card: var(--shadow-lg);
+  --shadow-dropdown: var(--shadow-xl);
+  --shadow-modal: var(--shadow-2xl);
+  --shadow-focus: 0 0 0 3px rgba(40, 150, 170, 0.3);
+}

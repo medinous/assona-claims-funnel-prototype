@@ -1,0 +1,549 @@
+/* Login + Welcome (homepage) screens – from index_01 flow.
+ * Icons: Tabler Icons (https://tabler.io/icons) via .ti class.
+ */
+
+input:invalid,
+select:invalid,
+textarea:invalid {
+  box-shadow: none;
+}
+
+/* Screen system: login | home | funnel */
+.view-screen {
+  position: fixed;
+  inset: 8px;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(24px);
+}
+.view-screen.active {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(0);
+}
+.view-screen.exit {
+  opacity: 0;
+  transform: translateX(-24px);
+}
+
+#view-funnel {
+  border-radius: var(--r-lg);
+  /* Fallback to explicit small shadow so it always renders */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+#view-funnel.active {
+  display: flex;
+}
+#view-funnel:not(.active) {
+  display: none;
+}
+
+/* ─── Login shell (shared layout for login + welcome) ─── */
+.login-shell {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.login-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.login-logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: flex-start;
+}
+.login-logo-img {
+  height: 20px;
+  width: auto;
+  display: block;
+}
+
+/* Language toggle above Welcome title (login only) */
+.login-lang-row-above-title {
+  align-self: flex-start;
+  margin-bottom: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.login-form-wrap {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  position: relative;
+}
+/* Soft gradient behind card (Figma: subtle glow behind form card) */
+.login-grad {
+  position: absolute;
+  width: 380px;
+  height: 260px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+.login-grad::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125.5deg, rgba(234, 246, 143, 0.65) 18.7%, rgba(144, 214, 218, 0.55) 68.7%);
+  filter: blur(55px);
+  border-radius: 50%;
+}
+
+.login-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+.login-title {
+  font-family: var(--ff-heading);
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.19px;
+  color: var(--n1000);
+}
+.login-sub {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--n700);
+  line-height: 20px;
+}
+
+.login-card {
+  background: #ffffff;
+  border-radius: var(--r-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06));
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+  z-index: 1;
+}
+/* Form primitives (login scope) */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--n1000);
+  line-height: 20px;
+}
+.field-wrap {
+  position: relative;
+}
+.field-input {
+  width: 100%;
+  height: 36px;
+  background: var(--color-sage-50, #fafbf7);
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  padding: 8px 40px 8px 12px;
+  font-family: var(--ff-body);
+  font-size: 14px;
+  color: var(--n900);
+  outline: none;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+.field-input::placeholder {
+  color: var(--n600);
+}
+.field-input.err {
+  border-color: var(--e600);
+  background: var(--e100);
+}
+.field-input.err::placeholder {
+  color: var(--e300);
+}
+
+.eye-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--n500);
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+.eye-btn:hover {
+  color: var(--n700);
+}
+
+.err-msg {
+  background: var(--e100);
+  border: 1px solid var(--e300);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--e700);
+  line-height: 1.4;
+  display: none;
+}
+.err-msg.vis {
+  display: block;
+}
+
+/* Login form layout stack (replaces inline flex styles in index.html) */
+.login-card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Language toggle (DE/EN) in header corner – discrete */
+.login-lang-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.login-lang-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--n500, #6b7280);
+  letter-spacing: 0.02em;
+}
+.login-lang-toggle {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--n300, #d1d5db);
+  background: var(--n200, #e5e7eb);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.login-lang-toggle[aria-pressed="false"] {
+  background: var(--a300, #EAF68F);
+}
+.login-lang-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s;
+}
+.login-lang-toggle[aria-pressed="false"] .login-lang-knob {
+  transform: translateX(18px);
+}
+
+.login-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+.btn-primary {
+  width: 100%;
+  height: 36px;
+  border-radius: var(--r-sm);
+  border: none;
+  border-bottom: 2px solid rgba(5, 8, 16, 0.2);
+  background: var(--a300, #EAF68F);
+  font-family: var(--ff-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--n500, #9BA29B);
+  cursor: default;
+  transition: all 0.2s;
+  letter-spacing: -0.04em;
+  pointer-events: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-primary.on {
+  color: var(--n900, #282B28);
+  cursor: pointer;
+  pointer-events: all;
+}
+.btn-primary.on:hover {
+  background: var(--a500, #D8E554);
+  transform: translateY(-1px);
+}
+.btn-primary.on:active {
+  transform: none;
+  box-shadow: none;
+}
+
+.forgot-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+.forgot-text {
+  font-size: 14px;
+  color: var(--n700);
+}
+.forgot-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--n1000);
+  cursor: pointer;
+  text-decoration: none;
+}
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* Right hero */
+.login-right {
+  flex: 1;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06));
+  position: relative;
+}
+/* Hero image: no gradient overlay (per previous request); use .login-hero-grad only if Figma adds a defined overlay */
+.login-hero-grad {
+  display: none;
+}
+.login-hero-bikes {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.icon-eye {
+  font-size: 18px;
+}
+.icon-eye--hidden {
+  display: none;
+}
+.login-hero-bikes svg {
+  width: 280px;
+  height: 280px;
+}
+
+/* Welcome (homepage) card */
+.welcome-heading {
+  position: relative;
+  z-index: 1;
+}
+.welcome-title {
+  font-family: var(--ff-heading);
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.19px;
+  color: var(--n1000);
+}
+.welcome-signed {
+  font-size: 16px;
+  color: var(--n1000);
+  line-height: 24px;
+}
+.welcome-signed a {
+  text-decoration: underline;
+  color: inherit;
+}
+.welcome-ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.btn-cta-primary {
+  width: 100%;
+  height: 36px;
+  border-radius: var(--r-sm);
+  border: none;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+  background: var(--a300, #EAF68F);
+  font-family: var(--ff-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--n1000, #0D0F0D);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-cta-primary:hover {
+  background: var(--a500, #D8E554);
+  transform: translateY(-1px);
+}
+.btn-cta-secondary {
+  width: 100%;
+  height: 36px;
+  border-radius: var(--r-sm);
+  border: none;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+  background: var(--pastelY200);
+  font-family: var(--ff-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--n1000);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-cta-secondary:hover {
+  background: #d6d9c0;
+  transform: translateY(-1px);
+}
+.btn-logout {
+  width: 100%;
+  height: 36px;
+  border-radius: var(--r-sm);
+  border: none;
+  background: none;
+  font-family: var(--ff-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--n1000);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.15s;
+}
+.btn-logout:hover {
+  background: var(--n100);
+}
+
+/* Tabler icon sizing inside buttons */
+.btn-primary .ti,
+.btn-logout .ti,
+.btn-cta-primary .ti,
+.btn-cta-secondary .ti {
+  font-size: 18px;
+}
+
+/* Hover + focus states for text inputs – matches original prototype */
+.field-input:hover:not(:focus) {
+  background: #fafbf7;
+  border-color: rgba(5, 8, 16, 0.1);
+}
+
+.field-input.err:hover:not(:focus) {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.field-input:focus {
+  outline: 0 !important;
+  -webkit-appearance: none;
+  border: 2px solid #e4ec84;
+  box-shadow: 0 0 0 4px #f8fcdb;
+  background: #ffffff;
+}
+
+.field-input:focus-visible {
+  outline: 0 !important;
+  -webkit-appearance: none;
+  border: 2px solid #e4ec84;
+  box-shadow: 0 0 0 4px #f8fcdb;
+  background: #ffffff;
+}
+
+/* ─── Responsive breakpoints ─── */
+
+/* Tablet and down: slightly tighter padding */
+@media (max-width: 1023px) {
+  .login-shell {
+    padding: 20px;
+  }
+}
+
+/* Mobile + tablet: single-column layout, hide right hero panel */
+@media (max-width: 1023px) {
+  .view-screen {
+    inset: 0;
+  }
+
+  .login-shell {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .login-left {
+    flex: none;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .login-logo {
+    position: static;
+    margin-bottom: 24px;
+  }
+
+  .login-form-wrap {
+    width: 100%;
+    max-width: 420px;
+    margin: 40px auto 24px;
+    gap: 40px;
+  }
+
+  .login-grad {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .login-title,
+  .welcome-title {
+    font-size: 26px;
+    line-height: 32px;
+  }
+
+  .login-card {
+    padding: 20px 16px;
+  }
+
+  .login-right {
+    display: none;
+  }
+}

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Assona – Claims Funnel Prototype</title>
+    <!-- Canonical design tokens from Figma export -->
+    <link
+      rel="stylesheet"
+      href="resources/Tailwind%20config/assona-design-tokens.css"
+    />
+    <!-- Legacy → canonical token bridge -->
+    <link
+      rel="stylesheet"
+      href="styles/tokens-bridge.css"
+    />
+    <!-- Shared layout + stepper/nav styles -->
+    <link
+      rel="stylesheet"
+      href="styles/base.css"
+    />
+    <!-- Step 1 Upload + PDF card + agent + error overlay -->
+    <link
+      rel="stylesheet"
+      href="styles/upload.css"
+    />
+    <!-- Step 2 Confirm Damage -->
+    <link
+      rel="stylesheet"
+      href="styles/damage.css"
+    />
+    <!-- Step 3 Validate (accordion, Bauteil, Type VR/HR) -->
+    <link
+      rel="stylesheet"
+      href="styles/validation.css"
+    />
+    <!-- Step 4 Review & Submit (summary card, modals) -->
+    <link
+      rel="stylesheet"
+      href="styles/review.css"
+    />
+    <!-- Login + Welcome screens -->
+    <link
+      rel="stylesheet"
+      href="styles/login.css"
+    />
+    <!-- Tabler Icons: https://tabler.io/icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
+    />
+    <script src="locales/bundle.js"></script>
+  </head>
+  <body>
+    <!-- View: Login -->
+    <div id="view-login" class="view-screen active">
+      <div class="login-shell">
+        <div class="login-left">
+          <div class="login-logo">
+            <img
+              src="images/logo/assona-simple_black.svg"
+              alt=""
+              class="login-logo-img"
+              data-i18n-alt="common.logoAlt"
+            />
+          </div>
+          <div class="login-form-wrap">
+            <div class="login-grad"></div>
+            <div class="login-lang-row login-lang-row-above-title">
+              <span class="login-lang-label" aria-hidden="true">DE</span>
+              <button type="button" class="login-lang-toggle" id="login-lang-toggle" aria-pressed="true" aria-label="Sprache: Deutsch / Language: English">
+                <span class="login-lang-knob"></span>
+              </button>
+              <span class="login-lang-label" aria-hidden="true">EN</span>
+            </div>
+            <div class="login-heading">
+              <h1 class="login-title" data-i18n="auth.login.title">Willkommen!</h1>
+              <p class="login-sub" data-i18n="auth.login.subtitle">Melde dich mit deinem assona Konto an.</p>
+            </div>
+            <div class="login-card">
+              <div class="login-card-stack">
+                <div class="field-group">
+                  <label class="field-label" for="l-email" data-i18n="auth.login.emailLabel">E‑Mail</label>
+                  <div class="field-wrap">
+                    <input
+                      id="l-email"
+                      class="field-input"
+                      type="text"
+                      inputmode="email"
+                      placeholder="john.smith@email.com"
+                      autocomplete="email"
+                      data-i18n-placeholder="auth.login.emailPlaceholder"
+                    />
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="l-pass" data-i18n="auth.login.passwordLabel">Passwort</label>
+                  <div class="field-wrap">
+                    <input
+                      id="l-pass"
+                      class="field-input"
+                      type="password"
+                      placeholder="Passwort"
+                      autocomplete="current-password"
+                      data-i18n-placeholder="auth.login.passwordPlaceholder"
+                    />
+                    <button class="eye-btn" id="l-eye" type="button" data-i18n-aria-label="auth.login.togglePasswordAria">
+                      <i id="l-eye-off" class="ti ti-eye icon-eye"></i>
+                      <i id="l-eye-on" class="ti ti-eye-off icon-eye icon-eye--hidden"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="err-msg" id="l-err" data-i18n="auth.login.errorMessage">Die eingegebene E‑Mail-Adresse oder das Passwort ist nicht korrekt. Bitte überprüfe deine Eingabe und versuche es erneut.</div>
+              </div>
+              <div class="login-actions">
+                <button class="btn-primary" id="l-btn" type="button" data-i18n="auth.login.submit">
+                  Anmelden
+                </button>
+                <div class="forgot-row">
+                  <span class="forgot-text" data-i18n="auth.login.forgotText">Passwort vergessen?</span>
+                  <a class="forgot-link" href="#" data-i18n="auth.login.forgotLink">Hier zurücksetzen</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="login-right">
+          <div class="login-hero-grad"></div>
+          <div class="login-hero-bikes">
+            <img
+              src="images/Bike%20Image.png"
+              alt="Bike shop staff with customers and bicycles"
+              class="login-hero-img"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View: Welcome (Homepage) -->
+    <div id="view-home" class="view-screen">
+      <div class="login-shell">
+        <div class="login-left">
+          <div class="login-logo">
+            <img
+              src="images/logo/assona-simple_black.svg"
+              alt=""
+              class="login-logo-img"
+              data-i18n-alt="common.logoAlt"
+            />
+          </div>
+          <div class="login-form-wrap">
+            <div class="login-grad"></div>
+            <div class="login-heading">
+              <h1 class="login-title" data-i18n="auth.welcome.title">Willkommen, Bike Shop Berlin!</h1>
+            </div>
+            <div class="login-card">
+              <p class="welcome-signed"><span data-i18n="auth.welcome.signedInAs">Du bist angemeldet als</span> <a href="#">admin@bikeshopberlin.de</a></p>
+              <div class="welcome-ctas">
+                <button class="btn-cta-primary" id="btn-welcome-report" type="button">
+                  <i class="ti ti-file-report" aria-hidden="true"></i>
+                  <span data-i18n="auth.welcome.reportClaim">Versicherungsfall melden</span>
+                </button>
+                <button class="btn-cta-secondary" id="btn-welcome-theft" type="button">
+                  <i class="ti ti-bike" aria-hidden="true"></i>
+                  <span data-i18n="auth.welcome.reportTheft">Diebstahl melden</span>
+                </button>
+                <button class="btn-logout" id="btn-welcome-logout" type="button">
+                  <i class="ti ti-logout" aria-hidden="true"></i>
+                  <span data-i18n="auth.welcome.logout">Abmelden</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="login-right">
+          <div class="login-hero-grad"></div>
+          <div class="login-hero-bikes">
+            <img
+              src="images/Woman%20Image.png"
+              alt="Customer filling a claim on a tablet"
+              class="login-hero-img"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View: Funnel (4-step claim flow) -->
+    <div id="view-funnel" class="view-screen">
+      <div class="modal-shell">
+        <!-- Nav Header (@nav-header) -->
+        <header class="nav-header" data-component="@nav-header">
+          <div class="nav-breadcrumb">
+            <div class="nav-logo-dot">
+              <img
+                src="images/logo/Logo%20Avatar.svg"
+                alt="Assona"
+                class="nav-logo-img"
+              />
+            </div>
+            <span class="nav-crumb-sep">›</span>
+            <span class="nav-crumb" data-i18n="nav.breadcrumbHome">Startseite</span>
+            <span class="nav-crumb-sep">›</span>
+            <span class="nav-crumb active" data-i18n="nav.breadcrumbNewClaim">Neuer Schadenfall</span>
+          </div>
+          <button class="nav-close" type="button" data-i18n-aria-label="nav.closeAria">
+            <i class="ti ti-x" aria-hidden="true"></i>
+          </button>
+        </header>
+
+        <!-- Stepper (@stepper) -->
+        <div
+          class="stepper-wrap"
+          data-component="@stepper"
+        >
+          <div class="stepper">
+            <!-- Step 1 -->
+            <div class="step-item">
+              <div class="step-inline">
+                <div class="step-line step-line--transparent"></div>
+                <div class="step-dot">1</div>
+                <div class="step-line"></div>
+              </div>
+              <span class="step-label" data-i18n="stepper.step1">Upload</span>
+            </div>
+            <!-- Step 2 -->
+            <div class="step-item">
+              <div class="step-inline">
+                <div class="step-line"></div>
+                <div class="step-dot">2</div>
+                <div class="step-line"></div>
+              </div>
+              <span class="step-label" data-i18n="stepper.step2">Schaden bestätigen</span>
+            </div>
+            <!-- Step 3 -->
+            <div class="step-item">
+              <div class="step-inline">
+                <div class="step-line"></div>
+                <div class="step-dot">3</div>
+                <div class="step-line"></div>
+              </div>
+              <span class="step-label" data-i18n="stepper.step3">Validieren</span>
+            </div>
+            <!-- Step 4 -->
+            <div class="step-item">
+              <div class="step-inline">
+                <div class="step-line"></div>
+                <div class="step-dot">4</div>
+                <div class="step-line step-line--transparent"></div>
+              </div>
+              <span class="step-label" data-i18n="stepper.step4">Prüfen & senden</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main content area: current step view is rendered here -->
+        <main
+          class="modal-content"
+          aria-live="polite"
+        >
+          <input
+            type="file"
+            id="pdf-file-input"
+            accept=".pdf,application/pdf"
+            data-i18n-aria-label="upload.fileInputAria"
+          />
+          <div
+            id="step-root"
+            data-current-step="1"
+          ></div>
+        </main>
+
+        <!-- PDF error overlay (step 1): shown when file is not a valid PDF -->
+        <div class="pdf-error-overlay" id="pdf-error-overlay" aria-modal="true" aria-labelledby="pdf-error-title" role="dialog">
+          <div class="pdf-error-dialog">
+            <div class="pdf-error-header">
+              <div class="pdf-error-title-row">
+                <i class="ti ti-alert-triangle icon-alert" aria-hidden="true"></i>
+                <span class="pdf-error-title" id="pdf-error-title" data-i18n="upload.pdfError.title">Wir konnten keine Daten aus deiner Rechnung extrahieren</span>
+              </div>
+              <button type="button" class="pdf-error-close" data-i18n-aria-label="upload.pdfError.closeAria">
+                <i class="ti ti-x" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="pdf-error-body">
+              <p class="pdf-error-text" data-i18n="upload.pdfError.body">Bitte versuche es mit einem neuen Datei-Upload erneut oder fahre mit der manuellen Bearbeitung im aktuellen Portal fort.</p>
+            </div>
+            <div class="pdf-error-footer">
+              <button type="button" class="pdf-error-btn-secondary">
+                <i class="ti ti-upload" aria-hidden="true"></i>
+                <span data-i18n="upload.pdfError.uploadNew">Neue Rechnung hochladen</span>
+              </button>
+              <button type="button" class="pdf-error-btn-primary" data-i18n="upload.pdfError.continueManual">Mit manueller Bearbeitung fortfahren</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: validation tooltip & Bauteil dropdown (fixed, used when step 3 is active) -->
+        <div id="validate-tooltip" aria-hidden="true" data-i18n="validation.tooltipCheck">Feld prüfen</div>
+        <div id="bauteil-dropdown" role="listbox" data-i18n-aria-label="validation.bauteilAria"></div>
+      </div>
+    </div>
+
+    <!-- Proto nav: Login | Welcome | Funnel steps -->
+    <nav class="proto-nav" data-component="@proto-nav">
+      <span class="proto-label" data-i18n="proto.flow">Flow</span>
+      <button class="proto-btn cur" type="button" data-view-link="login" data-i18n="proto.login">Login</button>
+      <button class="proto-btn" type="button" data-view-link="home" data-i18n="proto.home">Startseite</button>
+      <button class="proto-btn" type="button" data-step-link="1" data-i18n="proto.step1">Schritt 1: Upload</button>
+      <button class="proto-btn" type="button" data-step-link="2" data-i18n="proto.step2">Schritt 2: Schaden bestätigen</button>
+      <button class="proto-btn" type="button" data-step-link="3" data-i18n="proto.step3">Schritt 3: Validieren</button>
+      <button class="proto-btn" type="button" data-step-link="4" data-i18n="proto.step4">Schritt 4: Prüfen & senden</button>
+    </nav>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script type="module" src="scripts/app.js"></script>
+  </body>
+</html>
+

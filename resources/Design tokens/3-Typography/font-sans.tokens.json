@@ -1,0 +1,266 @@
+{
+  "primitives": {
+    "font-family": {
+      "heading": {
+        "$type": "string",
+        "$value": "Inter",
+        "$description": "You can change the font-family mode (font-sans, font-serif) in the sidebar at the appearance section. If you want to change the default font-families, just type your font-family's name to the values. (Be careful, if you choose a font with less variants than the original ones, it might occur issues.)",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138847",
+          "com.figma.scopes": [
+            "FONT_FAMILY"
+          ],
+          "com.figma.type": "string",
+          "com.figma.isOverride": true
+        }
+      },
+      "body": {
+        "$type": "string",
+        "$value": "Inter",
+        "$description": "You can change the font-family mode (font-sans, font-serif) in the sidebar at the appearance section. If you want to change the default font-families, just type your font-family's name to the values. (Be careful, if you choose a font with less variants than the original ones, it might occur issues.)",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138848",
+          "com.figma.scopes": [
+            "FONT_FAMILY"
+          ],
+          "com.figma.type": "string",
+          "com.figma.isOverride": true
+        }
+      }
+    },
+    "font-size": {
+      "font-size-xs": {
+        "$type": "number",
+        "$value": 12,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138849",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "text-xs"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "font-size-sm": {
+        "$type": "number",
+        "$value": 14,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138850",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "text-sm"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "font-size-md": {
+        "$type": "number",
+        "$value": 16,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138851",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "text-4xl"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "font-size-lg": {
+        "$type": "number",
+        "$value": 18,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138852",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "text-lg"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "font-size-xl": {
+        "$type": "number",
+        "$value": 24,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138853",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "text-2xl"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "font-size-2xl": {
+        "$type": "number",
+        "$value": 32,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138854",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "text-3xl"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "font-size-3xl": {
+        "$type": "number",
+        "$value": 40,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138855",
+          "com.figma.scopes": [
+            "FONT_SIZE"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "text-5xl"
+          },
+          "com.figma.isOverride": true
+        }
+      }
+    },
+    "line-height": {
+      "font-lineHeight-tight": {
+        "$type": "number",
+        "$value": 1.25,
+        "$description": "https://tailwindcss.com/docs/line-height",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138856",
+          "com.figma.scopes": [
+            "LINE_HEIGHT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "leading-8"
+          },
+          "com.figma.isOverride": true
+        }
+      },
+      "font-lineHeight-normal": {
+        "$type": "number",
+        "$value": 1.5,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138857",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.isOverride": true
+        }
+      },
+      "font-lineHeight-relaxed": {
+        "$type": "number",
+        "$value": 1.75,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138858",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.isOverride": true
+        }
+      }
+    },
+    "font-weight": {
+      "font-weight-light": {
+        "$type": "number",
+        "$value": 200,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138859",
+          "com.figma.scopes": [
+            "FONT_STYLE"
+          ],
+          "com.figma.isOverride": true
+        }
+      },
+      "font-weight-regular": {
+        "$type": "number",
+        "$value": 400,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138860",
+          "com.figma.scopes": [
+            "FONT_STYLE"
+          ],
+          "com.figma.isOverride": true
+        }
+      },
+      "font-weight-medium": {
+        "$type": "number",
+        "$value": 500,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138861",
+          "com.figma.scopes": [
+            "FONT_STYLE"
+          ],
+          "com.figma.isOverride": true
+        }
+      },
+      "font-weight-semibold": {
+        "$type": "number",
+        "$value": 600,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138862",
+          "com.figma.scopes": [
+            "FONT_STYLE"
+          ],
+          "com.figma.isOverride": true
+        }
+      },
+      "font-weight-bold": {
+        "$type": "number",
+        "$value": 700,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138863",
+          "com.figma.scopes": [
+            "FONT_STYLE"
+          ],
+          "com.figma.isOverride": true
+        }
+      }
+    },
+    "letter-spacing": {
+      "font-letterSpacing-tight": {
+        "$type": "number",
+        "$value": -0.6000000238418579,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138864",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.isOverride": true
+        }
+      },
+      "font-letterSpacing-normal": {
+        "$type": "number",
+        "$value": 0,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138865",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.isOverride": true
+        }
+      },
+      "font-letterSpacing-wide": {
+        "$type": "number",
+        "$value": 0.20000000298023224,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:4390:138866",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.isOverride": true
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "font-sans"
+  }
+}

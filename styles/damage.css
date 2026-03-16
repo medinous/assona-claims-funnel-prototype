@@ -1,0 +1,450 @@
+/**
+ * Step 2 – Confirm Damage
+ * Layout: left PDF panel, right damage panel (alert, damage type, causes, CTA).
+ * Matches index_02_damage.html structure.
+ */
+
+/* ─── Damage layout: 50% left (PDF), 50% right (form) ─── */
+.damage-content {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  gap: 24px;
+  overflow-x: hidden;
+  overflow-y: visible;
+  background: var(--n0, #ffffff);
+  padding-bottom: 40px;
+}
+
+.damage-left {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 24px 0 24px 24px;
+  overflow: visible;
+  position: relative;
+  background: var(--n0);
+  transition: padding 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.damage-left.pdf-expanded {
+  align-items: stretch;
+  padding: 16px 0 16px 16px;
+}
+.damage-left.pdf-expanded .pdf-card {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  margin-left: 0;
+}
+.damage-left .pdf-card {
+  margin-left: auto;
+}
+
+.damage-right {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 24px 24px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: var(--n0);
+}
+.damage-right-inner {
+  width: 416px;
+  max-width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.damage-right::-webkit-scrollbar {
+  width: 4px;
+}
+.damage-right::-webkit-scrollbar-track {
+  background: transparent;
+}
+.damage-right::-webkit-scrollbar-thumb {
+  background: var(--n200);
+  border-radius: 2px;
+}
+
+/* ─── Alert banner ─── */
+.alert-banner {
+  background: var(--pastelY100, #f5f7ed);
+  border: none;
+  border-bottom: 2px solid rgba(5, 8, 16, 0.1);
+  border-radius: var(--r-sm, 6px);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.alert-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.alert-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.alert-icon {
+  color: var(--n1000);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.alert-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--n1000);
+}
+.alert-filename {
+  font-weight: 500;
+}
+.alert-sub {
+  font-size: 14px;
+  color: var(--n700);
+  padding-left: 28px;
+  line-height: 20px;
+}
+.alert-action {
+  padding-left: 28px;
+  padding-top: 8px;
+}
+.alert-close {
+  cursor: pointer;
+  color: var(--n500);
+  flex-shrink: 0;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+.alert-close:hover {
+  background: var(--n100);
+  color: var(--n900);
+}
+
+.btn-reupload {
+  height: 36px;
+  padding: 0 16px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--n100);
+  background: var(--n0);
+  font-family: var(--ff-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--n1000);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s;
+}
+.btn-reupload:hover {
+  background: var(--n50);
+}
+
+/* ─── Damage sections ─── */
+.damage-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.damage-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--n1000);
+  letter-spacing: -0.1px;
+  font-family: var(--ff-heading);
+}
+.tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Tag: default, selected, disabled. Use transparent border so hover outline doesn’t shift text. */
+.tag {
+  height: 28px;
+  padding: 0 9px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: var(--pastelY50, #fafbf7);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--n1000);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  user-select: none;
+  position: relative;
+  box-sizing: border-box;
+}
+.tag:hover {
+  background: var(--pastelY50);
+  border-color: rgba(5, 8, 16, 0.1);
+}
+.tag.selected {
+  background: var(--a300, #eaf68f);
+  border: 1px solid transparent;
+  border-bottom: 2px solid rgba(5, 8, 16, 0.2);
+  padding: 0 9px;
+  color: var(--n1000);
+}
+.tag.selected:hover {
+  background-image: linear-gradient(90deg, rgba(5, 8, 16, 0.03) 0%, rgba(5, 8, 16, 0.03) 100%),
+    linear-gradient(90deg, var(--a300) 0%, var(--a300) 100%);
+  border: 1px solid transparent;
+  border-bottom: none;
+  padding: 0 9px;
+}
+.tag-x {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--n1000);
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+.tag.selected .tag-x {
+  display: flex;
+}
+.tag.disabled {
+  background: var(--n0);
+  border: 1px solid rgba(5, 8, 16, 0.1);
+  padding: 0 9px;
+  color: var(--n1000);
+  opacity: 0.8;
+  cursor: not-allowed;
+  pointer-events: auto;
+}
+.tag.disabled:hover {
+  background: var(--n0);
+  border-color: rgba(5, 8, 16, 0.1);
+  padding: 0 9px;
+}
+
+#causes-section {
+  overflow: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+#causes-section.hidden {
+  display: none;
+}
+
+/* ─── CTA row ─── */
+.cta-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-top: 8px;
+}
+.btn-continue {
+  height: 36px;
+  padding: 0 20px;
+  border-radius: var(--r-sm);
+  border: none;
+  border-bottom: 2px solid rgba(5, 8, 16, 0.2);
+  background: var(--a300);
+  font-family: var(--ff-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--n500);
+  cursor: default;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  pointer-events: none;
+}
+.btn-continue.on {
+  color: var(--n900);
+  cursor: pointer;
+  pointer-events: all;
+}
+.btn-continue.on:hover {
+  background: var(--a500);
+  transform: translateY(-1px);
+}
+.continue-hint {
+  font-size: 13px;
+  color: var(--n600);
+}
+.continue-hint.ok {
+  color: var(--s600);
+}
+
+/* PDF trigger bar (mobile/tablet): full-width accent background with hover */
+.pdf-trigger-bar {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .pdf-trigger-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 32px;
+    background: var(--a300);
+    padding: 0 16px;
+    border-radius: var(--r-sm);
+    font-family: var(--ff-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--n1000);
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s;
+    margin-bottom: 16px;
+  }
+  .pdf-trigger-bar:hover {
+    background: var(--a400);
+  }
+  .pdf-trigger-bar-icon {
+    margin-left: 8px;
+    color: var(--n1000);
+  }
+}
+
+/* Mobile-only PDF toggle header */
+.pdf-mobile-toggle {
+  display: none;
+}
+.pdf-mobile-panel {
+  display: block;
+}
+.pdf-mobile-panel.collapsed {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .pdf-mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 0;
+    margin-bottom: 8px;
+    border: none;
+    background: transparent;
+    font-family: var(--ff-body);
+    font-size: 14px;
+    color: var(--n900);
+    cursor: pointer;
+  }
+  .pdf-mobile-toggle-label {
+    flex: 1;
+    text-align: left;
+  }
+  .pdf-mobile-toggle-icon {
+    margin-left: 8px;
+    color: var(--n600);
+    transition: transform 0.18s;
+  }
+  .pdf-mobile-toggle[aria-expanded="false"] .pdf-mobile-toggle-icon {
+    transform: rotate(0deg);
+  }
+  .pdf-mobile-toggle[aria-expanded="true"] .pdf-mobile-toggle-icon {
+    transform: rotate(180deg);
+  }
+}
+
+/* ─── Responsive breakpoints ─── */
+
+/* Tablet: keep two columns, slightly reduce paddings */
+@media (max-width: 1023px) {
+  .damage-content {
+    gap: 20px;
+  }
+
+  .damage-left {
+    padding: 20px 0 20px 20px;
+  }
+
+  .damage-right {
+    padding: 20px 20px 20px 0;
+  }
+
+  .damage-right-inner {
+    width: 380px;
+    max-width: 100%;
+  }
+}
+
+/* Mobile+tablet (<=1023px): right panel scrolls, PDF only as fullscreen overlay */
+@media (max-width: 1023px) {
+  .damage-content {
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 24px;
+  }
+
+  .damage-right {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    padding: 0 16px 24px;
+    overflow-x: hidden;
+  }
+
+  .damage-right-inner {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* Left PDF panel becomes a hidden fullscreen overlay, shown via .active */
+  .damage-left {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: var(--n0);
+    padding: 16px;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .damage-left.active {
+    display: flex;
+  }
+
+  .damage-left .pdf-card {
+    margin-left: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+  }
+
+  .damage-left.pdf-expanded {
+    padding: 16px;
+  }
+
+  .damage-left.pdf-expanded .pdf-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+}

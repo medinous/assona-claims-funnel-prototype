@@ -1,0 +1,195 @@
+key,de,en,context,status
+common.logoAlt,"assona – Insurance Solutions","assona – Insurance Solutions",Logo alt text,approved
+auth.login.title,Willkommen!,Welcome!,Login heading,approved
+auth.login.subtitle,Melde dich mit deinem assona Konto an.,Sign in with your assona account.,Login subheading,approved
+auth.login.emailLabel,E‑Mail,Email,Login form,approved
+auth.login.emailPlaceholder,john.smith@email.com,john.smith@email.com,Login form,approved
+auth.login.passwordLabel,Passwort,Password,Login form,approved
+auth.login.passwordPlaceholder,Passwort,Password,Login form,approved
+auth.login.togglePasswordAria,Passwort ein-/ausblenden,Toggle password visibility,Accessibility,approved
+auth.login.errorMessage,"Die eingegebene E‑Mail-Adresse oder das Passwort ist nicht korrekt. Bitte überprüfe deine Eingabe und versuche es erneut.","The email or password you entered is incorrect. Please check your input and try again.",Login error,approved
+auth.login.submit,Anmelden,Sign in,Login button,approved
+auth.login.forgotText,Passwort vergessen?,Forgot password?,Login,approved
+auth.login.forgotLink,Hier zurücksetzen,Reset here,Login,approved
+auth.login.toastDemoHint,"Tipp: Verwende {email} + ein beliebiges Passwort.","Tip: Use {email} and any password.",Demo hint toast,approved
+auth.login.languageDe,Deutsch,German,Language toggle,approved
+auth.login.languageEn,English,English,Language toggle,approved
+auth.welcome.title,"Willkommen, Bike Shop Berlin!","Welcome, Bike Shop Berlin!",Welcome heading,approved
+auth.welcome.signedInAs,Du bist angemeldet als,You are signed in as,Welcome,approved
+auth.welcome.reportClaim,Versicherungsfall melden,Report claim,Welcome CTA,approved
+auth.welcome.reportTheft,Diebstahl melden,Report theft,Welcome CTA,approved
+auth.welcome.logout,Abmelden,Sign out,Welcome,approved
+auth.welcome.toastTheftSoon,Diebstahl melden – in Kürze verfügbar,Report theft – coming soon,Toast,approved
+nav.breadcrumbHome,Startseite,Home,Nav,approved
+nav.breadcrumbNewClaim,Neuer Schadenfall,New claim,Nav,approved
+nav.closeAria,Schließen,Close,Nav,approved
+stepper.step1,Upload,Upload,Stepper,approved
+stepper.step2,Schaden bestätigen,Confirm damage,Stepper,approved
+stepper.step3,Validieren,Validate,Stepper,approved
+stepper.step4,Prüfen & senden,Review & submit,Stepper,approved
+proto.flow,Flow,Flow,Proto nav,approved
+proto.login,Login,Login,Proto nav,approved
+proto.home,Startseite,Home,Proto nav,approved
+proto.step1,Schritt 1: Upload,Step 1: Upload,Proto nav,approved
+proto.step2,Schritt 2: Schaden bestätigen,Step 2: Confirm damage,Proto nav,approved
+proto.step3,Schritt 3: Validieren,Step 3: Validate,Proto nav,approved
+proto.step4,Schritt 4: Prüfen & senden,Step 4: Review & submit,Proto nav,approved
+upload.pdfError.title,Wir konnten keine Daten aus deiner Rechnung extrahieren,We could not extract data from your invoice,PDF error overlay,approved
+upload.pdfError.body,"Bitte versuche es mit einem neuen Datei-Upload erneut oder fahre mit der manuellen Bearbeitung im aktuellen Portal fort.","Please try again with a new file upload or continue with manual entry in the current portal.",PDF error overlay,approved
+upload.pdfError.uploadNew,Neue Rechnung hochladen,Upload new invoice,PDF error overlay,approved
+upload.pdfError.continueManual,Mit manueller Bearbeitung fortfahren,Continue with manual entry,PDF error overlay,approved
+upload.pdfError.closeAria,Schließen,Close,PDF error overlay,approved
+validation.tooltipCheck,Feld prüfen,Check field,Step 3 tooltip,approved
+validation.bauteilAria,Bauteil,Component,Step 3 dropdown,approved
+upload.title,Rechnung oder Kostenvoranschlag hochladen,Upload invoice or quote,Step 1,approved
+upload.subtitle,Wir extrahieren die Daten automatisch für dich.,We extract the data automatically for you.,Step 1,approved
+upload.selectFile,Datei auswählen,Select file,Step 1,approved
+upload.or,oder,or,Step 1,approved
+upload.dragDrop,Datei hierher ziehen und ablegen,Drag and drop file here,Step 1,approved
+upload.loadingPreview,Vorschau wird geladen …,Loading preview…,Step 1,approved
+upload.pdfNavPrev,Vorherige Seite,Previous page,PDF toolbar,approved
+upload.pdfNavNext,Nächste Seite,Next page,PDF toolbar,approved
+upload.pdfZoomOut,Verkleinern,Zoom out,PDF toolbar,approved
+upload.pdfZoomIn,Vergrößern,Zoom in,PDF toolbar,approved
+upload.pdfExpand,Vorschau vergrößern,Expand preview,PDF toolbar,approved
+upload.pdfShrink,Vorschau verkleinern,Shrink preview,PDF toolbar,approved
+upload.agentAnalyzing,Datei wird analysiert …,Analyzing file…,Step 1 agent,approved
+upload.agentExtract,Daten extrahieren,Extract data,Step 1 agent,approved
+upload.agentFrame,Rahmennummer prüfen,Check frame number,Step 1 agent,approved
+upload.agentAddress,Adresse prüfen,Check address,Step 1 agent,approved
+upload.agentAnalyzed,Datei analysiert,File analyzed,Step 1 agent,approved
+upload.agentExtracted,Daten extrahiert,Data extracted,Step 1 agent,approved
+upload.agentFrameDone,Rahmennummer geprüft,Frame number checked,Step 1 agent,approved
+upload.agentAddressDone,Adresse verifiziert,Address verified,Step 1 agent,approved
+upload.agentExtracting,Daten werden extrahiert …,Extracting data…,Step 1 agent,approved
+upload.agentFrameChecking,Rahmennummer wird geprüft …,Checking frame number…,Step 1 agent,approved
+upload.agentAddressChecking,Adresse wird geprüft …,Checking address…,Step 1 agent,approved
+upload.fileInputAria,PDF-Rechnung auswählen,Select PDF invoice,Step 1,approved
+damage.pdfTrigger,PDF‑Vorschau anzeigen,Show PDF preview,Step 2,approved
+damage.alertTitle,Rechnung hochgeladen:,Invoice uploaded:,Step 2 alert,approved
+damage.alertSub,Bitte bestätige die folgenden Angaben.,Please confirm the following details.,Step 2 alert,approved
+damage.reupload,Neue Datei hochladen,Upload new file,Step 2,approved
+damage.confirmType,Schadentyp bestätigen,Confirm damage type,Step 2,approved
+damage.partial,Teilschaden,Partial damage,Step 2,approved
+damage.uvv,UVV,UVV,Step 2,approved
+damage.inspection,Inspektion,Inspection,Step 2,approved
+damage.inspectionTooltip,Inspektion muss separat gemeldet werden,Inspection must be reported separately,Step 2,approved
+damage.confirmCauses,Schadensursachen bestätigen,Confirm causes,Step 2,approved
+damage.continue,Weiter,Continue,Step 2,approved
+damage.continueHintSelectCause,Wähle mindestens eine Ursache um fortzufahren,Select at least one cause to continue,Step 2,approved
+damage.continueHintSelectType,Wähle zuerst einen Schadentyp,Select a damage type first,Step 2,approved
+damage.continueHintReady,Bereit zum Fortfahren,Ready to continue,Step 2,approved
+damage.causesSelected,"{n} Ursache(n) ausgewählt","{n} cause(s) selected",Step 2,approved
+damage.pdfFallback,"PDF aus dem Upload-Schritt. Wähle im Schritt 1 eine Datei um sie hier zu sehen.","PDF from upload step. Select a file in step 1 to see it here.",Step 2,approved
+damage.navPrevAria,Vorherige Seite,Previous page,Step 2 PDF,approved
+damage.navNextAria,Nächste Seite,Next page,Step 2 PDF,approved
+damage.zoomOutTitle,Verkleinern,Zoom out,Step 2 PDF,approved
+damage.zoomInTitle,Vergrößern,Zoom in,Step 2 PDF,approved
+damage.closeAria,Schließen,Close,Step 2,approved
+val.alertTitleAllDone,Alle Felder vollständig!,All fields complete!,Step 3 alert,approved
+val.alertTitleMissing,"{missing} fehlende Felder","{missing} fields missing",Step 3 alert,approved
+val.alertTitleValidate,"{count} Felder zu prüfen","{count} fields to check",Step 3 alert,approved
+val.alertTitleMissingAndValidate,"{missing} fehlende Felder {count} zu prüfen","{missing} fields missing {count} to check",Step 3 alert,approved
+val.alertTitleRequired,Pflichtfelder ausfüllen,Fill required fields,Step 3 alert,approved
+val.alertSubFill,Bitte fülle alle fehlenden Felder aus um fortzufahren.,Please fill in all missing fields to continue.,Step 3 alert,approved
+val.alertSubCheck,Bitte prüfe die markierten Felder.,Please check the marked fields.,Step 3 alert,approved
+val.alertSubCanContinue,Du kannst zum Schritt „Prüfen & senden“ fortfahren.,You can proceed to Review & submit.,Step 3 alert,approved
+val.btnCheckFields,Felder prüfen,Check fields,Step 3,approved
+val.btnCheckMissing,Fehlende Felder prüfen,Check missing fields,Step 3,approved
+val.btnExpandAll,Alle ausklappen,Expand all,Step 3,approved
+val.btnCollapseAll,Alle einklappen,Collapse all,Step 3,approved
+val.sectionInvoiceDetails,Rechnungsdetails,Invoice details,Step 3,approved
+val.addFieldTitle,Feld hinzufügen,Add field,Step 3,approved
+val.frameId,Frame ID,Frame ID,Step 3,approved
+val.invoiceDate,Rechnungsdatum,Invoice date,Step 3,approved
+val.damageDate,Schadendatum,Damage date,Step 3,approved
+val.damageDesc,Schadensbeschreibung,Damage description,Step 3,approved
+val.hintSelect,Auswählen,Select,Step 3,approved
+val.hintEnter,Eingeben,Enter,Step 3,approved
+val.placeholderDamageDesc,Beschreibung eingeben …,Enter description…,Step 3,approved
+val.sectionItems,Rechnungsposten,Line items,Step 3,approved
+val.addPositionTitle,Position hinzufügen,Add line item,Step 3,approved
+val.showAmountsAs,Beträge anzeigen als,Show amounts as,Step 3,approved
+val.net,Netto,Net,Step 3,approved
+val.gross,Brutto,Gross,Step 3,approved
+val.taxRateLabel,Steuersatz,Tax rate,Step 3,approved
+val.totalTitle,Gesamtbetrag,Total amount,Step 3,approved
+val.totalNetLabel,Nettobetrag,Net amount,Step 3,approved
+val.totalGrossLabel,Bruttobetrag,Gross amount,Step 3,approved
+val.back,Zurück,Back,Step 3,approved
+val.continue,Weiter,Continue,Step 3,approved
+val.footerHintFill,Fülle alle fehlenden Felder aus um fortzufahren,Fill all missing fields to continue,Step 3,approved
+val.footerHintOk,Alle Pflichtfelder sind ausgefüllt,All required fields are complete,Step 3,approved
+val.modalLeaveTitle,Validierung verlassen?,Leave validation?,Step 3 modal,approved
+val.modalLeaveBody,"Wenn du jetzt zurückgehst können nicht gespeicherte Änderungen in diesem Validierungsschritt verloren gehen.","If you go back now unsaved changes in this validation step may be lost.",Step 3 modal,approved
+val.modalStay,Auf diesem Schritt bleiben,Stay on this step,Step 3 modal,approved
+val.modalBack,Zurückgehen,Go back,Step 3 modal,approved
+val.noPdfLoaded,Kein PDF geladen,No PDF loaded,Step 3,approved
+val.datePickerAria,Datumsauswahl öffnen,Open date picker,Step 3,approved
+val.causeLabel,Schadenursache,Cause,Step 3 accordion,approved
+val.bauteilLabel,Bauteil,Component,Step 3 accordion,approved
+val.selectOne,Auswählen,Select one,Step 3 accordion,approved
+val.typeLabel,Type,Type,Step 3 accordion,approved
+val.qtyLabel,Menge,Quantity,Step 3 accordion,approved
+val.noResultsFor,Keine Ergebnisse für {query},No results for {query},Step 3 Bauteil dropdown,approved
+val.searchPlaceholder,Komponenten suchen…,Search components…,Step 3 Bauteil dropdown,approved
+val.totalMismatch,Stimmt nicht mit der Summe überein (erwartet {expected} EUR),Doesn't match item sum (expected {expected} EUR),Step 3 validation,approved
+val.navPrevAria,Vorherige Seite,Previous page,Step 3 PDF,approved
+val.navNextAria,Nächste Seite,Next page,Step 3 PDF,approved
+val.zoomOutTitle,Verkleinern,Zoom out,Step 3 PDF,approved
+val.zoomInTitle,Vergrößern,Zoom in,Step 3 PDF,approved
+val.collapsePdfAria,PDF verkleinern,Collapse PDF,Step 3 PDF,approved
+val.expandPdfAria,PDF vergrößern,Expand PDF,Step 3 PDF,approved
+review.pdfTrigger,PDF‑Vorschau anzeigen,Show PDF preview,Step 4,approved
+review.title,Schadenfall prüfen,Review claim,Step 4,approved
+review.subtitle,Fast geschafft! Prüfe die folgenden Angaben bevor du sendest.,Almost done! Review the details below before submitting.,Step 4,approved
+review.invoiceData,Rechnungsdaten,Invoice data,Step 4,approved
+review.editInvoiceData,Rechnungsdaten bearbeiten,Edit invoice data,Step 4,approved
+review.frameNumber,Rahmennummer,Frame number,Step 4,approved
+review.invoiceDate,Rechnungsdatum,Invoice date,Step 4,approved
+review.damageDate,Schadendatum,Damage date,Step 4,approved
+review.description,Beschreibung,Description,Step 4,approved
+review.itemsCount,Rechnungsposten,Line items,Step 4,approved
+review.editItems,Rechnungsposten bearbeiten,Edit line items,Step 4,approved
+review.totalAmount,Gesamtbetrag,Total amount,Step 4,approved
+review.editTotal,Gesamtbetrag bearbeiten,Edit total,Step 4,approved
+review.causeLabel,Schadensursache,Cause,Step 4 accordion,approved
+review.bauteilLabel,Bauteil,Component,Step 4 accordion,approved
+review.quantity,Menge,Quantity,Step 4 accordion,approved
+review.netAmount,Nettobetrag,Net amount,Step 4 accordion,approved
+review.vatRate,Steuersatz,VAT rate,Step 4 accordion,approved
+review.grossAmount,Bruttobetrag,Gross amount,Step 4 accordion,approved
+review.back,Zurück,Back,Step 4,approved
+review.submitToAssona,Schaden an assona senden,Send claim to assona,Step 4,approved
+review.modalLeaveTitle,Überprüfung verlassen?,Leave review?,Step 4 modal,approved
+review.modalLeaveBody,"Wenn du jetzt zurückgehst können nicht gespeicherte Änderungen in diesem Schritt verloren gehen.","If you go back now unsaved changes in this step may be lost.",Step 4 modal,approved
+review.modalStay,Auf diesem Schritt bleiben,Stay on this step,Step 4 modal,approved
+review.modalBack,Zurückgehen,Go back,Step 4 modal,approved
+review.pdfNavPrevAria,Vorherige Seite,Previous page,Step 4 PDF,approved
+review.pdfNavNextAria,Nächste Seite,Next page,Step 4 PDF,approved
+review.zoomOutTitle,Verkleinern,Zoom out,Step 4 PDF,approved
+review.zoomInTitle,Vergrößern,Zoom in,Step 4 PDF,approved
+review.closeAria,Schließen,Close,Step 4,approved
+review.noPdfLoaded,Kein PDF geladen,No PDF loaded,Step 4,approved
+review.submitModalTitle,Schaden einreichen,Submit claim,Step 4 submit modal,approved
+review.additionalNotes,Zusätzliche Hinweise,Additional notes,Step 4 submit modal,approved
+review.notesPlaceholder,Nutze dieses Textfeld um uns weitere Informationen zum Schaden zu geben.,Use this field to provide additional information about the claim.,Step 4 submit modal,approved
+review.mediaUpload,Medien hochladen,Upload media,Step 4 submit modal,approved
+review.mediaUploadSub,Bis zu 9 Bilder oder Videos (max. 9),Up to 9 images or videos (max. 9),Step 4 submit modal,approved
+review.mediaUploadedCount,"{n} Datei(en) hochgeladen (max. 9)","{n} file(s) uploaded (max. 9)",Step 4 submit modal,approved
+review.uploadBtn,Hochladen,Upload,Step 4 submit modal,approved
+review.confirmCheckbox,Ich bestätige dass alle Angaben korrekt und vollständig sind.,I confirm that all information is correct and complete.,Step 4 submit modal,approved
+review.notYet,Noch nicht,Not yet,Step 4 submit modal,approved
+review.send,Senden,Send,Step 4 submit modal,approved
+review.sending,Wird gesendet …,Sending…,Step 4 submit modal,approved
+review.successTitle,Schaden erfolgreich eingereicht,Claim submitted successfully,Step 4 success,approved
+review.successSubtitle,"Wir haben deinen Schadenfall erhalten und dir eine Bestätigung per E‑Mail gesendet. Du kannst jetzt zur Startseite zurückkehren oder weitere Vorgänge bearbeiten.","We have received your claim and sent a confirmation by email. You can return to the homepage or continue with other tasks.",Step 4 success,approved
+review.claimNumberLabel,Schadennummer:,Claim number:,Step 4 success,approved
+review.goHome,Zur Startseite,Go to homepage,Step 4 success,approved
+review.mediaMaxError,Maximal 9 Mediendateien erlaubt.,Maximum 9 media files allowed.,Step 4 submit modal,approved
+review.mediaListAria,Vorschau der hochgeladenen Medien,Preview of uploaded media,Step 4 submit modal,approved
+router.step2Heading,Schritt 2 – Schaden bestätigen,Step 2 – Confirm damage,Router fallback,approved
+router.step3Heading,Schritt 3 – Validieren,Step 3 – Validate,Router fallback,approved
+router.step4Heading,Schritt 4 – Prüfen & senden,Step 4 – Review & submit,Router fallback,approved
+router.placeholderHeading,Assona-Funnel-Prototyp,Assona Funnel Prototype,Router fallback,approved
+router.placeholderText,"Platzhalter für Schritt {step}. Die vollständige UI wird im nächsten Schritt übernommen.","Placeholder for step {step}. Full UI will be implemented next.",Router fallback,approved

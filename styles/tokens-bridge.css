@@ -1,0 +1,83 @@
+/* Assona tokens bridge
+ * Maps legacy prototype CSS variables (p*, a*, n*, e*, s*, etc.)
+ * to the canonical design tokens defined in `Tailwind config/assona-design-tokens.css`.
+ *
+ * This lets existing step-specific styles keep their variable names
+ * while the underlying values come from the shared design system.
+ */
+
+:root {
+  /* Primary Teal (legacy --p*) → primary petrol scale */
+  --p50:  var(--color-primary-50);
+  --p100: var(--color-primary-100);
+  --p200: var(--color-primary-200);
+  --p300: var(--color-primary-300);
+  --p400: var(--color-primary-400);
+  --p500: var(--color-primary-500);
+  --p600: var(--color-primary-600);
+  --p700: var(--color-primary-700);
+
+  /* Accent Lime (legacy --a*) → yellow‑green / accent scale */
+  --a200: var(--color-accent-200);
+  --a300: var(--color-accent-300);
+  --a400: var(--color-accent-400);
+  --a500: var(--color-accent-500);
+  --a700: var(--color-accent-700);
+
+  /* Neutral Green‑Gray (legacy --n*) → neutral scale */
+  --n0:    var(--color-neutral-0);
+  --n50:   var(--color-neutral-50);
+  --n100:  var(--color-neutral-100);
+  --n200:  var(--color-neutral-200);
+  --n300:  var(--color-neutral-300);
+  --n400:  var(--color-neutral-400);
+  --n500:  var(--color-neutral-500);
+  --n600:  var(--color-neutral-600);
+  --n700:  var(--color-neutral-700);
+  --n800:  var(--color-neutral-800);
+  --n900:  var(--color-neutral-900);
+  --n1000: var(--color-neutral-1000);
+
+  /* Error Coral (legacy --e*) → red / error scale */
+  --e50:  var(--color-error-50);
+  --e100: var(--color-error-100);
+  --e300: var(--color-error-300);
+  --e600: var(--color-error-600);
+  --e700: var(--color-error-700);
+
+  /* Success (legacy --s*) → success scale */
+  --s50:  var(--color-success-50,  #F0FDF4);
+  --s100: var(--color-success-100, #DCFCE7);
+  --s500: var(--color-success-500);
+  --s600: var(--color-success-600);
+  --s700: var(--color-success-700);
+
+  /* Pastel Petrol (legacy --petrol*) → pastel petrol scale */
+  --petrol100: var(--color-petrol-100);
+  --petrol200: var(--color-petrol-200);
+
+  /* Pastel Yellow (legacy --pastelY*) → pastel sage (earthy) scale */
+  --pastelY50:  var(--color-sage-50);
+  --pastelY100: var(--color-sage-100);
+  --pastelY200: var(--color-sage-200);
+
+  /* Typography families (legacy ff vars) → token families */
+  /* Headings: prefer Uni Neue, fallback to Inter */
+  --ff-heading: 'Uni Neue', var(--font-family-heading, 'Inter', sans-serif);
+  /* Body: Inter */
+  --ff-body:    var(--font-family-body, 'Inter', sans-serif);
+
+  /* Radii and shadows: reuse system tokens where possible */
+  --r-xs:  var(--radius-xs, 4px);
+  --r-sm:  var(--radius-sm, 6px);
+  --r-md:  var(--radius-md, 10px);
+  --r-lg:  var(--radius-lg, 14px);
+  --r-xl:  var(--radius-xl, 20px);
+
+  --shadow-xs:      var(--shadow-xs);
+  --shadow-sm:      var(--shadow-sm);
+  --shadow-md:      var(--shadow-md);
+  --shadow-lg:      var(--shadow-lg);
+  --shadow-overlay: var(--shadow-modal, var(--shadow-xl));
+}
+
