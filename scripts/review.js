@@ -12,6 +12,8 @@ import {
   pdfNavNext,
   showLoadedPdfInCurrentCard,
   getPdfDoc,
+  getPdfExpandSvg,
+  isMobileViewport,
 } from './pdf-viewer.js';
 import { showHome } from './auth.js';
 import { t } from './i18n.js';
@@ -82,7 +84,7 @@ export function getStep4Markup() {
           </div>
           <div class="pdf-toolbar-divider"></div>
           <button type="button" class="pdf-expand-btn" id="pdf-expand-btn-review" title="${t('review.closeAria')}" aria-label="${t('review.closeAria')}">
-            <i class="ti ti-x" id="pdf-expand-icon-review" aria-hidden="true"></i>
+            <span id="pdf-expand-icon-review" aria-hidden="true"></span>
           </button>
         </div>
       </div>
@@ -340,9 +342,23 @@ export function wireReviewStep(goToStep) {
   const card = document.getElementById('pdf-card-review');
   const left = document.getElementById('review-left');
   if (expandBtn && card && left) {
+    // Initialize desktop icon as expand (maximize); keep X icon on mobile/tablet
+    const iconHost = document.getElementById('pdf-expand-icon-review');
+    if (iconHost) {
+      if (!isMobileViewport()) {
+        iconHost.outerHTML = getPdfExpandSvg(false, 'pdf-expand-icon-review');
+      } else {
+        iconHost.innerHTML = '<i class="ti ti-x" aria-hidden="true"></i>';
+      }
+    }
+
     expandBtn.addEventListener('click', () => {
       // On tablet/mobile, treat expand as "close overlay"
-      if (window.matchMedia('(max-width: 1023px)').matches) {
+      if (isMobileViewport()) {
+        const icon = document.getElementById('pdf-expand-icon-review');
+        if (icon) {
+          icon.innerHTML = '<i class="ti ti-x" aria-hidden="true"></i>';
+        }
         left.classList.remove('active');
         return;
       }
@@ -350,10 +366,10 @@ export function wireReviewStep(goToStep) {
       left.classList.toggle('pdf-expanded', pdfExpandedReview);
       card.classList.toggle('expanded', pdfExpandedReview);
       expandBtn.setAttribute('aria-label', pdfExpandedReview ? t('val.collapsePdfAria') : t('val.expandPdfAria'));
-      expandBtn.innerHTML =
-        pdfExpandedReview
-          ? '<i class="ti ti-arrows-minimize" aria-hidden="true"></i>'
-          : '<i class="ti ti-arrows-maximize" aria-hidden="true"></i>';
+      const icon = document.getElementById('pdf-expand-icon-review');
+      if (icon) {
+        icon.outerHTML = getPdfExpandSvg(pdfExpandedReview, 'pdf-expand-icon-review');
+      }
     });
   }
 

@@ -12,6 +12,8 @@ import {
   pdfNavNext,
   showLoadedPdfInCurrentCard,
   getPdfDoc,
+  getPdfExpandSvg,
+  isMobileViewport,
 } from './pdf-viewer.js';
 import { t } from './i18n.js';
 
@@ -66,7 +68,7 @@ export function getStep2Markup() {
           </div>
           <div class="pdf-toolbar-divider"></div>
           <button type="button" class="pdf-expand-btn" id="pdf-expand-btn-damage" title="${t('damage.closeAria')}" aria-label="${t('damage.closeAria')}">
-            <i class="ti ti-x" id="pdf-expand-icon-damage" aria-hidden="true"></i>
+            <span id="pdf-expand-icon-damage" aria-hidden="true"></span>
           </button>
         </div>
       </div>
@@ -243,10 +245,24 @@ function wirePdfExpandDamage() {
   const card = document.getElementById('pdf-card-damage');
   const left = document.getElementById('damage-left');
   if (!btn || !card || !left) return;
+
+  // Initialize desktop icon as expand (maximize); keep X icon on mobile/tablet
+  if (!isMobileViewport()) {
+    const iconHost = document.getElementById('pdf-expand-icon-damage');
+    if (iconHost) {
+      iconHost.outerHTML = getPdfExpandSvg(false, 'pdf-expand-icon-damage');
+    }
+  } else {
+    const iconHost = document.getElementById('pdf-expand-icon-damage');
+    if (iconHost && iconHost.childElementCount === 0) {
+      iconHost.innerHTML = '<i class="ti ti-x" aria-hidden="true"></i>';
+    }
+  }
+
   btn.replaceWith(btn.cloneNode(true));
   document.getElementById('pdf-expand-btn-damage').addEventListener('click', () => {
     // On tablet/mobile, treat expand as "close overlay"
-    if (window.matchMedia('(max-width: 1023px)').matches) {
+    if (isMobileViewport()) {
       left.classList.remove('active');
       return;
     }
@@ -255,6 +271,10 @@ function wirePdfExpandDamage() {
     left.classList.toggle('pdf-expanded', pdfExpandedDamage);
     const b = document.getElementById('pdf-expand-btn-damage');
     if (b) b.classList.toggle('active', pdfExpandedDamage);
+    const icon = document.getElementById('pdf-expand-icon-damage');
+    if (icon) {
+      icon.outerHTML = getPdfExpandSvg(pdfExpandedDamage, 'pdf-expand-icon-damage');
+    }
   });
 }
 

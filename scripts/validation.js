@@ -12,6 +12,8 @@ import {
   pdfNavNext,
   showLoadedPdfInCurrentCard,
   getPdfDoc,
+  getPdfExpandSvg,
+  isMobileViewport,
 } from './pdf-viewer.js';
 import { t } from './i18n.js';
 
@@ -111,7 +113,7 @@ export function getStep3Markup() {
           </div>
           <div class="pdf-toolbar-divider"></div>
           <button type="button" class="pdf-expand-btn" id="pdf-expand-btn-val" title="${t('nav.closeAria')}" aria-label="${t('nav.closeAria')}">
-            <i class="ti ti-x" id="pdf-expand-icon-val" aria-hidden="true"></i>
+            <span id="pdf-expand-icon-val" aria-hidden="true"></span>
           </button>
         </div>
       </div>
@@ -812,9 +814,23 @@ function wirePdfExpandValidate() {
   const card = document.getElementById('pdf-card-validate');
   const left = document.getElementById('validate-left');
   if (!btn || !card || !left) return;
+
+  // Initialize desktop icon as expand (maximize); keep X icon on mobile/tablet
+  if (!isMobileViewport()) {
+    const iconHost = document.getElementById('pdf-expand-icon-val');
+    if (iconHost) {
+      iconHost.outerHTML = getPdfExpandSvg(false, 'pdf-expand-icon-val');
+    }
+  } else {
+    const iconHost = document.getElementById('pdf-expand-icon-val');
+    if (iconHost && iconHost.childElementCount === 0) {
+      iconHost.innerHTML = '<i class="ti ti-x" aria-hidden="true"></i>';
+    }
+  }
+
   btn.addEventListener('click', () => {
     // On tablet/mobile, treat expand as "close overlay"
-    if (window.matchMedia('(max-width: 1023px)').matches) {
+    if (isMobileViewport()) {
       left.classList.remove('active');
       return;
     }
@@ -822,7 +838,10 @@ function wirePdfExpandValidate() {
     left.classList.toggle('pdf-expanded', pdfExpandedValidate);
     card.classList.toggle('expanded', pdfExpandedValidate);
     btn.setAttribute('aria-label', pdfExpandedValidate ? t('val.collapsePdfAria') : t('val.expandPdfAria'));
-    btn.innerHTML = pdfExpandedValidate ? '<i class="ti ti-arrows-minimize" aria-hidden="true"></i>' : '<i class="ti ti-arrows-maximize" aria-hidden="true"></i>';
+    const icon = document.getElementById('pdf-expand-icon-val');
+    if (icon) {
+      icon.outerHTML = getPdfExpandSvg(pdfExpandedValidate, 'pdf-expand-icon-val');
+    }
   });
 }
 

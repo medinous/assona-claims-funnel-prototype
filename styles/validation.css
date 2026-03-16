@@ -1050,6 +1050,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: var(--n700);
   cursor: pointer;
   transition: background 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .btn-back:hover {
   background: var(--n50);
@@ -1071,6 +1073,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   gap: 6px;
   transition: all 0.2s;
   pointer-events: none;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .btn-continue-lg.on {
   color: var(--n900);

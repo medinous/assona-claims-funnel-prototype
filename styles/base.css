@@ -189,7 +189,7 @@ button {
 }
 
 .step-line--transparent {
-  background: transparent;
+  background: transparent !important;
 }
 
 .step-line.done {
