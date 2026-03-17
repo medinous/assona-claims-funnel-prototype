@@ -231,7 +231,7 @@ export function getStep3Markup() {
           </div>
           <div class="form-row">
             <label class="form-label">${t('val.taxRateLabel')}</label>
-            <div class="form-field"><div class="amount-field-input-wrap disabled" style="display:flex;align-items:center;justify-content:space-between"><span id="total-tax-display" class="amount-value-disabled">19,00</span><span class="amount-suffix">%</span></div></div>
+            <div class="form-field"><div class="amount-field-input-wrap disabled" style="display:flex;align-items:center;justify-content:space-between"><span id="total-tax-display" class="amount-value-disabled">0,00</span><span class="amount-suffix">EUR</span></div></div>
           </div>
           <div class="form-row" style="align-items:flex-start;padding-top:6px;">
             <label class="form-label" style="padding-top:8px;">${t('val.totalGrossLabel')}<span class="form-label-hint" id="hint-total-gross">${t('val.hintEnter')}</span></label>
@@ -627,6 +627,11 @@ function updateTotals() {
   const displayVal = displayMode === 'net' ? totalNet : totalGross;
   const header = document.getElementById('total-header-amount');
   if (header) header.textContent = formatDE(displayVal) + ' EUR';
+  const taxDisplayEl = document.getElementById('total-tax-display');
+  if (taxDisplayEl) {
+    const taxAmount = totalGross - totalNet;
+    taxDisplayEl.textContent = formatDE(taxAmount);
+  }
   const netEl = document.getElementById('total-net');
   const grossEl = document.getElementById('total-gross');
   if (netEl && netEl !== document.activeElement) netEl.value = formatDE(totalNet);
@@ -912,11 +917,9 @@ export function wireValidationStep(goToStep) {
       const sep = v.search(/[,.]/);
       if (sep !== -1) { const a = v.slice(0, sep).replace(/[,.]/g, ''); const b = v.slice(sep + 1).replace(/[,.]/g, '').slice(0, 2); v = a + ',' + b; }
       this.value = v;
-      const display = document.getElementById('total-tax-display');
-      if (display) display.textContent = v || '0,00';
       updateTotals();
     });
-    ctrlTax.addEventListener('blur', function () { formatAmountOnBlur(this); const d = document.getElementById('total-tax-display'); if (d) d.textContent = this.value; updateTotals(); });
+    ctrlTax.addEventListener('blur', function () { formatAmountOnBlur(this); updateTotals(); });
   }
 
   const accordionList = document.getElementById('accordion-list');
