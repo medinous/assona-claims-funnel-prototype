@@ -39,13 +39,6 @@ let submitCheckboxChecked = false;
 let mediaError = false;
 let mediaCount = 0;
 
-function parseDE(str) {
-  const cleaned = String(str || '').replace(/[^\d,.-]/g, '').replace('.', '').replace(',', '.');
-  return parseFloat(cleaned) || 0;
-}
-function formatDE(num) {
-  return Number(num || 0).toFixed(2).replace('.', ',');
-}
 
 function escHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -53,6 +46,12 @@ function escHtml(s) {
 
 export function getStep4Markup() {
   const filename = funnelState.upload?.pdfName || 'Rechnung-003.pdf';
+  const totals = funnelState.review?.totals || {
+    net: '677,28 EUR',
+    taxRate: '19,00 %',
+    gross: '805,69 EUR',
+    taxAmount: '128,41 EUR',
+  };
   const itemsHtml = REVIEW_ITEMS.map(
     (item) => `
     <div class="review-accordion-item" data-review-item>
@@ -146,9 +145,9 @@ export function getStep4Markup() {
               <button type="button" class="section-edit-btn" title="${t('review.editTotal')}" data-edit="total"><i class="ti ti-pencil" aria-hidden="true"></i></button>
             </div>
             <div class="data-rows">
-              <div class="total-row"><span class="total-label">${t('review.netAmount')}</span><span class="total-value" id="review-total-net">677,28 EUR</span></div>
-              <div class="total-row"><span class="total-label">${t('review.vatRate')}</span><span class="total-value" id="review-total-tax">19,00 %</span></div>
-              <div class="total-row gross"><span class="total-label">${t('review.grossAmount')}</span><span class="total-value" id="review-total-gross">805,69 EUR</span></div>
+              <div class="total-row"><span class="total-label">${t('review.netAmount')}</span><span class="total-value" id="review-total-net">${escHtml(totals.net)}</span></div>
+              <div class="total-row"><span class="total-label">${t('review.vatRate')}</span><span class="total-value" id="review-total-tax">${escHtml(totals.taxAmount ? `${totals.taxAmount} (${totals.taxRate})` : totals.taxRate)}</span></div>
+              <div class="total-row gross"><span class="total-label">${t('review.grossAmount')}</span><span class="total-value" id="review-total-gross">${escHtml(totals.gross)}</span></div>
             </div>
           </div>
         </div>
@@ -345,30 +344,6 @@ export function wireReviewStep(goToStep) {
   if (navPrev) navPrev.addEventListener('click', pdfNavPrev);
   if (navNext) navNext.addEventListener('click', pdfNavNext);
   pdfZoomApply();
-
-  // Sync totals + tax display from Step 3 values if present
-  try {
-    const netInput = document.getElementById('total-net');
-    const grossInput = document.getElementById('total-gross');
-    const taxRateInput = document.getElementById('ctrl-tax-input');
-    const netLabel = document.getElementById('review-total-net');
-    const grossLabel = document.getElementById('review-total-gross');
-    const taxLabel = document.getElementById('review-total-tax');
-    if (netInput && grossInput && taxRateInput && netLabel && grossLabel && taxLabel) {
-      const netVal = parseDE(netInput.value);
-      const grossVal = parseDE(grossInput.value);
-      const taxRate = parseDE(taxRateInput.value) / 100;
-      const taxAmount = Math.max(0, grossVal - netVal);
-      netLabel.textContent = `${formatDE(netVal)} EUR`;
-      grossLabel.textContent = `${formatDE(grossVal)} EUR`;
-      const percentStr = `${formatDE(taxRate * 100)} %`;
-      const amountStr = `${formatDE(taxAmount)} EUR`;
-      // Show amount first, then rate in parentheses (best-practice clarity)
-      taxLabel.textContent = `${amountStr} (${percentStr})`;
-    }
-  } catch (e) {
-    // Non-fatal: keep static demo values if something goes wrong
-  }
 
   const expandBtn = document.getElementById('pdf-expand-btn-review');
   const card = document.getElementById('pdf-card-review');

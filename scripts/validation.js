@@ -632,6 +632,14 @@ function updateTotals() {
     const taxAmount = totalGross - totalNet;
     taxDisplayEl.textContent = formatDE(taxAmount);
   }
+  // Persist totals into shared funnel state for Step 4 (Review)
+  if (funnelState && funnelState.review && funnelState.review.totals) {
+    const taxAmount = totalGross - totalNet;
+    funnelState.review.totals.net = `${formatDE(totalNet)} EUR`;
+    funnelState.review.totals.gross = `${formatDE(totalGross)} EUR`;
+    funnelState.review.totals.taxAmount = `${formatDE(taxAmount)} EUR`;
+    funnelState.review.totals.taxRate = `${formatDE(taxRate * 100)} %`;
+  }
   const netEl = document.getElementById('total-net');
   const grossEl = document.getElementById('total-gross');
   if (netEl && netEl !== document.activeElement) netEl.value = formatDE(totalNet);
