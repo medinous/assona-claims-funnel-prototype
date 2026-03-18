@@ -1,0 +1,236 @@
+---
+description: Rules for implementing Figma designs into the Assona claims funnel prototype using the Figma MCP server. Covers component organization, styling conventions, design tokens, asset handling, and the required Figma-to-code workflow.
+globs: ["index.html", "styles/**", "scripts/**"]
+alwaysApply: false
+---
+
+## Overview
+
+This project is a static HTML/CSS/JS prototype of the Assona claims funnel (login, welcome, 4-step flow). It uses a design-token-first CSS architecture exported from Figma.
+
+- Entry point: `index.html`
+- Styles: `styles/*.css`
+- Canonical design tokens: `resources/Tailwind config/assona-design-tokens.css`
+- Legacy → canonical bridge: `styles/tokens-bridge.css`
+
+When implementing or updating UI from Figma, always respect the token system and existing CSS structure instead of hardcoding visual values.
+
+## Component & file organization
+
+- **Page shell & shared layout**
+  - `index.html` contains:
+    - Login view
+    - Welcome (home) view
+    - 4-step funnel view
+    - Prototype navigation bar
+  - Shared layout + nav + shell styles live in `styles/base.css`.
+
+- **Step-specific styles**
+  - Step 1 (Upload): `styles/upload.css`
+  - Step 2 (Confirm damage): `styles/damage.css`
+  - Step 3 (Validate): `styles/validation.css`
+  - Step 4 (Review & submit): `styles/review.css`
+  - Login & welcome: `styles/login.css`
+
+- **Localization**
+  - Translations live under `locales/` and are wired by `locales/bundle.js`.
+  - When Figma labels change, prefer updating translation keys/values rather than hardcoding copy in HTML.
+
+**Rules**
+
+- IMPORTANT: When extending or refactoring UI, reuse the existing CSS files above instead of creating new ones unless there is a clear new feature or layer.
+- New shared layout rules should go into `styles/base.css`.
+- New step-specific rules should go into the corresponding step CSS file.
+
+## Styling & design tokens
+
+### Token sources
+
+- Canonical design tokens from Figma are defined in:
+  - `resources/Tailwind config/assona-design-tokens.css` under `:root { ... }`
+
+- Legacy prototype variables are mapped to canonical tokens in:
+  - `styles/tokens-bridge.css` under `:root { ... }`
+
+Examples:
+
+- Primary teal: `--color-primary-*` mapped to `--p*`
+- Neutral green-gray: `--color-neutral-*` mapped to `--n*`
+- Error: `--color-error-*` mapped to `--e*`
+- Success: `--color-success-*` mapped to `--s*`
+- Radii: `--radius-*` mapped to `--r-*`
+- Typography families: `--font-family-*` mapped to `--ff-heading`, `--ff-body`
+
+### Surface & background tokens
+
+- **App background**:
+  - Use `background: var(--color-sage-50, #FAFBF7);` for the page background (see `html, body` in `styles/base.css`).
+
+- **Cards & panels**:
+  - Use `background: var(--n0);` for primary card surfaces (white).
+  - Use `border-color: var(--n100);` or `var(--n200);` for subtle card borders/dividers.
+
+- **Neutral text**:
+  - Body text: `color: var(--color-text-primary, #0D0F0D);`
+  - Muted/secondary text: `color: var(--n600);`
+  - Subtle hints/help text: `color: var(--n400);`
+
+### Buttons & CTAs
+
+- **Primary CTA** (e.g. main submit / “Versicherungsfall melden”):
+  - Background: `background: var(--color-primary-600);`
+  - Text: `color: var(--n0);`
+  - Hover: darken to `var(--color-primary-700);`
+  - Focus ring / outline: use a token from the primary or accent scale (e.g. `outline-color: var(--color-primary-400);`).
+
+- **Secondary CTA**:
+  - Background: `background: var(--n0);`
+  - Border: `border: 1px solid var(--n200);`
+  - Text: `color: var(--color-primary-600);`
+  - Hover: use a light neutral background (e.g. `background: var(--n50);`).
+
+- **Destructive / error actions**:
+  - Background: `background: var(--color-error-500);`
+  - Text: `color: var(--n0);`
+  - Hover: `background: var(--color-error-600);`
+
+### Status & feedback tokens
+
+- **Success states** (e.g. confirmations, success badges):
+  - Icon / accent: `color: var(--color-success-600);`
+  - Background: `background: var(--color-success-50);`
+  - Text: `color: var(--color-success-700);`
+
+- **Warning states** (e.g. caution banners):
+  - Icon / accent: `color: var(--color-warning-600);`
+  - Background: `background: var(--color-warning-50);`
+  - Text: `color: var(--color-warning-800);`
+
+- **Error states** (e.g. validation errors, the PDF error dialog):
+  - Icon / accent: `color: var(--e700);` (alias for `var(--color-error-700)`)
+  - Background: `background: var(--color-error-50);`
+  - Border: `border-color: var(--color-error-200);`
+  - Text: `color: var(--color-error-700);`
+
+### Typography & spacing
+
+- **Headings**:
+  - Font family: `font-family: var(--ff-heading);`
+  - Typical sizes:
+    - Large page title: map to a single heading utility (e.g. `font-size: 24–28px; line-height: 32–36px`) and reuse it.
+    - Section titles: `18–20px`, reusing a shared heading class.
+
+- **Body text**:
+  - Font family: `font-family: var(--ff-body);`
+  - Base size: `font-size: 14–16px` defined in a small set of classes, not scattered inline.
+
+- **Spacing**:
+  - Use a consistent scale (e.g. 4px steps) and express it through a small set of reusable classes/utilities, not random `px` values:
+    - Example: `--space-xs = 4px`, `--space-sm = 8px`, `--space-md = 12px`, `--space-lg = 16px`, `--space-xl = 24px`.
+  - If spacing tokens don’t exist yet, introduce them once (in `assona-design-tokens.css` or a dedicated spacing section) and reference them everywhere instead of raw numbers.
+
+### Styling rules
+
+- IMPORTANT: Never hardcode colors (hex, rgb, hsl) in HTML or CSS. Always use `var(--...)` tokens defined in:
+  - `resources/Tailwind config/assona-design-tokens.css`
+  - `styles/tokens-bridge.css` (for legacy variables like `--p500`, `--n600`, `--e700`).
+- IMPORTANT: Do not hardcode fonts. Use:
+  - `font-family: var(--ff-heading);` for headings
+  - `font-family: var(--ff-body);` for body text
+- IMPORTANT: Use token-based radii and shadows:
+  - Radii: `var(--r-xs)`, `var(--r-sm)`, `var(--r-md)`, `var(--r-lg)`, `var(--r-xl)`
+  - Shadows: `var(--shadow-xs)`, `var(--shadow-sm)`, `var(--shadow-md)`, `var(--shadow-lg)`, `var(--shadow-overlay)`
+- Where spacing tokens exist, prefer them over raw `px` values. If spacing tokens are missing, introduce them once in the token layer and reuse them.
+
+### Inline styles
+
+- IMPORTANT: Avoid inline `style="..."` for visual properties in `index.html`.
+  - Instead:
+    - Create or reuse a CSS class in the appropriate `styles/*.css` file.
+    - Apply the class to the HTML element.
+  - Inline styles are only acceptable for:
+    - Non-visual attributes that are truly dynamic and not easily represented as classes (if any).
+
+### Visual implementation checklist (tokens)
+
+When adding or changing UI:
+
+- [ ] No new hex / rgb colors were hardcoded; all colors use `var(--...)` based on `assona-design-tokens.css` and `tokens-bridge.css`.
+  - Check especially for `style="color:...` or `style="background:...` attributes in HTML.
+- [ ] No new `font-family` values were introduced; only `var(--ff-heading)` and `var(--ff-body)` are used.
+- [ ] Spacing, radii, and shadows come from a small, shared set of token-backed utilities or classes (no random `px` values where tokens exist).
+- [ ] Buttons, badges, alerts, and banners use the primary / accent / neutral / status tokens listed above.
+
+## Figma MCP integration rules
+
+These rules apply whenever you’re using the Figma MCP server to implement or adjust UI based on Figma designs.
+
+### Required flow
+
+1. Fetch design context
+   - Run `get_design_context` for the exact Figma node(s) being implemented or updated.
+2. Handle large responses
+   - If the response is too large or truncated, run `get_metadata` to find node IDs, then re-run `get_design_context` on a narrower selection.
+3. Get visual reference
+   - Run `get_screenshot` for the specific variant/instance you are implementing.
+4. Map design → tokens
+   - Map Figma color styles, typography, spacing, and radii to the token system in:
+     - `assona-design-tokens.css`
+     - `tokens-bridge.css`
+5. Implement in code
+   - Implement or adjust markup in `index.html` (or related HTML) and styles in `styles/*.css`.
+6. Validate
+   - Compare the result visually against the Figma screenshot (layout, spacing, colors, typography).
+   - Ensure that all visual values are coming from tokens (no new hardcoded colors or fonts).
+
+### Implementation rules
+
+- Treat Figma MCP output (often React + Tailwind) as a design reference, not as final code style.
+  - Translate it to static HTML + CSS using this project’s conventions and token system.
+- Prefer updating existing components/sections in `index.html` rather than duplicating similar structures.
+- Respect the existing structure:
+  - `view-login`, `view-home`, `view-funnel` containers.
+  - `@nav-header`, `@stepper`, and other `data-component` markers.
+- Ensure all new or updated text elements have:
+  - Proper `data-i18n` attributes where localization is expected.
+  - Accessible `aria-*` attributes when indicated by the Figma design.
+
+## Asset handling
+
+- Icons:
+  - Primary icon set is Tabler Icons via `@tabler/icons-webfont` (see `<link>` in `<head>`).
+  - IMPORTANT: Do not add new icon libraries if a Tabler equivalent exists.
+- Images:
+  - Use the existing `images/` folder structure.
+  - When Figma provides raster assets, export them and store alongside current hero images.
+- Figma MCP assets:
+  - If the MCP server returns `localhost` URLs for images or SVGs, use them directly in development.
+  - Do not create placeholder graphics when a real asset is provided by Figma.
+
+## Localization & content
+
+- Text content should:
+  - Use `data-i18n` attributes where appropriate.
+  - Pull copy from `locales/translations.csv` via `locales/bundle.js`.
+- IMPORTANT: Do not hardcode new production copy in HTML without adding/updating translations.
+
+## Project-specific conventions
+
+- Views are toggled by data attributes and JS logic (`scripts/app.js`); do not break the `view-*` and `data-view-link` / `data-step-link` patterns.
+- For new interactions:
+  - Prefer to extend `scripts/app.js` instead of embedding inline event handlers (e.g. `onclick="..."`) in HTML.
+- Accessibility:
+  - Maintain ARIA roles/labels already present.
+  - Any new interactive element must be keyboard accessible and labeled.
+
+## Verification checklist for changes
+
+Before considering a Figma-driven change “done”:
+
+- [ ] All new colors, typography, spacing, radii, and shadows are using tokens from `assona-design-tokens.css` or `tokens-bridge.css`.
+- [ ] No new hardcoded hex colors or font-family values were introduced.
+- [ ] No new inline styles were added for layout/visual design.
+- [ ] Existing view structure (`view-login`, `view-home`, `view-funnel`) is respected.
+- [ ] New text content is wired to translations where applicable.
+- [ ] The result visually matches the Figma screenshot in layout, spacing, and visual hierarchy.
+

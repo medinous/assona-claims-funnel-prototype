@@ -1,0 +1,17 @@
+---
+description: Ensure token-first UI changes by consulting the Assona design token docs and usage examples.
+alwaysApply: true
+---
+
+# Design tokens & UI usage docs (always consult)
+
+When working on UI, styling, theming, layout, or component patterns in this repo:
+
+- Read `docs/design-system/ASSONA-DESIGN-TOKENS.md` before making token-related decisions.
+- Use `docs/design-system/USAGE-EXAMPLES.md` as the default reference for how to apply tokens in components.
+
+Hard rules:
+- Do not introduce hardcoded hex/rgb/hsl colors if a token exists.
+- Prefer semantic token variables (`var(--color-...)`) over raw palette tokens unless the codebase standard requires otherwise.
+- Keep dark mode parity: verify any UI change works in both themes.
+
