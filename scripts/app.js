@@ -9,7 +9,19 @@ import { init as i18nInit, applyToDOM } from './i18n.js';
 
 function boot() {
   i18nInit();
-  showView('login');
+  // Decide initial view based on hash / search, so deep links like
+  // index.html#home or index.html#funnel work from other pages.
+  const hash = window.location.hash || '';
+  const params = new URLSearchParams(window.location.search || '');
+  const viewParam = params.get('view');
+  let initialView = 'login';
+  if (hash === '#home' || viewParam === 'home') {
+    initialView = 'home';
+  } else if (hash === '#funnel' || viewParam === 'funnel') {
+    initialView = 'funnel';
+  }
+
+  showView(initialView);
   wireLoginForm();
   wireWelcomeButtons();
   routerBoot();
