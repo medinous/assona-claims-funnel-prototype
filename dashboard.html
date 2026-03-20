@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Assona – Dashboard</title>
+    <!-- Canonical design tokens from Figma export -->
+    <link
+      rel="stylesheet"
+      href="resources/Tailwind%20config/assona-design-tokens.css"
+    />
+    <!-- Legacy → canonical token bridge -->
+    <link
+      rel="stylesheet"
+      href="styles/tokens-bridge.css"
+    />
+    <!-- Shared base styles (typography, helpers) -->
+    <link
+      rel="stylesheet"
+      href="styles/base.css"
+    />
+    <!-- Dashboard layout + components -->
+    <link
+      rel="stylesheet"
+      href="styles/dashboard.css"
+    />
+    <!-- Lucide Icons (used by shadcn/ui) -->
+    <script
+      src="https://unpkg.com/lucide@latest"
+      defer
+    ></script>
+    <script src="locales/bundle.js"></script>
+    <script type="module" src="scripts/dashboard.js"></script>
+  </head>
+  <body>
+    <div class="figma-stage">
+      <div class="figma-app" role="application" aria-label="Dashboard">
+        <!-- Sidebar -->
+        <aside class="sb" aria-label="Sidebar">
+          <div class="sb-header">
+            <div class="sb-brand">
+              <div class="sb-brand-avatar">
+                <img
+                  src="https://www.figma.com/api/mcp/asset/d1eafeee-b918-4886-8e41-b15e0ecb24d0"
+                  alt=""
+                />
+              </div>
+              <div class="sb-brand-text">
+                <div class="sb-brand-title">assona</div>
+                <div class="sb-brand-sub">Insurance Solutions</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sb-actions">
+            <label class="sb-search" role="search" aria-label="Search">
+              <span class="sb-search-icon" aria-hidden="true">
+                <i data-lucide="search"></i>
+              </span>
+              <input
+                class="sb-search-input"
+                type="search"
+                placeholder="Search for anything"
+                aria-label="Search for anything"
+              />
+              <span class="sb-search-kbd">⇧S</span>
+            </label>
+          </div>
+
+          <div class="sb-content">
+            <div class="sb-group">
+              <div class="sb-group-label">Platform</div>
+              <a class="sb-item sb-item--active" href="dashboard.html">
+                <span class="sb-item-icon" aria-hidden="true">
+                  <i data-lucide="layout-dashboard"></i>
+                </span>
+                <span class="sb-item-text">Dashboard</span>
+              </a>
+              <a class="sb-item" href="#">
+                <span class="sb-item-icon" aria-hidden="true">
+                  <i data-lucide="file-spreadsheet"></i>
+                </span>
+                <span class="sb-item-text">Claims</span>
+                <span class="sb-item-count">12</span>
+              </a>
+              <a class="sb-item" href="#">
+                <span class="sb-item-icon" aria-hidden="true">
+                  <i data-lucide="shopping-bag"></i>
+                </span>
+                <span class="sb-item-text">Contracts</span>
+                <span class="sb-item-count">35</span>
+              </a>
+              <button class="sb-item sb-item--btn" type="button">
+                <span class="sb-item-icon" aria-hidden="true">
+                  <i data-lucide="settings-2"></i>
+                </span>
+                <span class="sb-item-text">Settings</span>
+                <span class="sb-item-chevron" aria-hidden="true">
+                  <i data-lucide="chevron-right"></i>
+                </span>
+              </button>
+            </div>
+
+            <div class="sb-group">
+              <div class="sb-group-label">Support</div>
+              <a class="sb-item" href="#">
+                <span class="sb-item-icon" aria-hidden="true">
+                  <i data-lucide="cloud-download"></i>
+                </span>
+                <span class="sb-item-text">Download Materials</span>
+              </a>
+              <a class="sb-item" href="#">
+                <span class="sb-item-icon" aria-hidden="true">
+                  <i data-lucide="contact"></i>
+                </span>
+                <span class="sb-item-text">Contact your CSM</span>
+              </a>
+              <a class="sb-item" href="#">
+                <span class="sb-item-icon" aria-hidden="true">
+                  <i data-lucide="messages-square"></i>
+                </span>
+                <span class="sb-item-text">Chat with support</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="sb-footer">
+            <div class="sb-user">
+              <div class="sb-user-avatar">BB</div>
+              <div class="sb-user-text">
+                <div class="sb-user-name">Bike Shop Berlin</div>
+                <div class="sb-user-email">admin@bikeshopberlin.com</div>
+              </div>
+              <span class="sb-user-chevron" aria-hidden="true">
+                <i data-lucide="chevron-right"></i>
+              </span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main -->
+        <div class="main">
+          <header class="topbar" aria-label="Top bar">
+            <div class="topbar-left">
+              <button
+                class="sidebar-toggle"
+                type="button"
+                data-action="toggle-sidebar"
+                aria-label="Close sidebar"
+              >
+                <span class="topbar-icon icon-when-open" aria-hidden="true">
+                  <i data-lucide="panel-left-close"></i>
+                </span>
+                <span class="topbar-icon icon-when-closed" aria-hidden="true">
+                  <i data-lucide="panel-left-open"></i>
+                </span>
+              </button>
+              <span class="crumb">Dashboard</span>
+              <div class="topbar-tabs" aria-label="Sticky filters">
+                <div class="tabs tabs--topbar" role="tablist" aria-label="Topbar filters">
+                  <button class="tab tab--active" type="button" role="tab" data-range="30d">
+                    Last 30 days
+                  </button>
+                  <button class="tab" type="button" role="tab" data-range="60d">
+                    Last 60 days
+                  </button>
+                  <button class="tab" type="button" role="tab" data-range="90d">
+                    Last 90 days
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="topbar-right">
+              <span class="topbar-action" aria-hidden="true">
+                <i data-lucide="bell"></i>
+              </span>
+              <span class="topbar-action" aria-hidden="true">
+                <i data-lucide="sun"></i>
+              </span>
+            </div>
+          </header>
+
+          <div class="main-inner">
+          <section class="welcome">
+            <div class="welcome-text">
+              <div class="welcome-title">Welcome back, Bike Shop Berlin!</div>
+              <div class="welcome-sub">
+                Here's what's happening with your claims today.
+              </div>
+            </div>
+          </section>
+
+          <section class="dash-interaction-bar" aria-label="Dashboard filters">
+            <div class="tabs" role="tablist" aria-label="Filters">
+              <button class="tab tab--active" type="button" role="tab" data-range="30d">
+                Last 30 days
+              </button>
+              <button class="tab" type="button" role="tab" data-range="60d">
+                Last 60 days
+              </button>
+              <button class="tab" type="button" role="tab" data-range="90d">
+                Last 90 days
+              </button>
+            </div>
+          </section>
+
+          <main class="content">
+            <div class="content-left">
+              <section class="dash-kpis" aria-label="KPIs">
+                <div class="dash-kpi dash-kpi--lime dash-kpi--top" data-kpi-card="contracts-closed">
+                  <div class="dash-kpi-top">
+                    <div class="dash-kpi-kicker">Contracts closed</div>
+                    <span class="dash-kpi-icon" aria-hidden="true">
+                      <i data-lucide="handshake"></i>
+                    </span>
+                  </div>
+                  <div class="dash-kpi-value-row">
+                    <div class="dash-kpi-value" data-kpi-value="contracts-closed">10.567,30 EUR</div>
+                    <span class="dash-kpi-chip">Net</span>
+                  </div>
+                  <div class="dash-kpi-trend dash-kpi-trend--muted">
+                    <span class="dash-kpi-trend-sub" data-kpi-sub="contracts-closed">Last 30 days</span>
+                  </div>
+                  <label class="dash-kpi-select-wrap" aria-label="Contracts product filter">
+                    <select class="dash-kpi-select" data-kpi-select="contracts-closed">
+                      <option value="all" selected>All products</option>
+                      <option value="bike">Bike insurance</option>
+                      <option value="motor">Motor insurance</option>
+                      <option value="home">Home insurance</option>
+                      <option value="fleet">Fleet insurance</option>
+                      <option value="travel">Travel insurance</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="dash-kpi dash-kpi--sage dash-kpi--top" data-kpi-card="avg-resolution">
+                  <div class="dash-kpi-top">
+                    <div class="dash-kpi-kicker">Avg resolution time</div>
+                    <span class="dash-kpi-icon" aria-hidden="true">
+                      <i data-lucide="clock-2"></i>
+                    </span>
+                  </div>
+                  <div class="dash-kpi-value-row">
+                    <div class="dash-kpi-value" data-kpi-value="avg-resolution">2 days</div>
+                  </div>
+                  <div class="dash-kpi-trend dash-kpi-trend--muted">
+                    <span class="dash-kpi-trend-sub" data-kpi-sub="avg-resolution">Last 30 days</span>
+                  </div>
+                  <label class="dash-kpi-select-wrap" aria-label="Resolution product filter">
+                    <select class="dash-kpi-select" data-kpi-select="avg-resolution">
+                      <option value="all" selected>All products</option>
+                      <option value="bike">Bike insurance</option>
+                      <option value="motor">Motor insurance</option>
+                      <option value="home">Home insurance</option>
+                      <option value="fleet">Fleet insurance</option>
+                      <option value="travel">Travel insurance</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="dash-kpi dash-kpi--petrol dash-kpi--top" data-kpi-card="claims-submitted">
+                  <div class="dash-kpi-top">
+                    <div class="dash-kpi-kicker">Claims submitted</div>
+                    <span class="dash-kpi-icon" aria-hidden="true">
+                      <i data-lucide="check-circle-2"></i>
+                    </span>
+                  </div>
+                  <div class="dash-kpi-value-row">
+                    <div class="dash-kpi-value" data-kpi-value="claims-submitted">14</div>
+                  </div>
+                  <div class="dash-kpi-trend dash-kpi-trend--muted">
+                    <span class="dash-kpi-trend-sub" data-kpi-sub="claims-submitted">Last 30 days</span>
+                  </div>
+                  <button class="dash-btn dash-btn--secondary dash-kpi-cta" type="button">
+                    See all claims
+                  </button>
+                </div>
+                <div class="dash-kpi dash-kpi--neutral dash-kpi--admin" data-kpi-card="claims-paid">
+                  <div class="dash-kpi-top">
+                    <div class="dash-kpi-kicker">Claims paid out</div>
+                  </div>
+                  <div class="dash-kpi-value-row">
+                    <div class="dash-kpi-value" data-kpi-value="claims-paid">1.244,98 EUR</div>
+                  </div>
+                  <div class="dash-kpi-trend">
+                    <span class="dash-kpi-trend-sub" data-kpi-sub="claims-paid">Last 30 years</span>
+                  </div>
+                  <div class="dash-kpi-chart" aria-hidden="true">
+                    <svg viewBox="0 0 116 40" preserveAspectRatio="none">
+                      <path
+                        class="dash-kpi-chart-path dash-kpi-chart-path--down"
+                        d="M2 8 C 18 6, 28 22, 42 24 C 58 26, 68 18, 80 20 C 94 22, 104 34, 114 36"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span class="dash-kpi-tag dash-kpi-tag--down" data-kpi-tag="claims-paid">+2% past year</span>
+                </div>
+                <div class="dash-kpi dash-kpi--neutral dash-kpi--admin" data-kpi-card="commission-paid">
+                  <div class="dash-kpi-top">
+                    <div class="dash-kpi-kicker">Comissions paid out</div>
+                  </div>
+                  <div class="dash-kpi-value-row">
+                    <div class="dash-kpi-value" data-kpi-value="commission-paid">1.244,98 EUR</div>
+                  </div>
+                  <div class="dash-kpi-trend">
+                    <span class="dash-kpi-trend-sub" data-kpi-sub="commission-paid">Last 30 years</span>
+                  </div>
+                  <div class="dash-kpi-chart" aria-hidden="true">
+                    <svg viewBox="0 0 116 40" preserveAspectRatio="none">
+                      <path
+                        class="dash-kpi-chart-path dash-kpi-chart-path--up"
+                        d="M2 34 C 18 28, 30 20, 44 16 C 60 12, 70 26, 82 24 C 96 22, 106 8, 114 6"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span class="dash-kpi-tag dash-kpi-tag--up" data-kpi-tag="commission-paid">+4,6% past year</span>
+                </div>
+              </section>
+
+              <section class="dash-table-section" aria-label="Latest claims">
+                <div class="dash-attn-head">
+                  <h2 class="dash-attn-title">Latest claims</h2>
+                  <div class="dash-attn-ctas">
+                    <button class="dash-btn dash-btn--secondary" type="button">
+                      See all claims
+                    </button>
+                    <button class="dash-btn dash-btn--primary" type="button" data-action="new-claim">
+                      <span class="dash-btn-icon" aria-hidden="true">
+                        <i data-lucide="plus"></i>
+                      </span>
+                      New claim
+                    </button>
+                  </div>
+                </div>
+
+                <div class="ds-table-scroll">
+                <div class="ds-table ds-table--claims-compact">
+                  <div class="ds-table-head-row">
+                    <button class="ds-th ds-th--sortable" type="button">
+                      <span>Claim ID</span>
+                      <i data-lucide="arrow-up-down"></i>
+                    </button>
+                    <div class="ds-th">Status</div>
+                    <div class="ds-th">Type</div>
+                    <div class="ds-th ds-th--wide">Description</div>
+                    <div class="ds-th">Claim Amount</div>
+                    <button class="ds-th ds-th--sortable" type="button">
+                      <span>Submitted</span>
+                      <i data-lucide="arrow-up-down"></i>
+                    </button>
+                    <div class="ds-th">Last Update</div>
+                    <div class="ds-th ds-th--menu"></div>
+                  </div>
+                  <div class="ds-table-body">
+                    <div class="ds-tr">
+                      <div class="ds-td ds-td--claim">CLM-001</div>
+                      <div class="ds-td">
+                        <span class="ds-badge ds-badge--warn">Pending Answer</span>
+                      </div>
+                      <div class="ds-td">
+                        <span class="ds-pill">Partial Damage</span>
+                      </div>
+                      <div class="ds-td ds-td--desc">
+                        Customer slipped in a wet floor and broke the bike handle, no third party involved
+                      </div>
+                      <div class="ds-td">349.00 EUR</div>
+                      <div class="ds-td">2024-09-09</div>
+                      <div class="ds-td">2 days ago</div>
+                      <div class="ds-td ds-td--menu">
+                        <button class="ds-menu-btn" type="button" aria-label="Row actions">
+                          <i data-lucide="more-horizontal"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td ds-td--claim">CLM-002</div>
+                      <div class="ds-td">
+                        <span class="ds-badge ds-badge--muted">Draft</span>
+                      </div>
+                      <div class="ds-td">
+                        <span class="ds-pill">Partial Damage</span>
+                      </div>
+                      <div class="ds-td ds-td--desc">
+                        Car was completely submerged in flood waters, no recovery possible
+                      </div>
+                      <div class="ds-td">15,000.00 EUR</div>
+                      <div class="ds-td">2024-09-10</div>
+                      <div class="ds-td">4 days ago</div>
+                      <div class="ds-td ds-td--menu">
+                        <button class="ds-menu-btn" type="button" aria-label="Row actions">
+                          <i data-lucide="more-horizontal"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td ds-td--claim">CLM-003</div>
+                      <div class="ds-td">
+                        <span class="ds-badge ds-badge--good">Waiting Payout</span>
+                      </div>
+                      <div class="ds-td">
+                        <span class="ds-pill">Partial Damage</span>
+                      </div>
+                      <div class="ds-td ds-td--desc">
+                        Windshield cracked due to hail, repair pending inspection
+                      </div>
+                      <div class="ds-td">250.00 EUR</div>
+                      <div class="ds-td">2024-09-11</div>
+                      <div class="ds-td">6 days ago</div>
+                      <div class="ds-td ds-td--menu">
+                        <button class="ds-menu-btn" type="button" aria-label="Row actions">
+                          <i data-lucide="more-horizontal"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td ds-td--claim">CLM-004</div>
+                      <div class="ds-td">
+                        <span class="ds-badge ds-badge--warn">Pending Answer</span>
+                      </div>
+                      <div class="ds-td">
+                        <span class="ds-pill">Partial Damage</span>
+                      </div>
+                      <div class="ds-td ds-td--desc">
+                        Missing invoice attachment, follow-up sent to customer
+                      </div>
+                      <div class="ds-td">980.00 EUR</div>
+                      <div class="ds-td">2024-09-12</div>
+                      <div class="ds-td">8 days ago</div>
+                      <div class="ds-td ds-td--menu">
+                        <button class="ds-menu-btn" type="button" aria-label="Row actions">
+                          <i data-lucide="more-horizontal"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td ds-td--claim">CLM-005</div>
+                      <div class="ds-td">
+                        <span class="ds-badge ds-badge--muted">Draft</span>
+                      </div>
+                      <div class="ds-td">
+                        <span class="ds-pill">Partial Damage</span>
+                      </div>
+                      <div class="ds-td ds-td--desc">
+                        Claim opened but customer has not submitted photos yet
+                      </div>
+                      <div class="ds-td">420.00 EUR</div>
+                      <div class="ds-td">2024-09-13</div>
+                      <div class="ds-td">9 days ago</div>
+                      <div class="ds-td ds-td--menu">
+                        <button class="ds-menu-btn" type="button" aria-label="Row actions">
+                          <i data-lucide="more-horizontal"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td ds-td--claim">CLM-006</div>
+                      <div class="ds-td">
+                        <span class="ds-badge ds-badge--good">Waiting Payout</span>
+                      </div>
+                      <div class="ds-td">
+                        <span class="ds-pill">Partial Damage</span>
+                      </div>
+                      <div class="ds-td ds-td--desc">
+                        Repair completed and approved, payout pending bank validation
+                      </div>
+                      <div class="ds-td">1,260.00 EUR</div>
+                      <div class="ds-td">2024-09-14</div>
+                      <div class="ds-td">10 days ago</div>
+                      <div class="ds-td ds-td--menu">
+                        <button class="ds-menu-btn" type="button" aria-label="Row actions">
+                          <i data-lucide="more-horizontal"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td ds-td--claim">CLM-007</div>
+                      <div class="ds-td">
+                        <span class="ds-badge ds-badge--warn">Pending Answer</span>
+                      </div>
+                      <div class="ds-td">
+                        <span class="ds-pill">Partial Damage</span>
+                      </div>
+                      <div class="ds-td ds-td--desc">
+                        Additional workshop report requested from service provider
+                      </div>
+                      <div class="ds-td">780.00 EUR</div>
+                      <div class="ds-td">2024-09-15</div>
+                      <div class="ds-td">11 days ago</div>
+                      <div class="ds-td ds-td--menu">
+                        <button class="ds-menu-btn" type="button" aria-label="Row actions">
+                          <i data-lucide="more-horizontal"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td ds-td--claim">CLM-008</div>
+                      <div class="ds-td">
+                        <span class="ds-badge ds-badge--good">Waiting Payout</span>
+                      </div>
+                      <div class="ds-td">
+                        <span class="ds-pill">Partial Damage</span>
+                      </div>
+                      <div class="ds-td ds-td--desc">
+                        Theft recovery confirmed, payout approved by review team
+                      </div>
+                      <div class="ds-td">2,100.00 EUR</div>
+                      <div class="ds-td">2024-09-16</div>
+                      <div class="ds-td">12 days ago</div>
+                      <div class="ds-td ds-td--menu">
+                        <button class="ds-menu-btn" type="button" aria-label="Row actions">
+                          <i data-lucide="more-horizontal"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              </section>
+
+              <section class="dash-table-section" aria-label="Latest contracts">
+                <div class="dash-attn-head">
+                  <h2 class="dash-attn-title">Latest contracts</h2>
+                  <div class="dash-attn-ctas">
+                    <button class="dash-btn dash-btn--secondary" type="button">
+                      See all contract
+                    </button>
+                    <button class="dash-btn dash-btn--primary" type="button">
+                      <span class="dash-btn-icon" aria-hidden="true">
+                        <i data-lucide="plus"></i>
+                      </span>
+                      New contract
+                    </button>
+                  </div>
+                </div>
+
+                <div class="ds-table-scroll">
+                <div class="ds-table ds-table--contracts-real">
+                  <div class="ds-table-head-row">
+                    <div class="ds-th">Status</div>
+                    <div class="ds-th ds-th--stack"><span>Vertrag</span><span>Belegnummer</span></div>
+                    <div class="ds-th">Schaden</div>
+                    <div class="ds-th">Vorname</div>
+                    <div class="ds-th">Nachname</div>
+                    <div class="ds-th ds-th--stack"><span>gultig von</span><span>gultig bis</span></div>
+                    <div class="ds-th ds-th--stack"><span>Gerateart</span><span>Rahmennummer</span></div>
+                    <div class="ds-th">Marktcode</div>
+                    <div class="ds-th">Marktname</div>
+                  </div>
+                  <div class="ds-table-body">
+                    <div class="ds-tr">
+                      <div class="ds-td"><span class="contract-status contract-status--red" aria-label="Inactive"></span></div>
+                      <div class="ds-td ds-td--stack"><span>6653473</span><span>n.A.</span></div>
+                      <div class="ds-td"></div>
+                      <div class="ds-td">Max</div>
+                      <div class="ds-td">Mustermann</div>
+                      <div class="ds-td ds-td--stack"><span>02.05.2025</span><span>02.05.2025</span></div>
+                      <div class="ds-td ds-td--stack"><span>E-Bike test tes</span><span>X125</span></div>
+                      <div class="ds-td">FTRestAD</div>
+                      <div class="ds-td">Testmarkt AuBendienst BikeProtect DE - nur Testvertrage</div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td"><span class="contract-status contract-status--amber" aria-label="In progress"></span></div>
+                      <div class="ds-td ds-td--stack"><span>6892585</span><span>n.A.</span></div>
+                      <div class="ds-td">1891615</div>
+                      <div class="ds-td">Thomas</div>
+                      <div class="ds-td">Harwig</div>
+                      <div class="ds-td">19.08.2025</div>
+                      <div class="ds-td ds-td--stack"><span>Fahrrad Giant Liv</span><span>G1111111</span></div>
+                      <div class="ds-td">FTRestAD</div>
+                      <div class="ds-td">Testmarkt AuBendienst BikeProtect DE - nur Testvertrage</div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td"><span class="contract-status contract-status--red" aria-label="Inactive"></span></div>
+                      <div class="ds-td ds-td--stack"><span>6892581</span><span>n.A.</span></div>
+                      <div class="ds-td"></div>
+                      <div class="ds-td">Minnie</div>
+                      <div class="ds-td">Mouse</div>
+                      <div class="ds-td">27.08.2025</div>
+                      <div class="ds-td ds-td--stack"><span>Fahrrad Filzer Mini</span><span>X5000</span></div>
+                      <div class="ds-td">FTRestAD</div>
+                      <div class="ds-td">Testmarkt AuBendienst BikeProtect DE - nur Testvertrage</div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td"><span class="contract-status contract-status--lime" aria-label="Active"></span></div>
+                      <div class="ds-td ds-td--stack"><span>6902588</span><span>n.A.</span></div>
+                      <div class="ds-td"></div>
+                      <div class="ds-td">Mickey</div>
+                      <div class="ds-td">Mouse</div>
+                      <div class="ds-td">27.08.2025</div>
+                      <div class="ds-td ds-td--stack"><span>Fahrrad Corratec Test</span><span>X1000</span></div>
+                      <div class="ds-td">FPhadAD</div>
+                      <div class="ds-td">Testmarkt AuBendienst BikeProtect DE - nur Testvertrage</div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td"><span class="contract-status contract-status--amber" aria-label="In progress"></span></div>
+                      <div class="ds-td ds-td--stack"><span>6924511</span><span>n.A.</span></div>
+                      <div class="ds-td">1895588</div>
+                      <div class="ds-td">Thomas</div>
+                      <div class="ds-td">Harwig</div>
+                      <div class="ds-td">15.09.2025</div>
+                      <div class="ds-td ds-td--stack"><span>Fahrrad KTM X Strada Elite</span><span>KS0000000</span></div>
+                      <div class="ds-td">FTRestAD</div>
+                      <div class="ds-td">Testmarkt AuBendienst BikeProtect DE - nur Testvertrage</div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td"><span class="contract-status contract-status--lime" aria-label="Active"></span></div>
+                      <div class="ds-td ds-td--stack"><span>6928013</span><span>n.A.</span></div>
+                      <div class="ds-td">1896021</div>
+                      <div class="ds-td">Laura</div>
+                      <div class="ds-td">Becker</div>
+                      <div class="ds-td">20.09.2025</div>
+                      <div class="ds-td ds-td--stack"><span>Cube Kathmandu</span><span>CB20991</span></div>
+                      <div class="ds-td">FTRestAD</div>
+                      <div class="ds-td">Testmarkt BikeProtect DE</div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td"><span class="contract-status contract-status--red" aria-label="Inactive"></span></div>
+                      <div class="ds-td ds-td--stack"><span>6928344</span><span>n.A.</span></div>
+                      <div class="ds-td"></div>
+                      <div class="ds-td">Jonas</div>
+                      <div class="ds-td">Klein</div>
+                      <div class="ds-td">21.09.2025</div>
+                      <div class="ds-td ds-td--stack"><span>Trekking Bike 500</span><span>TR50088</span></div>
+                      <div class="ds-td">FTRestAD</div>
+                      <div class="ds-td">Testmarkt BikeProtect DE</div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td"><span class="contract-status contract-status--amber" aria-label="In progress"></span></div>
+                      <div class="ds-td ds-td--stack"><span>6929120</span><span>n.A.</span></div>
+                      <div class="ds-td">1897004</div>
+                      <div class="ds-td">Sofia</div>
+                      <div class="ds-td">Meyer</div>
+                      <div class="ds-td">23.09.2025</div>
+                      <div class="ds-td ds-td--stack"><span>E-Bike Urban Pro</span><span>EB77411</span></div>
+                      <div class="ds-td">FTRestAD</div>
+                      <div class="ds-td">Testmarkt BikeProtect DE</div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td"><span class="contract-status contract-status--lime" aria-label="Active"></span></div>
+                      <div class="ds-td ds-td--stack"><span>6929981</span><span>n.A.</span></div>
+                      <div class="ds-td">1897440</div>
+                      <div class="ds-td">Mara</div>
+                      <div class="ds-td">Schulz</div>
+                      <div class="ds-td">24.09.2025</div>
+                      <div class="ds-td ds-td--stack"><span>Gravel Bike XR</span><span>GV33009</span></div>
+                      <div class="ds-td">FTRestAD</div>
+                      <div class="ds-td">Testmarkt BikeProtect DE</div>
+                    </div>
+                    <div class="ds-tr">
+                      <div class="ds-td"><span class="contract-status contract-status--amber" aria-label="In progress"></span></div>
+                      <div class="ds-td ds-td--stack"><span>6930455</span><span>n.A.</span></div>
+                      <div class="ds-td">1898012</div>
+                      <div class="ds-td">Daniel</div>
+                      <div class="ds-td">Fischer</div>
+                      <div class="ds-td">25.09.2025</div>
+                      <div class="ds-td ds-td--stack"><span>Fahrrad Touring Plus</span><span>TP90021</span></div>
+                      <div class="ds-td">FTRestAD</div>
+                      <div class="ds-td">Testmarkt BikeProtect DE</div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              </section>
+            </div>
+
+            <aside class="content-right" aria-label="Activity">
+              <section class="dash-feedback">
+                <div class="dash-feedback-media" aria-hidden="true">
+                  <img
+                    src="https://www.figma.com/api/mcp/asset/9baa56bb-fdc9-47b6-8a08-7b819ea40cce"
+                    alt=""
+                  />
+                </div>
+                <div class="dash-feedback-content">
+                  <h2 class="dash-feedback-title">Handlerprodukt</h2>
+                  <p class="dash-feedback-body">
+                    Simplify used bike sales with our warranty product.
+                  </p>
+                  <button class="dash-feedback-cta" type="button">
+                    Get Started Now
+                  </button>
+                </div>
+              </section>
+
+              <section class="dash-news" aria-label="Needs your attention">
+                <div class="dash-news-label">Needs your attention</div>
+                <div class="dash-news-list">
+                  <div class="dash-news-item dash-news-item--attention">
+                    <div class="dash-news-thumb dash-news-thumb--petrol">
+                      <i data-lucide="image"></i>
+                      <span class="dash-news-thumb-dot" aria-hidden="true"></span>
+                    </div>
+                    <div class="dash-news-text">
+                      <div class="dash-news-row">
+                        <div class="dash-news-title">Additional photo(s) required</div>
+                        <div class="dash-news-tag">CLM-123</div>
+                      </div>
+                      <div class="dash-news-sub">Just now</div>
+                    </div>
+                  </div>
+                  <div class="dash-news-item dash-news-item--attention">
+                    <div class="dash-news-thumb dash-news-thumb--petrol">
+                      <i data-lucide="file-text"></i>
+                      <span class="dash-news-thumb-dot" aria-hidden="true"></span>
+                    </div>
+                    <div class="dash-news-text">
+                      <div class="dash-news-row">
+                        <div class="dash-news-title">Proof of Purchase required</div>
+                        <div class="dash-news-tag">CLM-123</div>
+                      </div>
+                      <div class="dash-news-sub">2 days ago</div>
+                    </div>
+                  </div>
+                  <div class="dash-news-item dash-news-item--attention">
+                    <div class="dash-news-thumb dash-news-thumb--red">
+                      <i data-lucide="badge-dollar-sign"></i>
+                      <span class="dash-news-thumb-dot" aria-hidden="true"></span>
+                    </div>
+                    <div class="dash-news-text">
+                      <div class="dash-news-row">
+                        <div class="dash-news-title">Payout request denied</div>
+                        <div class="dash-news-tag">CLM-123</div>
+                      </div>
+                      <div class="dash-news-sub">7 days ago</div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="dash-news" aria-label="Latest news from assona">
+                <div class="dash-news-label">Latest news from assona</div>
+                <div class="dash-news-list">
+                  <div class="dash-news-item dash-news-item--plain">
+                    <div class="dash-news-text">
+                      <div class="dash-news-title">Write here a news title</div>
+                      <div class="dash-news-sub">By author_name</div>
+                    </div>
+                  </div>
+                  <div class="dash-news-item dash-news-item--plain">
+                    <div class="dash-news-text">
+                      <div class="dash-news-title">Write here a news title</div>
+                      <div class="dash-news-sub">By author_name</div>
+                    </div>
+                  </div>
+                  <div class="dash-news-item dash-news-item--plain">
+                    <div class="dash-news-text">
+                      <div class="dash-news-title">Write here a news title</div>
+                      <div class="dash-news-sub">By author_name</div>
+                    </div>
+                  </div>
+                  <div class="dash-news-item dash-news-item--plain">
+                    <div class="dash-news-text">
+                      <div class="dash-news-title">Write here a news title</div>
+                      <div class="dash-news-sub">By author_name</div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </aside>
+          </main>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav class="dash-fixture" aria-label="Tester fixture">
+      <span class="dash-fixture-label">Persona</span>
+      <button class="dash-fixture-btn is-active" type="button" data-persona="admin">Admin</button>
+      <button class="dash-fixture-btn" type="button" data-persona="member">Member</button>
+    </nav>
+  </body>
+</html>
+
