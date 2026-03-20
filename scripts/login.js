@@ -99,9 +99,15 @@ function updateWelcomeEmail(email) {
 }
 
 export function wireWelcomeButtons() {
+  const btnDashboard = document.getElementById('btn-welcome-dashboard');
   const btnReport = document.getElementById('btn-welcome-report');
   const btnTheft = document.getElementById('btn-welcome-theft');
   const btnLogout = document.getElementById('btn-welcome-logout');
+  if (btnDashboard) {
+    btnDashboard.addEventListener('click', () => {
+      window.location.href = 'dashboard.html';
+    });
+  }
   if (btnReport) {
     btnReport.addEventListener('click', () => {
       openFunnel();
