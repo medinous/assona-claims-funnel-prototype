@@ -4,15 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Assona – Claims</title>
-    <!-- Design tokens -->
     <link rel="stylesheet" href="resources/Tailwind%20config/assona-design-tokens.css" />
     <link rel="stylesheet" href="styles/tokens-bridge.css" />
     <link rel="stylesheet" href="styles/base.css" />
-    <!-- Dashboard layout + sidebar styles -->
     <link rel="stylesheet" href="styles/dashboard.css" />
-    <!-- Claims-specific styles -->
     <link rel="stylesheet" href="styles/claims.css" />
-    <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest" defer></script>
     <script src="locales/bundle.js"></script>
     <script type="module" src="scripts/claims.js"></script>
@@ -114,79 +110,260 @@
 
           <div class="main-inner">
 
-            <!-- Page header -->
-            <section class="cl-page-header">
-              <div>
-                <h1 class="cl-page-title">Claims</h1>
-                <p class="cl-page-sub">Monitor your submitted claims: Inspection, UVV and damage reports</p>
+            <!-- Page header: title + actions -->
+            <section class="cl-header">
+              <div class="cl-header-text">
+                <div class="welcome-title">Claims</div>
+                <div class="welcome-sub">Monitor your submitted claims: Inspection, UVV and damage reports</div>
               </div>
-              <div class="cl-page-actions">
-                <button class="cl-btn-primary" type="button" data-action="new-claim">
-                  <i data-lucide="plus"></i>
+              <div class="cl-header-actions">
+                <button class="dash-btn dash-btn--teal" type="button" data-action="new-claim">
+                  <span class="dash-btn-icon" aria-hidden="true"><i data-lucide="plus"></i></span>
                   New claim
                 </button>
-                <button class="cl-btn-icon" type="button" aria-label="More options">
+                <button class="dash-btn dash-btn--secondary dash-btn--icon-only" type="button" aria-label="More options">
                   <i data-lucide="more-vertical"></i>
                 </button>
               </div>
             </section>
 
-            <!-- Toolbar: filter tabs + search -->
-            <section class="cl-toolbar" aria-label="Claims filters">
-              <div class="cl-tabs" role="tablist">
-                <button class="cl-tab cl-tab--active" type="button" role="tab" data-filter="all">All claims</button>
-                <button class="cl-tab" type="button" role="tab" data-filter="open">Open</button>
-                <button class="cl-tab" type="button" role="tab" data-filter="drafts">Drafts</button>
-                <button class="cl-tab" type="button" role="tab" data-filter="resolved">Resolved</button>
-                <button class="cl-tab" type="button" role="tab" data-filter="cancelled">Cancelled</button>
-                <button class="cl-filter-btn" type="button">
+            <!-- Filter tabs + search -->
+            <section class="cl-interaction-bar" aria-label="Claims filters">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <div class="tabs" role="tablist" aria-label="Claim status filters">
+                  <button class="tab tab--active" type="button" role="tab" data-filter="all">All claims</button>
+                  <button class="tab" type="button" role="tab" data-filter="open">Open</button>
+                  <button class="tab" type="button" role="tab" data-filter="drafts">Drafts</button>
+                  <button class="tab" type="button" role="tab" data-filter="resolved">Resolved</button>
+                  <button class="tab" type="button" role="tab" data-filter="cancelled">Cancelled</button>
+                </div>
+                <button class="cl-filter-toggle" type="button">
                   <i data-lucide="sliders-horizontal"></i>
                   Less Filters
                 </button>
               </div>
-              <div class="cl-search-wrap">
+              <label class="cl-search" aria-label="Search claims">
                 <span class="cl-search-icon" aria-hidden="true"><i data-lucide="search"></i></span>
                 <input class="cl-search-input" type="search" placeholder="Search claims" aria-label="Search claims" />
-              </div>
+              </label>
             </section>
 
             <!-- Column filter chips -->
             <div class="cl-col-filters" aria-label="Column filters">
-              <button class="cl-col-filter" type="button">Product <i data-lucide="circle-plus"></i></button>
-              <button class="cl-col-filter" type="button">Status <i data-lucide="circle-plus"></i></button>
-              <button class="cl-col-filter" type="button">Type <i data-lucide="circle-plus"></i></button>
-              <button class="cl-col-filter" type="button">Claim Amount <i data-lucide="circle-plus"></i></button>
-              <button class="cl-col-filter" type="button">Submission date <i data-lucide="circle-plus"></i></button>
+              <button class="cl-col-chip" type="button">Product <i data-lucide="circle-plus"></i></button>
+              <button class="cl-col-chip" type="button">Status <i data-lucide="circle-plus"></i></button>
+              <button class="cl-col-chip" type="button">Type <i data-lucide="circle-plus"></i></button>
+              <button class="cl-col-chip" type="button">Claim Amount <i data-lucide="circle-plus"></i></button>
+              <button class="cl-col-chip" type="button">Submission date <i data-lucide="circle-plus"></i></button>
             </div>
 
             <!-- Claims table -->
             <section class="cl-table-section">
-              <table class="cl-table" aria-label="Claims list">
-                <thead>
-                  <tr>
-                    <th class="sortable">Claim ID <span class="cl-sort-icon"><i data-lucide="chevrons-up-down"></i></span></th>
-                    <th class="sortable">Status <span class="cl-sort-icon"><i data-lucide="chevrons-up-down"></i></span></th>
-                    <th></th>
-                    <th class="sortable">Type <span class="cl-sort-icon"><i data-lucide="chevrons-up-down"></i></span></th>
-                    <th class="sortable">Claim Amount <span class="cl-sort-icon"><i data-lucide="chevrons-up-down"></i></span></th>
-                    <th class="sortable">Submission date <span class="cl-sort-icon"><i data-lucide="chevrons-up-down"></i></span></th>
-                    <th>Last Update</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody id="cl-tbody">
-                  <!-- Populated by claims.js -->
-                </tbody>
-              </table>
+              <div class="ds-table-scroll">
+                <div class="ds-table ds-table--claims-full">
+
+                  <!-- Header row -->
+                  <div class="ds-table-head-row">
+                    <button class="ds-th ds-th--sortable" type="button">
+                      <span>Claim ID</span>
+                      <i data-lucide="arrow-up-down"></i>
+                    </button>
+                    <button class="ds-th ds-th--sortable" type="button">
+                      <span>Status</span>
+                      <i data-lucide="arrow-up-down"></i>
+                    </button>
+                    <div class="ds-th"></div>
+                    <div class="ds-th">Type</div>
+                    <div class="ds-th">Claim Amount</div>
+                    <button class="ds-th ds-th--sortable" type="button">
+                      <span>Submission date</span>
+                      <i data-lucide="arrow-up-down"></i>
+                    </button>
+                    <div class="ds-th">Last Update</div>
+                    <div class="ds-th ds-th--menu"></div>
+                  </div>
+
+                  <!-- Body rows -->
+                  <div class="ds-table-body" id="cl-tbody">
+
+                    <div class="ds-tr" data-status="pending">
+                      <div class="ds-td ds-td--claim">CLM-001</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--warn">Pending Answer</span></div>
+                      <div class="ds-td ds-td--desc">Additional photo(s) required</div>
+                      <div class="ds-td"><span class="ds-pill">Partial Damage</span></div>
+                      <div class="ds-td">349.00 EUR</div>
+                      <div class="ds-td">2024-09-09</div>
+                      <div class="ds-td">2 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="pending">
+                      <div class="ds-td ds-td--claim">CLM-008</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--warn">Pending Answer</span></div>
+                      <div class="ds-td ds-td--desc">Proof of Purchase required</div>
+                      <div class="ds-td"><span class="ds-pill">Partial Damage</span></div>
+                      <div class="ds-td">887.00 EUR</div>
+                      <div class="ds-td">2024-09-07</div>
+                      <div class="ds-td">6 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="draft">
+                      <div class="ds-td ds-td--claim">CLM-002</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--muted">Draft</span></div>
+                      <div class="ds-td ds-td--desc">Invoice uploaded</div>
+                      <div class="ds-td"><span class="ds-pill">Partial Damage</span></div>
+                      <div class="ds-td">15,020.00 EUR</div>
+                      <div class="ds-td" style="color:var(--color-text-placeholder)">—</div>
+                      <div class="ds-td">2 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="draft">
+                      <div class="ds-td ds-td--claim">CLM-003</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--muted">Draft</span></div>
+                      <div class="ds-td ds-td--desc">Invoice uploaded</div>
+                      <div class="ds-td"><span class="ds-pill">Partial Damage</span></div>
+                      <div class="ds-td" style="color:var(--color-text-placeholder)">—</div>
+                      <div class="ds-td" style="color:var(--color-text-placeholder)">—</div>
+                      <div class="ds-td">3 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="process">
+                      <div class="ds-td ds-td--claim">CLM-004</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--info">In Process</span></div>
+                      <div class="ds-td ds-td--desc">Claim submitted, assona is analyzing</div>
+                      <div class="ds-td"><span class="ds-pill">Total Loss</span></div>
+                      <div class="ds-td">1,500.00 EUR</div>
+                      <div class="ds-td">2024-09-12</div>
+                      <div class="ds-td">1 day ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="process">
+                      <div class="ds-td ds-td--claim">CLM-005</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--info">In Process</span></div>
+                      <div class="ds-td ds-td--desc">Claim submitted, assona is analyzing</div>
+                      <div class="ds-td"><span class="ds-pill">Minor Damage</span></div>
+                      <div class="ds-td">100.00 EUR</div>
+                      <div class="ds-td">2024-09-10</div>
+                      <div class="ds-td">3 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="paid">
+                      <div class="ds-td ds-td--claim">CLM-006</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--paid">Paid out</span></div>
+                      <div class="ds-td ds-td--desc">Payment effectuated</div>
+                      <div class="ds-td"><span class="ds-pill">Partial Damage</span></div>
+                      <div class="ds-td">800.00 EUR</div>
+                      <div class="ds-td">2024-09-09</div>
+                      <div class="ds-td">4 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="process">
+                      <div class="ds-td ds-td--claim">CLM-007</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--info">In Process</span></div>
+                      <div class="ds-td ds-td--desc">Claim submitted, assona is analyzing</div>
+                      <div class="ds-td"><span class="ds-pill">Total Loss</span></div>
+                      <div class="ds-td">2,500.00 EUR</div>
+                      <div class="ds-td">2024-09-06</div>
+                      <div class="ds-td">5 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="paid">
+                      <div class="ds-td ds-td--claim">CLM-009</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--paid">Paid out</span></div>
+                      <div class="ds-td ds-td--desc">Payment effectuated</div>
+                      <div class="ds-td"><span class="ds-pill">Inspection</span></div>
+                      <div class="ds-td">50.00 EUR</div>
+                      <div class="ds-td">2024-09-04</div>
+                      <div class="ds-td">7 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="process">
+                      <div class="ds-td ds-td--claim">CLM-010</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--info">In Process</span></div>
+                      <div class="ds-td ds-td--desc">Claim submitted, assona is analyzing</div>
+                      <div class="ds-td"><span class="ds-pill">Minor Damage</span></div>
+                      <div class="ds-td">600.00 EUR</div>
+                      <div class="ds-td">2024-09-05</div>
+                      <div class="ds-td">8 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="denied">
+                      <div class="ds-td ds-td--claim">CLM-011</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--danger">Payout denied</span></div>
+                      <div class="ds-td ds-td--desc">The amount for Wear &amp; Tear is above the amount insured by e.</div>
+                      <div class="ds-td"><span class="ds-pill">Total Loss</span></div>
+                      <div class="ds-td">3,000.00 EUR</div>
+                      <div class="ds-td">2024-09-04</div>
+                      <div class="ds-td">9 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="process">
+                      <div class="ds-td ds-td--claim">CLM-012</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--info">In Process</span></div>
+                      <div class="ds-td ds-td--desc">Claim submitted, assona is analyzing</div>
+                      <div class="ds-td"><span class="ds-pill">Partial Damage</span></div>
+                      <div class="ds-td">200.00 EUR</div>
+                      <div class="ds-td">2024-09-03</div>
+                      <div class="ds-td">10 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="process">
+                      <div class="ds-td ds-td--claim">CLM-013</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--info">In Process</span></div>
+                      <div class="ds-td ds-td--desc">Claim submitted, assona is analyzing</div>
+                      <div class="ds-td"><span class="ds-pill">Partial Damage</span></div>
+                      <div class="ds-td">100.00 EUR</div>
+                      <div class="ds-td">2024-09-02</div>
+                      <div class="ds-td">11 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="draft">
+                      <div class="ds-td ds-td--claim">CLM-014</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--muted">Draft</span></div>
+                      <div class="ds-td ds-td--desc">Cost Estimate uploaded</div>
+                      <div class="ds-td"><span class="ds-pill">Inspection</span></div>
+                      <div class="ds-td">1,200.00 EUR</div>
+                      <div class="ds-td" style="color:var(--color-text-placeholder)">—</div>
+                      <div class="ds-td">12 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                    <div class="ds-tr" data-status="draft">
+                      <div class="ds-td ds-td--claim">CLM-015</div>
+                      <div class="ds-td"><span class="ds-badge ds-badge--muted">Draft</span></div>
+                      <div class="ds-td ds-td--desc">Cost Estimate uploaded</div>
+                      <div class="ds-td"><span class="ds-pill">Inspection</span></div>
+                      <div class="ds-td">1,200.00 EUR</div>
+                      <div class="ds-td" style="color:var(--color-text-placeholder)">—</div>
+                      <div class="ds-td">12 days ago</div>
+                      <div class="ds-td ds-td--menu"><button class="ds-menu-btn" type="button" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></div>
+                    </div>
+
+                  </div><!-- /ds-table-body -->
+                </div><!-- /ds-table -->
+              </div><!-- /ds-table-scroll -->
 
               <!-- Pagination -->
               <div class="cl-pagination">
-                <span class="cl-pagination-info" id="cl-pagination-info">Showing 15 of 15 claims</span>
+                <span class="cl-pagination-info" id="cl-pagination-info">Showing 15 of 21 claims</span>
                 <div class="cl-pagination-btns">
-                  <button class="cl-page-btn" type="button" disabled>Previous</button>
-                  <button class="cl-page-btn" type="button">Next</button>
+                  <button class="dash-btn dash-btn--secondary" type="button" disabled style="opacity:0.4;cursor:default;">Previous</button>
+                  <button class="dash-btn dash-btn--secondary" type="button">Next</button>
                 </div>
               </div>
+
             </section>
 
           </div><!-- /main-inner -->
