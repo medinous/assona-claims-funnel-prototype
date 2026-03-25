@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assona – Claims</title>
+    <!-- Design tokens -->
+    <link rel="stylesheet" href="resources/Tailwind%20config/assona-design-tokens.css" />
+    <link rel="stylesheet" href="styles/tokens-bridge.css" />
+    <link rel="stylesheet" href="styles/base.css" />
+    <!-- Dashboard layout + sidebar styles -->
+    <link rel="stylesheet" href="styles/dashboard.css" />
+    <!-- Claims-specific styles -->
+    <link rel="stylesheet" href="styles/claims.css" />
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="locales/bundle.js"></script>
+    <script type="module" src="scripts/claims.js"></script>
+  </head>
+  <body>
+    <div class="figma-stage">
+      <div class="figma-app" role="application" aria-label="Claims">
+
+        <!-- ── Sidebar ── -->
+        <aside class="sb" aria-label="Sidebar">
+          <div class="sb-header">
+            <div class="sb-brand">
+              <div class="sb-brand-avatar">
+                <img src="https://www.figma.com/api/mcp/asset/d1eafeee-b918-4886-8e41-b15e0ecb24d0" alt="" />
+              </div>
+              <div class="sb-brand-text">
+                <div class="sb-brand-title">assona</div>
+                <div class="sb-brand-sub">Insurance Solutions</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sb-actions">
+            <label class="sb-search" role="search" aria-label="Search">
+              <span class="sb-search-icon" aria-hidden="true"><i data-lucide="search"></i></span>
+              <input class="sb-search-input" type="search" placeholder="Search for anything" aria-label="Search for anything" />
+              <span class="sb-search-kbd">⇧S</span>
+            </label>
+          </div>
+
+          <div class="sb-content">
+            <div class="sb-group">
+              <div class="sb-group-label">Platform</div>
+              <a class="sb-item" href="dashboard.html">
+                <span class="sb-item-icon" aria-hidden="true"><i data-lucide="layout-dashboard"></i></span>
+                <span class="sb-item-text">Dashboard</span>
+              </a>
+              <a class="sb-item sb-item--active" href="claims.html" aria-current="page">
+                <span class="sb-item-icon" aria-hidden="true"><i data-lucide="file-spreadsheet"></i></span>
+                <span class="sb-item-text">Claims</span>
+                <span class="sb-item-count">12</span>
+              </a>
+              <a class="sb-item" href="#">
+                <span class="sb-item-icon" aria-hidden="true"><i data-lucide="shopping-bag"></i></span>
+                <span class="sb-item-text">Contracts</span>
+                <span class="sb-item-count">35</span>
+              </a>
+              <button class="sb-item sb-item--btn" type="button">
+                <span class="sb-item-icon" aria-hidden="true"><i data-lucide="settings-2"></i></span>
+                <span class="sb-item-text">Settings</span>
+                <span class="sb-item-chevron" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
+              </button>
+            </div>
+
+            <div class="sb-group">
+              <div class="sb-group-label">Support</div>
+              <a class="sb-item" href="#">
+                <span class="sb-item-icon" aria-hidden="true"><i data-lucide="cloud-download"></i></span>
+                <span class="sb-item-text">Download Materials</span>
+              </a>
+              <a class="sb-item" href="#">
+                <span class="sb-item-icon" aria-hidden="true"><i data-lucide="contact"></i></span>
+                <span class="sb-item-text">Contact your CSM</span>
+              </a>
+              <a class="sb-item" href="#">
+                <span class="sb-item-icon" aria-hidden="true"><i data-lucide="messages-square"></i></span>
+                <span class="sb-item-text">Chat with support</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="sb-footer">
+            <div class="sb-user">
+              <div class="sb-user-avatar">BB</div>
+              <div class="sb-user-text">
+                <div class="sb-user-name">Bike Shop Berlin</div>
+                <div class="sb-user-email">admin@bikeshopberlin.com</div>
+              </div>
+              <span class="sb-user-chevron" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- ── Main ── -->
+        <div class="main">
+          <header class="topbar" aria-label="Top bar">
+            <div class="topbar-left">
+              <button class="sidebar-toggle" type="button" data-action="toggle-sidebar" aria-label="Close sidebar">
+                <span class="topbar-icon icon-when-open" aria-hidden="true"><i data-lucide="panel-left-close"></i></span>
+                <span class="topbar-icon icon-when-closed" aria-hidden="true"><i data-lucide="panel-left-open"></i></span>
+              </button>
+              <span class="crumb">Claims</span>
+            </div>
+            <div class="topbar-right">
+              <span class="topbar-action" aria-hidden="true"><i data-lucide="bell"></i></span>
+              <span class="topbar-action" aria-hidden="true"><i data-lucide="sun"></i></span>
+            </div>
+          </header>
+
+          <div class="main-inner">
+
+            <!-- Page header -->
+            <section class="cl-page-header">
+              <div>
+                <h1 class="cl-page-title">Claims</h1>
+                <p class="cl-page-sub">Monitor your submitted claims: Inspection, UVV and damage reports</p>
+              </div>
+              <div class="cl-page-actions">
+                <button class="cl-btn-primary" type="button" data-action="new-claim">
+                  <i data-lucide="plus"></i>
+                  New claim
+                </button>
+                <button class="cl-btn-icon" type="button" aria-label="More options">
+                  <i data-lucide="more-vertical"></i>
+                </button>
+              </div>
+            </section>
+
+            <!-- Toolbar: filter tabs + search -->
+            <section class="cl-toolbar" aria-label="Claims filters">
+              <div class="cl-tabs" role="tablist">
+                <button class="cl-tab cl-tab--active" type="button" role="tab" data-filter="all">All claims</button>
+                <button class="cl-tab" type="button" role="tab" data-filter="open">Open</button>
+                <button class="cl-tab" type="button" role="tab" data-filter="drafts">Drafts</button>
+                <button class="cl-tab" type="button" role="tab" data-filter="resolved">Resolved</button>
+                <button class="cl-tab" type="button" role="tab" data-filter="cancelled">Cancelled</button>
+                <button class="cl-filter-btn" type="button">
+                  <i data-lucide="sliders-horizontal"></i>
+                  Less Filters
+                </button>
+              </div>
+              <div class="cl-search-wrap">
+                <span class="cl-search-icon" aria-hidden="true"><i data-lucide="search"></i></span>
+                <input class="cl-search-input" type="search" placeholder="Search claims" aria-label="Search claims" />
+              </div>
+            </section>
+
+            <!-- Column filter chips -->
+            <div class="cl-col-filters" aria-label="Column filters">
+              <button class="cl-col-filter" type="button">Product <i data-lucide="circle-plus"></i></button>
+              <button class="cl-col-filter" type="button">Status <i data-lucide="circle-plus"></i></button>
+              <button class="cl-col-filter" type="button">Type <i data-lucide="circle-plus"></i></button>
+              <button class="cl-col-filter" type="button">Claim Amount <i data-lucide="circle-plus"></i></button>
+              <button class="cl-col-filter" type="button">Submission date <i data-lucide="circle-plus"></i></button>
+            </div>
+
+            <!-- Claims table -->
+            <section class="cl-table-section">
+              <table class="cl-table" aria-label="Claims list">
+                <thead>
+                  <tr>
+                    <th class="sortable">Claim ID <span class="cl-sort-icon"><i data-lucide="chevrons-up-down"></i></span></th>
+                    <th class="sortable">Status <span class="cl-sort-icon"><i data-lucide="chevrons-up-down"></i></span></th>
+                    <th></th>
+                    <th class="sortable">Type <span class="cl-sort-icon"><i data-lucide="chevrons-up-down"></i></span></th>
+                    <th class="sortable">Claim Amount <span class="cl-sort-icon"><i data-lucide="chevrons-up-down"></i></span></th>
+                    <th class="sortable">Submission date <span class="cl-sort-icon"><i data-lucide="chevrons-up-down"></i></span></th>
+                    <th>Last Update</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="cl-tbody">
+                  <!-- Populated by claims.js -->
+                </tbody>
+              </table>
+
+              <!-- Pagination -->
+              <div class="cl-pagination">
+                <span class="cl-pagination-info" id="cl-pagination-info">Showing 15 of 15 claims</span>
+                <div class="cl-pagination-btns">
+                  <button class="cl-page-btn" type="button" disabled>Previous</button>
+                  <button class="cl-page-btn" type="button">Next</button>
+                </div>
+              </div>
+            </section>
+
+          </div><!-- /main-inner -->
+        </div><!-- /main -->
+
+      </div><!-- /figma-app -->
+    </div><!-- /figma-stage -->
+  </body>
+</html>
