@@ -72,6 +72,118 @@ function boot() {
   }
 
   applyFilters();
+
+  // ── Side Panel ────────────────────────────────────────────────────────────
+  const sidepanel = document.getElementById('claims-sidepanel');
+  const spOverlay = document.getElementById('sp-overlay');
+
+  // Map data-status → sp-badge class modifier
+  const STATUS_BADGE_CLASS = {
+    pending: 'sp-badge--pending',
+    process: 'sp-badge--process',
+    draft:   'sp-badge--draft',
+    paid:    'sp-badge--paid',
+    denied:  'sp-badge--denied',
+  };
+
+  function openSidepanel(row) {
+    const status      = row.getAttribute('data-status') || '';
+    const claimId     = row.querySelector('.ds-td--claim')?.textContent.trim() || '';
+    const statusLabel = row.querySelector('.ds-badge')?.textContent.trim() || '';
+    const desc        = row.querySelector('.ds-td--desc')?.textContent.trim() || '';
+
+    // Populate header
+    sidepanel.querySelector('#sp-title').textContent = claimId;
+    const badge = sidepanel.querySelector('#sp-badge');
+    badge.textContent = statusLabel;
+    badge.className = 'sp-badge ' + (STATUS_BADGE_CLASS[status] || '');
+    sidepanel.querySelector('#sp-subtitle').textContent = desc;
+    sidepanel.querySelector('#sp-notif-ref').textContent = claimId;
+
+    // Reset to Overview tab on every open
+    sidepanel.querySelectorAll('.sp-tab').forEach((t) =>
+      t.classList.toggle('sp-tab--active', t.getAttribute('data-sp-tab') === 'overview'),
+    );
+    sidepanel.querySelectorAll('.sp-panel').forEach((p) =>
+      p.classList.toggle('is-active', p.getAttribute('data-sp-panel') === 'overview'),
+    );
+
+    // Open
+    sidepanel.classList.add('is-open');
+    spOverlay.classList.add('is-open');
+    sidepanel.removeAttribute('aria-hidden');
+    spOverlay.removeAttribute('aria-hidden');
+    document.body.style.overflow = 'hidden';
+
+    // Re-render Lucide icons inside the panel
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons({ nodes: [sidepanel] });
+    }
+  }
+
+  function closeSidepanel() {
+    sidepanel.classList.remove('is-open');
+    spOverlay.classList.remove('is-open');
+    sidepanel.setAttribute('aria-hidden', 'true');
+    spOverlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  if (sidepanel && spOverlay) {
+    // Row click → open panel (ignore clicks on the 3-dot menu button)
+    rows.forEach((row) => {
+      row.addEventListener('click', (e) => {
+        if (e.target.closest('.ds-menu-btn')) return;
+        openSidepanel(row);
+      });
+    });
+
+    // Close triggers: X button, Cancel button
+    document.querySelectorAll('[data-action="close-sidepanel"]').forEach((btn) => {
+      btn.addEventListener('click', closeSidepanel);
+    });
+
+    // Close on overlay click
+    spOverlay.addEventListener('click', closeSidepanel);
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidepanel.classList.contains('is-open')) {
+        closeSidepanel();
+      }
+    });
+
+    // Tab switching — active state + show matching panel
+    sidepanel.querySelectorAll('.sp-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const target = tab.getAttribute('data-sp-tab');
+
+        sidepanel.querySelectorAll('.sp-tab').forEach((t) =>
+          t.classList.toggle('sp-tab--active', t === tab),
+        );
+
+        sidepanel.querySelectorAll('.sp-panel').forEach((panel) =>
+          panel.classList.toggle('is-active', panel.getAttribute('data-sp-panel') === target),
+        );
+
+        // Re-render Lucide icons in the newly visible panel
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          const activePanel = sidepanel.querySelector(`.sp-panel[data-sp-panel="${target}"]`);
+          if (activePanel) window.lucide.createIcons({ nodes: [activePanel] });
+        }
+      });
+    });
+
+    // Accordion toggle (Items tab)
+    sidepanel.addEventListener('click', (e) => {
+      const header = e.target.closest('.sp-accordion-header');
+      if (!header) return;
+      const accordion = header.closest('.sp-accordion');
+      if (!accordion) return;
+      const isOpen = accordion.classList.toggle('is-open');
+      header.setAttribute('aria-expanded', String(isOpen));
+    });
+  }
 }
 
 if (document.readyState === 'loading') {

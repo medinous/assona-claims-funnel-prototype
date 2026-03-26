@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="styles/base.css" />
     <link rel="stylesheet" href="styles/dashboard.css" />
     <link rel="stylesheet" href="styles/claims.css" />
+    <link rel="stylesheet" href="styles/sidepanel.css" />
     <script src="https://unpkg.com/lucide@latest" defer></script>
     <script src="locales/bundle.js"></script>
     <script type="module" src="scripts/claims.js"></script>
@@ -368,6 +369,350 @@
 
           </div><!-- /main-inner -->
         </div><!-- /main -->
+
+      <!-- ── Side Panel Overlay ── -->
+      <div class="sp-overlay" id="sp-overlay" aria-hidden="true"></div>
+
+      <!-- ── Side Panel ── -->
+      <aside class="sp" id="claims-sidepanel" role="complementary" aria-label="Claim details" aria-hidden="true">
+
+        <!-- Header (shared across all tabs) -->
+        <div class="sp-header">
+          <div class="sp-header-left">
+            <div class="sp-heading-row">
+              <h2 class="sp-title" id="sp-title">CLM-005</h2>
+              <span class="sp-badge sp-badge--pending" id="sp-badge">Pending Answer</span>
+            </div>
+            <p class="sp-subtitle" id="sp-subtitle">Additional photo(s) required</p>
+          </div>
+          <div class="sp-header-actions">
+            <button class="sp-icon-btn" type="button" aria-label="Expand"><i data-lucide="maximize-2"></i></button>
+            <button class="sp-icon-btn" type="button" aria-label="More options"><i data-lucide="more-vertical"></i></button>
+            <button class="sp-icon-btn" type="button" aria-label="Close panel" data-action="close-sidepanel"><i data-lucide="x"></i></button>
+          </div>
+        </div>
+
+        <!-- Tabs bar (shared) -->
+        <div class="sp-tabs-bar">
+          <div class="sp-tab-list" role="tablist" aria-label="Claim sections">
+            <button class="sp-tab sp-tab--active" type="button" role="tab" data-sp-tab="overview">Overview</button>
+            <button class="sp-tab" type="button" role="tab" data-sp-tab="files">File(s)</button>
+            <button class="sp-tab" type="button" role="tab" data-sp-tab="timeline">Timeline</button>
+          </div>
+        </div>
+
+        <!-- ── Tab panel: Overview ── -->
+        <div class="sp-panel is-active" data-sp-panel="overview">
+
+          <!-- Action notification card -->
+          <div class="sp-notifs">
+            <div class="sp-card-row">
+              <div class="sp-card-main">
+                <div class="sp-thumbnail">
+                  <i data-lucide="image" class="sp-thumb-icon"></i>
+                  <span class="sp-status-dot" aria-hidden="true"></span>
+                </div>
+                <div class="sp-card-content">
+                  <p class="sp-card-title">Additional photo(s) required</p>
+                  <div class="sp-card-subtitle">
+                    <span class="sp-time">Just now</span>
+                    <span class="sp-dot" aria-hidden="true"></span>
+                    <span class="sp-claim-ref" id="sp-notif-ref">CLM-005</span>
+                  </div>
+                </div>
+              </div>
+              <div class="sp-card-actions">
+                <button class="sp-btn-primary" type="button">
+                  <i data-lucide="cloud-upload"></i>
+                  Upload
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="sp-main">
+            <div class="sp-content-area">
+
+              <!-- Invoice Data -->
+              <div class="sp-data-card">
+                <div class="sp-data-card-header">Invoice Data</div>
+                <div class="sp-data-list">
+                  <div class="sp-data-row">
+                    <span class="sp-data-label">Bike Frame ID</span>
+                    <span class="sp-data-value">00RDLS98221</span>
+                  </div>
+                  <div class="sp-data-row">
+                    <span class="sp-data-label">Invoice Date</span>
+                    <span class="sp-data-value">20/09/2025</span>
+                  </div>
+                  <div class="sp-data-row">
+                    <span class="sp-data-label">Damage Date</span>
+                    <span class="sp-data-value">20/09/2025</span>
+                  </div>
+                  <div class="sp-data-row sp-data-row--tall">
+                    <span class="sp-data-label">Description</span>
+                    <span class="sp-data-value sp-data-value--wrap">Lenker gebrochen nach Sturz durch verklemmte Kette</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Total Amount -->
+              <div class="sp-data-card">
+                <div class="sp-data-card-header">Total Amount</div>
+                <div class="sp-data-list">
+                  <div class="sp-data-row">
+                    <span class="sp-data-label">Net Amount</span>
+                    <span class="sp-data-value">677,28 EUR</span>
+                  </div>
+                  <div class="sp-data-row">
+                    <span class="sp-data-label">Tax Rate</span>
+                    <span class="sp-data-value">19,00 %</span>
+                  </div>
+                  <div class="sp-data-row">
+                    <span class="sp-data-label">Gross Amount</span>
+                    <span class="sp-data-value">805,69 EUR</span>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /sp-content-area -->
+
+            <div class="sp-footer">
+              <button class="sp-btn-cancel" type="button" data-action="close-sidepanel">Cancel Claim</button>
+            </div>
+          </div><!-- /sp-main -->
+
+        </div><!-- /panel:overview -->
+
+        <!-- ── Tab panel: File(s) ── -->
+        <div class="sp-panel" data-sp-panel="files">
+
+          <!-- Action notification card -->
+          <div class="sp-notifs">
+            <div class="sp-card-row">
+              <div class="sp-card-main">
+                <div class="sp-thumbnail">
+                  <i data-lucide="image" class="sp-thumb-icon"></i>
+                  <span class="sp-status-dot" aria-hidden="true"></span>
+                </div>
+                <div class="sp-card-content">
+                  <p class="sp-card-title">Additional photo(s) required</p>
+                  <div class="sp-card-subtitle">
+                    <span class="sp-time">Just now</span>
+                    <span class="sp-dot" aria-hidden="true"></span>
+                    <span class="sp-claim-ref">CLM-005</span>
+                  </div>
+                </div>
+              </div>
+              <div class="sp-card-actions">
+                <button class="sp-btn-primary" type="button">
+                  <i data-lucide="cloud-upload"></i>
+                  Upload
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="sp-main">
+            <div class="sp-content-area">
+
+              <!-- File awaiting type assignment -->
+              <div class="sp-file-row">
+                <div class="sp-card-main">
+                  <div class="sp-thumbnail sp-thumbnail--doc">
+                    <i data-lucide="file-spreadsheet" class="sp-thumb-icon"></i>
+                  </div>
+                  <div class="sp-card-content">
+                    <p class="sp-card-title">Name_of_document.pdf</p>
+                    <div class="sp-card-subtitle">
+                      <span class="sp-time">Document</span>
+                      <span class="sp-dot" aria-hidden="true"></span>
+                      <span class="sp-claim-ref">2MB</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="sp-card-actions sp-file-assign">
+                  <div class="sp-type-select" aria-label="Select document type">
+                    <span>Select…</span>
+                    <i data-lucide="chevron-down"></i>
+                  </div>
+                  <button class="sp-btn-primary sp-btn--disabled" type="button" disabled>Add</button>
+                </div>
+              </div>
+
+              <!-- Document — muted (awaiting) -->
+              <div class="sp-file-row sp-file-row--muted">
+                <div class="sp-card-main">
+                  <div class="sp-thumbnail sp-thumbnail--doc">
+                    <i data-lucide="file-spreadsheet" class="sp-thumb-icon"></i>
+                  </div>
+                  <div class="sp-card-content">
+                    <p class="sp-card-title">Name_of_document.pdf</p>
+                    <div class="sp-card-subtitle">
+                      <span class="sp-time">Document</span>
+                      <span class="sp-dot" aria-hidden="true"></span>
+                      <span class="sp-claim-ref">2MB</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="sp-card-actions">
+                  <button class="sp-icon-btn" type="button" aria-label="More options"><i data-lucide="more-horizontal"></i></button>
+                </div>
+              </div>
+
+              <!-- Document — confirmed -->
+              <div class="sp-file-row">
+                <div class="sp-card-main">
+                  <div class="sp-thumbnail sp-thumbnail--doc">
+                    <i data-lucide="file-spreadsheet" class="sp-thumb-icon"></i>
+                  </div>
+                  <div class="sp-card-content">
+                    <p class="sp-card-title">Name_of_document.pdf</p>
+                    <div class="sp-card-subtitle">
+                      <span class="sp-time">Document</span>
+                      <span class="sp-dot" aria-hidden="true"></span>
+                      <span class="sp-claim-ref">2MB</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="sp-card-actions">
+                  <button class="sp-icon-btn" type="button" aria-label="More options"><i data-lucide="more-horizontal"></i></button>
+                </div>
+              </div>
+
+              <!-- Image — muted -->
+              <div class="sp-file-row sp-file-row--muted">
+                <div class="sp-card-main">
+                  <div class="sp-thumbnail sp-thumbnail--img">
+                    <i data-lucide="image" class="sp-thumb-icon"></i>
+                  </div>
+                  <div class="sp-card-content">
+                    <p class="sp-card-title">Bike image.png</p>
+                    <div class="sp-card-subtitle">
+                      <span class="sp-time">Image</span>
+                      <span class="sp-dot" aria-hidden="true"></span>
+                      <span class="sp-claim-ref">249kb</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="sp-card-actions">
+                  <button class="sp-icon-btn" type="button" aria-label="More options"><i data-lucide="more-horizontal"></i></button>
+                </div>
+              </div>
+
+              <!-- Image — confirmed -->
+              <div class="sp-file-row">
+                <div class="sp-card-main">
+                  <div class="sp-thumbnail sp-thumbnail--img">
+                    <i data-lucide="image" class="sp-thumb-icon"></i>
+                  </div>
+                  <div class="sp-card-content">
+                    <p class="sp-card-title">Bike image.png</p>
+                    <div class="sp-card-subtitle">
+                      <span class="sp-time">Image</span>
+                      <span class="sp-dot" aria-hidden="true"></span>
+                      <span class="sp-claim-ref">249kb</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="sp-card-actions">
+                  <button class="sp-icon-btn" type="button" aria-label="More options"><i data-lucide="more-horizontal"></i></button>
+                </div>
+              </div>
+
+            </div><!-- /sp-content-area -->
+
+            <div class="sp-footer">
+              <button class="sp-btn-primary sp-btn--full" type="button">
+                <i data-lucide="cloud-upload"></i>
+                Upload a file
+              </button>
+            </div>
+          </div><!-- /sp-main -->
+
+        </div><!-- /panel:files -->
+
+        <!-- ── Tab panel: Timeline ── -->
+        <div class="sp-panel" data-sp-panel="timeline">
+
+          <!-- Action notification card -->
+          <div class="sp-notifs">
+            <div class="sp-card-row">
+              <div class="sp-card-main">
+                <div class="sp-thumbnail">
+                  <i data-lucide="image" class="sp-thumb-icon"></i>
+                  <span class="sp-status-dot" aria-hidden="true"></span>
+                </div>
+                <div class="sp-card-content">
+                  <p class="sp-card-title">Additional photo(s) required</p>
+                  <div class="sp-card-subtitle">
+                    <span class="sp-time">Just now</span>
+                    <span class="sp-dot" aria-hidden="true"></span>
+                    <span class="sp-claim-ref" id="sp-notif-ref-tl">CLM-005</span>
+                  </div>
+                </div>
+              </div>
+              <div class="sp-card-actions">
+                <button class="sp-btn-primary" type="button">
+                  <i data-lucide="cloud-upload"></i>
+                  Upload
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="sp-main">
+            <div class="sp-content-area">
+
+              <div class="sp-timeline">
+
+                <div class="sp-tl-item">
+                  <div class="sp-tl-connector">
+                    <div class="sp-tl-dot"></div>
+                    <div class="sp-tl-line"></div>
+                  </div>
+                  <div class="sp-tl-content">
+                    <div class="sp-tl-header">
+                      <span class="sp-tl-title">Documentation requested by insurance provider</span>
+                      <span class="sp-tl-date">2024-10-15</span>
+                    </div>
+                    <p class="sp-tl-body">Additional photo(s) requested for justifying the price of repair</p>
+                  </div>
+                </div>
+
+                <div class="sp-tl-item">
+                  <div class="sp-tl-connector">
+                    <div class="sp-tl-dot"></div>
+                    <div class="sp-tl-line"></div>
+                  </div>
+                  <div class="sp-tl-content">
+                    <div class="sp-tl-header">
+                      <span class="sp-tl-title">Damage Report is submitted</span>
+                      <span class="sp-tl-date">2024-10-14</span>
+                    </div>
+                    <p class="sp-tl-body">CLM-005 was submitted by Bike Shop Berlin and assigned to assona for verification</p>
+                  </div>
+                </div>
+
+                <div class="sp-tl-item sp-tl-item--last">
+                  <div class="sp-tl-connector">
+                    <div class="sp-tl-dot"></div>
+                  </div>
+                  <div class="sp-tl-content">
+                    <div class="sp-tl-header">
+                      <span class="sp-tl-title">Draft created</span>
+                      <span class="sp-tl-date">2024-10-13</span>
+                    </div>
+                    <p class="sp-tl-body">CLM-005 was created by Bike Shop Berlin</p>
+                  </div>
+                </div>
+
+              </div><!-- /sp-timeline -->
+            </div><!-- /sp-content-area -->
+          </div><!-- /sp-main -->
+        </div><!-- /panel:timeline -->
+
+      </aside><!-- /claims-sidepanel -->
 
       </div><!-- /figma-app -->
     </div><!-- /figma-stage -->
