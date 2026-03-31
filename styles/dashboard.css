@@ -1235,7 +1235,7 @@ body {
 .dash-feedback-media img {
   position: absolute;
   left: -30px;
-  bottom: -24px;
+  bottom: -40px;
   width: 170px;
   max-width: none;
 }
