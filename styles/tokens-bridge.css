@@ -74,10 +74,6 @@
   --r-lg:  var(--radius-lg, 14px);
   --r-xl:  var(--radius-xl, 20px);
 
-  --shadow-xs:      var(--shadow-xs);
-  --shadow-sm:      var(--shadow-sm);
-  --shadow-md:      var(--shadow-md);
-  --shadow-lg:      var(--shadow-lg);
   --shadow-overlay: var(--shadow-modal, var(--shadow-xl));
 }
 
