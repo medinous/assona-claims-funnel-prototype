@@ -1,0 +1,118 @@
+#assona-guard-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 10, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+#assona-guard-modal {
+  background: var(--color-background-primary, #ffffff);
+  border-radius: var(--radius-xl, 16px);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+#assona-guard-modal .guard-logo {
+  display: flex;
+  justify-content: center;
+}
+
+#assona-guard-modal .guard-logo img {
+  height: 28px;
+  width: auto;
+}
+
+#assona-guard-modal .guard-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#assona-guard-modal .guard-title {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text-primary, #111);
+  margin: 0;
+}
+
+#assona-guard-modal .guard-sub {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 14px;
+  color: var(--color-text-secondary, #666);
+  margin: 0;
+}
+
+#assona-guard-modal .guard-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#assona-guard-modal .guard-label {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary, #111);
+}
+
+#assona-guard-input {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 15px;
+  border: 1.5px solid var(--color-border-default, #d1d5db);
+  border-radius: var(--radius-md, 8px);
+  background: var(--color-background-secondary, #f9fafb);
+  color: var(--color-text-primary, #111);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+#assona-guard-input:focus {
+  border-color: var(--color-border-focus, #111);
+}
+
+#assona-guard-input.guard-input-error {
+  border-color: var(--color-feedback-error, #e53e3e);
+}
+
+#assona-guard-error {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 13px;
+  color: var(--color-feedback-error, #e53e3e);
+  display: none;
+}
+
+#assona-guard-error.visible {
+  display: block;
+}
+
+#assona-guard-submit {
+  width: 100%;
+  padding: 12px;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--color-action-primary, #111);
+  color: var(--color-action-primary-text, #fff);
+  border: none;
+  border-radius: var(--radius-md, 8px);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+#assona-guard-submit:hover {
+  opacity: 0.85;
+}
