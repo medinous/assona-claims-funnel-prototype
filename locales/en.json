@@ -162,7 +162,8 @@
     "zoomOutTitle": "Zoom out",
     "zoomInTitle": "Zoom in",
     "collapsePdfAria": "Collapse PDF",
-    "expandPdfAria": "Expand PDF"
+    "expandPdfAria": "Expand PDF",
+    "viewPdf": "View invoice as PDF"
   },
   "review": {
     "pdfTrigger": "Show PDF preview",

@@ -193,3 +193,5 @@ router.step3Heading,Schritt 3 – Validieren,Step 3 – Validate,Router fallback
 router.step4Heading,Schritt 4 – Prüfen & senden,Step 4 – Review & submit,Router fallback,approved
 router.placeholderHeading,Assona-Funnel-Prototyp,Assona Funnel Prototype,Router fallback,approved
 router.placeholderText,"Platzhalter für Schritt {step}. Die vollständige UI wird im nächsten Schritt übernommen.","Placeholder for step {step}. Full UI will be implemented next.",Router fallback,approved
+
+val.viewPdf,Rechnung als PDF ansehen,View invoice as PDF,Step 3 table,approved

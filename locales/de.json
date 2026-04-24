@@ -162,7 +162,8 @@
     "zoomOutTitle": "Verkleinern",
     "zoomInTitle": "Vergrößern",
     "collapsePdfAria": "PDF verkleinern",
-    "expandPdfAria": "PDF vergrößern"
+    "expandPdfAria": "PDF vergrößern",
+    "viewPdf": "Rechnung als PDF ansehen"
   },
   "review": {
     "pdfTrigger": "PDF‑Vorschau anzeigen",
