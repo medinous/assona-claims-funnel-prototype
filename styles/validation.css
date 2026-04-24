@@ -263,13 +263,9 @@
 /* ─── Table rows ─── */
 .val-tr {
   border-bottom: 1px solid rgba(5, 8, 16, 0.06);
-  transition: background 0.1s;
-}
-.val-tr:hover {
-  background: var(--pastelY50, #fafbf7);
 }
 .val-tr--warn {
-  background: transparent;
+  background: var(--w50);
 }
 
 .val-td {
@@ -299,7 +295,7 @@
 
 /* ─── Needs-validate cell highlight ─── */
 .val-td--needs-validate {
-  background: #fff8f0;
+  background: var(--w50);
 }
 
 /* ─── Dropdown triggers (Cause & Component columns) ─── */
@@ -332,13 +328,13 @@
   background: #fff;
 }
 .val-dropdown-trigger.val-dropdown--empty {
-  background: #fff8f0;
-  border-color: rgba(234, 88, 12, 0.25);
+  background: var(--w100);
+  border-color: rgba(230, 119, 0, 0.3);
 }
 .val-dropdown-trigger.val-dropdown--validate {
-  background: #fff8f0;
-  border-color: rgba(234, 88, 12, 0.4);
-  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.08);
+  background: var(--w100);
+  border-color: rgba(230, 119, 0, 0.5);
+  box-shadow: 0 0 0 2px rgba(230, 119, 0, 0.1);
 }
 .val-dropdown-label {
   flex: 1;
@@ -416,8 +412,8 @@
   background: #fff;
 }
 .val-td--needs-validate .val-qty-wrap {
-  background: #fff8f0;
-  border-color: rgba(234, 88, 12, 0.25);
+  background: var(--w50);
+  border-color: rgba(230, 119, 0, 0.3);
 }
 .val-qty-input {
   flex: 1;
@@ -687,8 +683,8 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0; position: ab
   pointer-events: none;
 }
 .amount-field-input-wrap.error {
-  background: var(--e50) !important;
-  border: 1.5px solid var(--e300) !important;
+  background: var(--w100) !important;
+  border: 1.5px solid var(--w300) !important;
   box-shadow: none !important;
 }
 .amount-input {
@@ -715,7 +711,7 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0; position: ab
 .field-error-msg {
   display: none;
   font-size: 11px;
-  color: var(--e600);
+  color: var(--w700);
   line-height: 16px;
   margin-top: 4px;
   padding-left: 1px;

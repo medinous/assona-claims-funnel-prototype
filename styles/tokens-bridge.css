@@ -45,6 +45,14 @@
   --e600: var(--color-error-600);
   --e700: var(--color-error-700);
 
+  /* Warning Orange (legacy --w*) → amber / warning scale */
+  --w50:  var(--color-warning-50);
+  --w100: var(--color-warning-100);
+  --w200: var(--color-warning-200);
+  --w300: var(--color-warning-300);
+  --w600: var(--color-warning-600);
+  --w700: var(--color-warning-700);
+
   /* Success (legacy --s*) → success scale */
   --s50:  var(--color-success-50,  #F0FDF4);
   --s100: var(--color-success-100, #DCFCE7);
