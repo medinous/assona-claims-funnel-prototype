@@ -1,0 +1,261 @@
+/* ================================================================
+ * ASSONA DESIGN SYSTEM — tokens.css
+ *
+ * Three-layer token architecture:
+ *   Layer 1 (Primitives)  — resources/Tailwind config/assona-design-tokens.css
+ *                           Raw scale values: colors, spacing, radius, shadows, type.
+ *   Layer 2 (Aliases)     — THIS FILE
+ *                           Semantic, context-named aliases with Layer 1 fallbacks.
+ *                           This is the ONLY layer component CSS should reference.
+ *   Layer 3 (Components)  — styles/*.css
+ *                           All var() calls must reference a token from this file.
+ *
+ * Load order in HTML:
+ *   1. assona-design-tokens.css  (Layer 1)
+ *   2. styles/tokens.css         (Layer 2, this file)
+ *   3. styles/tokens-bridge.css  (legacy aliases, to be phased out)
+ *   4. styles/*.css              (Layer 3 components)
+ * ================================================================ */
+
+:root {
+
+  /* ================================================================
+     SURFACES
+     When to use: background values on containers, panels, overlays.
+     ================================================================ */
+
+  --surface-page:           var(--color-surface-secondary);       /* app / page bg (#FAFBFA) */
+  --surface-card:           var(--color-surface-primary);         /* white card bg (#FFF) */
+  --surface-elevated:       var(--color-surface-elevated);        /* modals / dropdowns */
+  --surface-sidebar:        var(--color-surface-sage-subtle);     /* sidebar bg (#FAFBF7) */
+  --surface-field:          var(--color-sage-50);                 /* form inputs bg */
+  --surface-field-hover:    var(--color-sage-100);                /* input hover bg */
+  --surface-accent:         var(--color-accent-300);              /* lime interactive surface */
+  --surface-accent-hover:   var(--color-accent-400);              /* lime hover state */
+  --surface-petrol:         var(--color-surface-petrol);          /* petrol-tinted surface */
+  --surface-info:           #DBEAFE;                              /* info/blue badge bg (no palette token) */
+  --surface-drag:           rgba(77, 181, 196, 0.04);             /* drag-over overlay */
+
+
+  /* ================================================================
+     TEXT
+     When to use: all color: declarations.
+     ================================================================ */
+
+  --text-primary:           var(--color-text-primary);
+  --text-secondary:         var(--color-text-secondary);
+  --text-tertiary:          var(--color-text-tertiary);
+  --text-placeholder:       var(--color-text-placeholder);
+  --text-disabled:          var(--color-text-disabled);
+  --text-link:              var(--color-text-link);
+  --text-link-hover:        var(--color-text-link-hover);
+  --text-on-accent:         var(--color-text-on-accent);          /* dark text on lime */
+  --text-on-primary:        var(--color-text-on-primary);         /* white text on teal */
+  --text-info:              #1E40AF;                              /* info badge text */
+  --text-muted:             var(--color-neutral-700);             /* #5C635C — timestamps, refs */
+  --text-cancel:            #DC2626;                              /* destructive action text */
+
+  /* On-dark surface text (proto-nav, fixture bar) */
+  --text-on-dark:           rgba(255, 255, 255, 0.5);
+  --text-on-dark-muted:     rgba(255, 255, 255, 0.35);
+  --text-on-dark-secondary: rgba(255, 255, 255, 0.6);
+  --text-on-dark-bright:    #ffffff;
+
+
+  /* ================================================================
+     BORDERS
+     When to use: border: and outline: declarations.
+     ================================================================ */
+
+  --border-default:         var(--color-border-primary);          /* #E8EBE8 */
+  --border-strong:          var(--color-border-secondary);        /* #D4D9D4 */
+  --border-focus:           var(--color-border-focus);            /* primary-600 */
+  --border-error:           var(--color-border-error);
+  --border-success:         var(--color-border-success);
+  --border-cancel:          #FECACA;                              /* destructive button border */
+
+
+  /* ================================================================
+     STROKES (alpha-based thin borders)
+     When to use: borders expressed as rgba with the 5,8,16 neutral base.
+     These adapt naturally to content below without harsh contrast.
+     ================================================================ */
+
+  --stroke-ui:              rgba(5, 8, 16, 0.1);                  /* standard UI dividers */
+  --stroke-ui-medium:       rgba(5, 8, 16, 0.2);                  /* button depth / pressed */
+  --stroke-ui-subtle:       rgba(5, 8, 16, 0.08);                 /* section dividers */
+  --stroke-ui-micro:        rgba(5, 8, 16, 0.06);                 /* row hairlines */
+  --stroke-ui-ghost:        rgba(5, 8, 16, 0.03);                 /* barely-there dividers */
+
+
+  /* ================================================================
+     OVERLAYS
+     When to use: semi-transparent backgrounds on fixed/absolute elements.
+     ================================================================ */
+
+  --overlay-page:           var(--color-surface-overlay);         /* rgba(13,15,13,0.5) sidepanel */
+  --overlay-confirm:        rgba(13, 15, 13, 0.28);               /* confirm-modal backdrop */
+  --overlay-modal:          rgba(63, 63, 70, 0.2);                /* review/upload modal backdrop */
+  --overlay-dark:           rgba(13, 15, 13, 0.88);               /* proto-nav / fixture bar bg */
+  --overlay-guard:          rgba(10, 10, 10, 0.72);               /* auth guard screen bg */
+  --on-dark-hover:          rgba(255, 255, 255, 0.1);             /* hover on dark surface */
+  --on-dark-border:         rgba(255, 255, 255, 0.1);             /* border on dark surface */
+
+
+  /* ================================================================
+     STATUS COLORS
+     When to use: badge and state indicator components.
+     ================================================================ */
+
+  --status-info-bg:         #DBEAFE;
+  --status-info-text:       #1E40AF;
+  --status-warning-bg:      var(--color-warning-background);
+  --status-warning-text:    var(--color-warning-foreground);
+  --status-success-bg:      var(--color-success-background);
+  --status-success-text:    var(--color-success-foreground);
+  --status-error-bg:        var(--color-error-background);
+  --status-error-text:      var(--color-error-foreground);
+
+
+  /* ================================================================
+     DECORATIVE GRADIENTS
+     When to use: background blob / glow effects. Never for functional color.
+     ================================================================ */
+
+  --grad-lime:              rgba(234, 246, 143, 0.65);            /* lime blob (login, upload) */
+  --grad-petrol:            rgba(144, 214, 218, 0.55);            /* petrol blob */
+  --grad-lime-soft:         rgba(234, 246, 143, 0.35);            /* subtler lime blob */
+  --grad-petrol-soft:       rgba(144, 214, 218, 0.25);            /* subtler petrol blob */
+
+
+  /* ================================================================
+     TYPOGRAPHY
+     When to use: all font-family, font-size, font-weight, line-height declarations.
+     ================================================================ */
+
+  /* Families */
+  --font-heading:           var(--font-family-heading);           /* Uni Neue */
+  --font-body:              var(--font-family-body);              /* Inter */
+  --font-mono:              var(--font-family-mono);              /* SF Mono */
+
+  /* Sizes */
+  --text-tiny:              8px;                                  /* icon captions, badge micro text */
+  --text-micro:             10px;                                 /* proto-nav / fixture labels */
+  --text-2xs:               11px;                                 /* micro labels, kbd hints */
+  --text-xs:                var(--font-size-xs);                  /* 12px */
+  --text-crumb:             13px;                                 /* breadcrumb separators, filter toggles */
+  --text-sm:                var(--font-size-sm);                  /* 14px */
+  --text-md:                var(--font-size-md);                  /* 16px */
+  --text-lg:                var(--font-size-lg);                  /* 18px */
+  --text-xl-compact:        22px;                                 /* compact display heading (between lg and xl) */
+  --text-xl:                var(--font-size-xl);                  /* 24px */
+  --text-2xl:               var(--font-size-2xl);                 /* 32px */
+  --text-3xl:               var(--font-size-3xl);                 /* 40px */
+  --text-display-sm:        26px;                                 /* responsive title override */
+
+  /* Weights */
+  --fw-light:               var(--font-weight-light);             /* 200 */
+  --fw-regular:             var(--font-weight-regular);           /* 400 */
+  --fw-medium:              var(--font-weight-medium);            /* 500 */
+  --fw-semibold:            var(--font-weight-semibold);          /* 600 */
+  --fw-bold:                var(--font-weight-bold);              /* 700 */
+  --fw-extrabold:           800;                                  /* display headings */
+
+  /* Line heights */
+  --lh-tight:               var(--line-height-tight);             /* 1.25 */
+  --lh-normal:              var(--line-height-normal);            /* 1.5 */
+  --lh-relaxed:             var(--line-height-relaxed);           /* 1.75 */
+
+  /* Letter spacing */
+  --ls-heading:             -0.108px;                             /* 18px headings */
+  --ls-heading-lg:          -0.144px;                             /* 24px headings */
+  --ls-heading-display:     -0.19px;                              /* 32px display */
+  --ls-label:               0.8px;                               /* uppercase pill labels */
+  --ls-body:                -0.1px;                               /* body text */
+
+
+  /* ================================================================
+     SPACING ADDITIONS
+     When to use: values not covered by assona-design-tokens.css space scale.
+     ================================================================ */
+
+  --space-5:                1.25rem;                              /* 20px */
+  --space-7:                1.75rem;                              /* 28px */
+
+
+  /* ================================================================
+     RADIUS
+     When to use: all border-radius declarations.
+     ================================================================ */
+
+  --radius-2xs:             2px;                                  /* scrollbar thumbs, micro elements */
+  --radius-chip:            var(--radius-lg);                     /* 14px — badge / pill */
+  --radius-card:            10px;                                 /* dashboard KPI cards */
+  --radius-dialog:          16px;                                 /* mid-size dialogs */
+  --radius-btn:             var(--radius-sm);                     /* 6px — all buttons */
+  --radius-input:           var(--radius-sm);                     /* 6px — all inputs */
+  --radius-tag:             var(--radius-full);                   /* pill tags */
+  --radius-thumb:           var(--radius-xs);                     /* 4px — small icons/thumbs */
+
+
+  /* ================================================================
+     ELEVATION / SHADOWS
+     When to use: all box-shadow declarations.
+     ================================================================ */
+
+  --shadow-card:            var(--shadow-md);
+  --shadow-panel:           var(--shadow-sm);
+  --shadow-popover:         var(--shadow-xl);
+  --shadow-elevated:        var(--shadow-lg);
+  --shadow-btn-inset:       inset 0 -2px 0 rgba(5, 8, 16, 0.2);  /* depth cue under lime CTAs */
+  --shadow-focus-ring:      0 0 0 4px var(--color-accent-100);   /* outer glow on focus */
+  --shadow-tab-glow:        0px 3px 18px 0px rgba(228, 236, 132, 0.4); /* active tab glow */
+  --shadow-guard:           0 24px 64px rgba(0, 0, 0, 0.18);     /* auth guard modal */
+  --shadow-pdf:             0 10px 24px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.05);
+
+
+  /* ================================================================
+     MOTION
+     When to use: all transition and animation declarations.
+     Durations and easings must be referenced by name, not hard-coded.
+     ================================================================ */
+
+  --duration-instant:       0.1s;
+  --duration-fast:          0.15s;
+  --duration-normal:        0.2s;
+  --duration-slow:          0.35s;
+
+  --ease-default:           ease;
+  --ease-spring:            cubic-bezier(0.16, 1, 0.3, 1);        /* spring: snappy overshoot */
+  --ease-decelerate:        cubic-bezier(0.4, 0, 0.2, 1);         /* material decelerate */
+  --ease-bounce:            cubic-bezier(0.34, 1.56, 0.64, 1);    /* bouncy modals */
+
+  /* Composed transitions (use when the whole transition is known) */
+  --transition-color:       color var(--duration-fast) var(--ease-default),
+                            background var(--duration-fast) var(--ease-default);
+  --transition-all-fast:    all var(--duration-fast) var(--ease-default);
+  --transition-all-normal:  all var(--duration-normal) var(--ease-default);
+  --transition-slide:       transform var(--duration-normal) var(--ease-decelerate);
+  --transition-fade:        opacity var(--duration-normal) var(--ease-default);
+  --transition-view:        opacity var(--duration-slow) var(--ease-spring),
+                            transform var(--duration-slow) var(--ease-spring);
+
+
+  /* ================================================================
+     Z-INDEX
+     When to use: all z-index declarations. Never hard-code z values.
+     ================================================================ */
+
+  --z-ground:               0;                                   /* explicit reset to ground */
+  --z-base:                 1;                                   /* local stacking — decorative layer */
+  --z-raised:               2;                                   /* slightly elevated within a local stack */
+  --z-topbar:               20;
+  --z-sidepanel-overlay:    40;
+  --z-sidepanel:            50;
+  --z-dropdown:             9999;
+  --z-proto-nav:            999;
+  --z-confirm:              120;
+  --z-review-overlay:       100;
+  --z-tooltip:              99999;
+  --z-guard:                99999;
+}

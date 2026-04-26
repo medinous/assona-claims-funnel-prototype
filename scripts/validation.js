@@ -19,6 +19,8 @@ const ITEMS = [
   { name: 'Reifen Hinten', gross: '53,55', net: '45,00', status: 'ok', cause: 'Reifenpanne durch Fremdkörper', bauteil: 'Reifen', type: 'HR', qty: 1, causes: ['Reifenpanne durch Fremdkörper', 'Abnutzung, Verschleiss'], validate: [] },
   { name: 'Montage Reifen', gross: '59,50', net: '50,00', status: 'warn', cause: '', bauteil: '', type: null, qty: 1, causes: ['Reifenpanne durch Fremdkörper', 'Fall/Sturz/Unfall ohne Beteiligung', 'Abnutzung, Verschleiss'], validate: [] },
   { name: 'Bremsscheibe Vorn', gross: '63,06', net: '52,99', status: 'ok', cause: 'Fall/Sturz/Unfall mit Beteiligung', bauteil: 'Bremse', type: 'VR', qty: 1, causes: ['Fall/Sturz/Unfall mit Beteiligung', 'Fall/Sturz/Unfall ohne Beteiligung'], validate: [] },
+  { name: 'Montage Bremsscheibe', gross: '59,50', net: '50,00', status: 'warn', cause: '', bauteil: '', type: null, qty: 1, causes: ['Fall/Sturz/Unfall mit Beteiligung', 'Abnutzung, Verschleiss'], validate: ['bauteil'] },
+  { name: 'Pedale', gross: '35,64', net: '29,95', status: 'ok', cause: 'Fall/Sturz/Unfall ohne Beteiligung', bauteil: 'Pedal', type: null, qty: 1, causes: ['Fall/Sturz/Unfall ohne Beteiligung', 'Bedienfehler/Ungeschicklichkeit'], validate: [] },
 ];
 
 const BAUTEIL_GROUPS = [

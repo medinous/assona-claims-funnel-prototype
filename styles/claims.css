@@ -5,23 +5,23 @@
 
 /* ── Page header (title + actions row) ── */
 .cl-header {
-  padding: 24px 24px 0;
+  padding: var(--space-6) var(--space-6) 0;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 24px;
+  gap: var(--space-6);
 }
 
 .cl-header-text {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 .cl-header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   flex-shrink: 0;
 }
 
@@ -30,7 +30,7 @@
   background: var(--color-primary-600);
   color: var(--color-neutral-0);
   border-color: transparent;
-  border-bottom-color: rgba(0, 0, 0, 0.2);
+  border-bottom-color: var(--stroke-ui-medium);
 }
 
 .dash-btn--teal:hover {
@@ -49,11 +49,11 @@
 
 /* ── Interaction bar: tabs + search row ── */
 .cl-interaction-bar {
-  padding: 16px 24px 0;
+  padding: var(--space-4) var(--space-6) 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--space-4);
   flex-wrap: wrap;
 }
 
@@ -65,13 +65,13 @@
 /* Less Filters button inside tabs row */
 .cl-filter-toggle {
   height: 29px;
-  padding: 4px 10px;
+  padding: var(--space-1) 10px;
   border-radius: var(--r-sm);
   border: 1px solid var(--color-border-primary);
   background: var(--color-surface-primary);
   cursor: pointer;
   font-family: var(--ff-body);
-  font-size: 13px;
+  font-size: var(--text-crumb);
   color: var(--color-text-secondary);
   display: inline-flex;
   align-items: center;
@@ -97,7 +97,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 12px 4px 8px;
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-2);
   flex-shrink: 0;
 }
 
@@ -123,7 +123,7 @@
   outline: 0;
   background: transparent;
   font-family: var(--ff-body);
-  font-size: 13px;
+  font-size: var(--text-crumb);
   line-height: 20px;
   color: var(--color-text-primary);
   width: 160px;
@@ -135,10 +135,10 @@
 
 /* ── Column filter chips ── */
 .cl-col-filters {
-  padding: 12px 24px 0;
+  padding: var(--space-3) var(--space-6) 0;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   flex-wrap: wrap;
 }
 
@@ -150,7 +150,7 @@
   background: var(--color-surface-primary);
   cursor: pointer;
   font-family: var(--ff-body);
-  font-size: 12px;
+  font-size: var(--text-xs);
   color: var(--color-text-secondary);
   display: inline-flex;
   align-items: center;
@@ -176,12 +176,12 @@
 
 .ds-table--claims-full .ds-th,
 .ds-table--claims-full .ds-td {
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
 }
 
 .ds-table--claims-full .ds-td--claim {
-  padding-left: 16px;
+  padding-left: var(--space-4);
 }
 
 .ds-table--claims-full .ds-th--menu,
@@ -195,8 +195,8 @@
 
 /* In Process → blue */
 .ds-badge--info {
-  background: #DBEAFE;
-  color: #1E40AF;
+  background: var(--status-info-bg);
+  color: var(--text-info);
 }
 
 /* Payout denied → red */
@@ -213,26 +213,26 @@
 
 /* ── Table section wrapper ── */
 .cl-table-section {
-  padding: 12px 24px 0;
+  padding: var(--space-3) var(--space-6) 0;
 }
 
 /* ── Pagination ── */
 .cl-pagination {
-  padding: 12px 20px;
+  padding: var(--space-3) var(--space-5);
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid var(--color-border-primary);
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .cl-pagination-info {
   font-family: var(--ff-body);
-  font-size: 12px;
+  font-size: var(--text-xs);
   color: var(--color-text-secondary);
 }
 
 .cl-pagination-btns {
   display: flex;
-  gap: 8px;
+  gap: var(--space-2);
 }

@@ -17,35 +17,35 @@ import {
 import { t } from './i18n.js';
 
 const PDF_FALLBACK_HTML = `
-<div style="display:flex;justify-content:space-between;margin-bottom:6px">
-  <div><b style="font-size:9px;color:#282b28">Bike Shop Berlin</b><br>www.bikeshopberlin.com<br>+49 30 99999999</div>
-  <div style="text-align:right">Sonnenallee 221, 12059 Berlin<br>Tax ID: 45DC2200787</div>
+<div class="pdf-fb-header">
+  <div><b class="pdf-fb-label">Bike Shop Berlin</b><br>www.bikeshopberlin.com<br>+49 30 99999999</div>
+  <div class="pdf-fb-right">Sonnenallee 221, 12059 Berlin<br>Tax ID: 45DC2200787</div>
 </div>
-<div style="display:flex;justify-content:space-between;margin-bottom:4px">
-  <span><b style="color:#282b28">Firma</b><br>AGL Activ Services GmbH<br>Georgstraße 42, 30159 Hannover</span>
-  <span style="text-align:right"><b style="color:#282b28">Datum</b><br>20.09.2025<br><b style="color:#282b28">Fahrzeug</b><br>E-Bike, 2.900€</span>
+<div class="pdf-fb-parties">
+  <span><b class="pdf-fb-label">Firma</b><br>AGL Activ Services GmbH<br>Georgstraße 42, 30159 Hannover</span>
+  <span class="pdf-fb-right"><b class="pdf-fb-label">Datum</b><br>20.09.2025<br><b class="pdf-fb-label">Fahrzeug</b><br>E-Bike, 2.900€</span>
 </div>
-<div style="font-size:9px;font-weight:700;color:#282b28;margin:6px 0 2px">Rechnung (#A3452-53)</div>
-<div style="margin-bottom:6px">Nutzer in Kurve wegeschlittert und Fahrrad ist seitlich gegen Bordstein gerutscht.</div>
-<div style="font-size:7px;color:#282b28;margin-bottom:2px">Schadennummer: 13876439<br>Assona Versicherungsnummer: 637883873-MAD-4766357</div>
-<table style="width:100%;border-collapse:collapse;margin-top:4px">
-  <tr style="border-bottom:1px solid #e8ebe8"><th style="text-align:left;padding:2px 0;color:#282b28">ARTIKEL</th><th style="text-align:left">BEZEICHNUNG</th><th>ANZ</th><th style="text-align:right">EINZELPREIS</th><th style="text-align:right">GESAMTPREIS</th></tr>
-  <tr><td>10045638</td><td>KETTE CN-M6100 126 GLIED HC 12-FACH</td><td style="text-align:center">1</td><td style="text-align:right">49,95€</td><td style="text-align:right">49,95€</td></tr>
-  <tr><td>10045650</td><td>Kassette SLX CS-M7100 13-fach</td><td style="text-align:center">1</td><td style="text-align:right">129,95€</td><td style="text-align:right">129,95€</td></tr>
-  <tr><td>10045725</td><td>Kettenblatt</td><td style="text-align:center">1</td><td style="text-align:right">48,99€</td><td style="text-align:right">48,99€</td></tr>
-  <tr><td>90033352</td><td>Montage (Kette, Kassette, Kettenblatt)</td><td style="text-align:center">1</td><td style="text-align:right">100,00€</td><td style="text-align:right">100,00€</td></tr>
-  <tr><td>10034576</td><td>Griffe</td><td style="text-align:center">1</td><td style="text-align:right">29,95€</td><td style="text-align:right">29,95€</td></tr>
-  <tr><td>90032873</td><td>Montage Griffe</td><td style="text-align:center">1</td><td style="text-align:right">20,00€</td><td style="text-align:right">20,00€</td></tr>
-  <tr><td>90032948</td><td>Montage Pedale</td><td style="text-align:center">1</td><td style="text-align:right">20,00€</td><td style="text-align:right">20,00€</td></tr>
-  <tr><td>10057622</td><td>Reifen Hinten</td><td style="text-align:center">1</td><td style="text-align:right">45,00€</td><td style="text-align:right">45,00€</td></tr>
-  <tr><td>90053175</td><td>Montage Reifen Hinten</td><td style="text-align:center">1</td><td style="text-align:right">50,00€</td><td style="text-align:right">50,00€</td></tr>
-  <tr><td>100399864</td><td>Bremsscheibe Vorn</td><td style="text-align:center">1</td><td style="text-align:right">52,99€</td><td style="text-align:right">52,99€</td></tr>
-  <tr><td>90053175</td><td>Montage Bremsscheibe Vorn</td><td style="text-align:center">1</td><td style="text-align:right">50,00€</td><td style="text-align:right">50,00€</td></tr>
+<div class="pdf-fb-invoice-title">Rechnung (#A3452-53)</div>
+<div class="pdf-fb-desc">Nutzer in Kurve wegeschlittert und Fahrrad ist seitlich gegen Bordstein gerutscht.</div>
+<div class="pdf-fb-meta">Schadennummer: 13876439<br>Assona Versicherungsnummer: 637883873-MAD-4766357</div>
+<table class="pdf-fb-table">
+  <tr class="pdf-fb-th-row"><th class="pdf-fb-th pdf-fb-th--left">ARTIKEL</th><th class="pdf-fb-th pdf-fb-th--left">BEZEICHNUNG</th><th class="pdf-fb-th">ANZ</th><th class="pdf-fb-th pdf-fb-th--right">EINZELPREIS</th><th class="pdf-fb-th pdf-fb-th--right">GESAMTPREIS</th></tr>
+  <tr class="pdf-fb-tr"><td class="pdf-fb-td">10045638</td><td class="pdf-fb-td">KETTE CN-M6100 126 GLIED HC 12-FACH</td><td class="pdf-fb-td pdf-fb-td--center">1</td><td class="pdf-fb-td pdf-fb-td--right">49,95€</td><td class="pdf-fb-td pdf-fb-td--right">49,95€</td></tr>
+  <tr class="pdf-fb-tr"><td class="pdf-fb-td">10045650</td><td class="pdf-fb-td">Kassette SLX CS-M7100 13-fach</td><td class="pdf-fb-td pdf-fb-td--center">1</td><td class="pdf-fb-td pdf-fb-td--right">129,95€</td><td class="pdf-fb-td pdf-fb-td--right">129,95€</td></tr>
+  <tr class="pdf-fb-tr"><td class="pdf-fb-td">10045725</td><td class="pdf-fb-td">Kettenblatt</td><td class="pdf-fb-td pdf-fb-td--center">1</td><td class="pdf-fb-td pdf-fb-td--right">48,99€</td><td class="pdf-fb-td pdf-fb-td--right">48,99€</td></tr>
+  <tr class="pdf-fb-tr"><td class="pdf-fb-td">90033352</td><td class="pdf-fb-td">Montage (Kette, Kassette, Kettenblatt)</td><td class="pdf-fb-td pdf-fb-td--center">1</td><td class="pdf-fb-td pdf-fb-td--right">100,00€</td><td class="pdf-fb-td pdf-fb-td--right">100,00€</td></tr>
+  <tr class="pdf-fb-tr"><td class="pdf-fb-td">10034576</td><td class="pdf-fb-td">Griffe</td><td class="pdf-fb-td pdf-fb-td--center">1</td><td class="pdf-fb-td pdf-fb-td--right">29,95€</td><td class="pdf-fb-td pdf-fb-td--right">29,95€</td></tr>
+  <tr class="pdf-fb-tr"><td class="pdf-fb-td">90032873</td><td class="pdf-fb-td">Montage Griffe</td><td class="pdf-fb-td pdf-fb-td--center">1</td><td class="pdf-fb-td pdf-fb-td--right">20,00€</td><td class="pdf-fb-td pdf-fb-td--right">20,00€</td></tr>
+  <tr class="pdf-fb-tr"><td class="pdf-fb-td">90032948</td><td class="pdf-fb-td">Montage Pedale</td><td class="pdf-fb-td pdf-fb-td--center">1</td><td class="pdf-fb-td pdf-fb-td--right">20,00€</td><td class="pdf-fb-td pdf-fb-td--right">20,00€</td></tr>
+  <tr class="pdf-fb-tr"><td class="pdf-fb-td">10057622</td><td class="pdf-fb-td">Reifen Hinten</td><td class="pdf-fb-td pdf-fb-td--center">1</td><td class="pdf-fb-td pdf-fb-td--right">45,00€</td><td class="pdf-fb-td pdf-fb-td--right">45,00€</td></tr>
+  <tr class="pdf-fb-tr"><td class="pdf-fb-td">90053175</td><td class="pdf-fb-td">Montage Reifen Hinten</td><td class="pdf-fb-td pdf-fb-td--center">1</td><td class="pdf-fb-td pdf-fb-td--right">50,00€</td><td class="pdf-fb-td pdf-fb-td--right">50,00€</td></tr>
+  <tr class="pdf-fb-tr"><td class="pdf-fb-td">100399864</td><td class="pdf-fb-td">Bremsscheibe Vorn</td><td class="pdf-fb-td pdf-fb-td--center">1</td><td class="pdf-fb-td pdf-fb-td--right">52,99€</td><td class="pdf-fb-td pdf-fb-td--right">52,99€</td></tr>
+  <tr class="pdf-fb-tr"><td class="pdf-fb-td">90053175</td><td class="pdf-fb-td">Montage Bremsscheibe Vorn</td><td class="pdf-fb-td pdf-fb-td--center">1</td><td class="pdf-fb-td pdf-fb-td--right">50,00€</td><td class="pdf-fb-td pdf-fb-td--right">50,00€</td></tr>
 </table>
-<div style="margin-top:8px;text-align:right;font-size:8px;border-top:1px solid #e8ebe8;padding-top:4px">
+<div class="pdf-fb-totals">
   <div>Gesamt Netto: 677,28€</div><div>MwSt: 19%</div><div><b>Gesamt: 805,98€</b></div>
 </div>
-<div style="margin-top:8px;color:#9ba29b;border-top:1px solid #e8ebe8;padding-top:6px">Bei diesem Einkauf sparen Sie 10,50€.<br>Wir danken für Ihren Auftrag.</div>
+<div class="pdf-fb-footer">Bei diesem Einkauf sparen Sie 10,50€.<br>Wir danken für Ihren Auftrag.</div>
 `;
 
 export function getStep1Markup() {

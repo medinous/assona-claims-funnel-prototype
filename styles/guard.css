@@ -1,25 +1,25 @@
 #assona-guard-overlay {
   position: fixed;
   inset: 0;
-  z-index: 99999;
+  z-index: var(--z-guard);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 10, 10, 0.72);
+  background: var(--overlay-guard);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
 
 #assona-guard-modal {
-  background: var(--color-background-primary, #ffffff);
-  border-radius: var(--radius-xl, 16px);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
-  padding: 40px;
+  background: var(--surface-card);
+  border-radius: var(--radius-dialog);
+  box-shadow: var(--shadow-guard);
+  padding: var(--space-10);
   width: 100%;
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-6);
 }
 
 #assona-guard-modal .guard-logo {
@@ -39,59 +39,59 @@
 }
 
 #assona-guard-modal .guard-title {
-  font-family: var(--font-sans, sans-serif);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--color-text-primary, #111);
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
   margin: 0;
 }
 
 #assona-guard-modal .guard-sub {
-  font-family: var(--font-sans, sans-serif);
-  font-size: 14px;
-  color: var(--color-text-secondary, #666);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
   margin: 0;
 }
 
 #assona-guard-modal .guard-field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 #assona-guard-modal .guard-label {
-  font-family: var(--font-sans, sans-serif);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-text-primary, #111);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
 }
 
 #assona-guard-input {
   width: 100%;
   padding: 10px 14px;
-  font-family: var(--font-sans, sans-serif);
-  font-size: 15px;
-  border: 1.5px solid var(--color-border-default, #d1d5db);
-  border-radius: var(--radius-md, 8px);
-  background: var(--color-background-secondary, #f9fafb);
-  color: var(--color-text-primary, #111);
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-sidebar);
+  color: var(--text-primary);
   outline: none;
   box-sizing: border-box;
-  transition: border-color 0.15s;
+  transition: border-color var(--duration-fast) var(--ease-default);
 }
 
 #assona-guard-input:focus {
-  border-color: var(--color-border-focus, #111);
+  border-color: var(--border-focus);
 }
 
 #assona-guard-input.guard-input-error {
-  border-color: var(--color-feedback-error, #e53e3e);
+  border-color: var(--border-error);
 }
 
 #assona-guard-error {
-  font-family: var(--font-sans, sans-serif);
-  font-size: 13px;
-  color: var(--color-feedback-error, #e53e3e);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--status-error-text);
   display: none;
 }
 
@@ -101,16 +101,16 @@
 
 #assona-guard-submit {
   width: 100%;
-  padding: 12px;
-  font-family: var(--font-sans, sans-serif);
-  font-size: 15px;
-  font-weight: 600;
-  background: var(--color-action-primary, #111);
-  color: var(--color-action-primary-text, #fff);
+  padding: var(--space-3);
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  font-weight: var(--fw-semibold);
+  background: var(--color-neutral-1000);
+  color: var(--color-neutral-0);
   border: none;
-  border-radius: var(--radius-md, 8px);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition: opacity var(--duration-fast) var(--ease-default);
 }
 
 #assona-guard-submit:hover {

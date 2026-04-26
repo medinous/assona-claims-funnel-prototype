@@ -11,8 +11,8 @@
   background: var(--color-surface-overlay); /* rgba(13,15,13,0.5) */
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
-  z-index: 40;
+  transition: opacity var(--duration-normal) ease;
+  z-index: var(--z-sidepanel-overlay);
 }
 
 .sp-overlay.is-open {
@@ -23,20 +23,20 @@
 /* ── Panel container ── */
 .sp {
   position: fixed;
-  top: 12px;
-  right: 12px;
-  bottom: 12px;
+  top: var(--space-3);
+  right: var(--space-3);
+  bottom: var(--space-3);
   width: 616px;
   max-width: calc(100vw - 24px);
   background: var(--color-surface-primary); /* #FFFFFF */
-  border: 0.84px solid rgba(0, 0, 0, 0.1);
+  border: 0.84px solid var(--stroke-ui);
   border-radius: var(--radius-md); /* 8px */
   display: flex;
   flex-direction: column;
   overflow: hidden;
   transform: translateX(calc(100% + 24px));
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 50;
+  transition: transform var(--duration-slow) cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: var(--z-sidepanel);
 }
 
 .sp.is-open {
@@ -49,17 +49,17 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 0 24px;
+  gap: var(--space-4);
+  padding: 0 var(--space-6);
   min-height: 64px;
-  border-bottom: 1px solid rgba(5, 8, 16, 0.1);
+  border-bottom: 1px solid var(--stroke-ui);
   flex-shrink: 0;
 }
 
 .sp-header-left {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-1);
   min-width: 0;
 }
 
@@ -67,7 +67,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 .sp-title {
@@ -85,7 +85,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 2px 8px;
+  padding: 2px var(--space-2);
   border-radius: var(--radius-lg); /* 14px */
   font-family: var(--ff-body);
   font-size: var(--font-size-xs); /* 12px */
@@ -97,7 +97,7 @@
 
 /* Status badge variants — mirror .ds-badge logic */
 .sp-badge--pending { background: var(--color-warning-200); }
-.sp-badge--process { background: #DBEAFE; color: #1E40AF; }
+.sp-badge--process { background: var(--status-info-bg); color: var(--text-info); }
 .sp-badge--draft   { background: var(--color-neutral-200); color: var(--color-text-secondary); }
 .sp-badge--paid    { background: var(--color-success-100); color: var(--color-success-700); }
 .sp-badge--denied  { background: var(--color-error-100);   color: var(--color-error-700); }
@@ -131,7 +131,7 @@
   border-radius: var(--radius-xs);
   cursor: pointer;
   color: var(--color-text-secondary);
-  transition: background 0.15s;
+  transition: background var(--duration-fast);
 }
 
 .sp-icon-btn:hover {
@@ -148,7 +148,7 @@
 
 /* ── Tabs bar ── */
 .sp-tabs-bar {
-  padding: 12px 24px;
+  padding: var(--space-3) var(--space-6);
   flex-shrink: 0;
 }
 
@@ -168,7 +168,7 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 4px 8px;
+  padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-lg); /* 14px — inactive */
   border: none;
   background: transparent;
@@ -178,7 +178,7 @@
   line-height: 1.43;
   color: var(--color-neutral-1000);
   cursor: pointer;
-  transition: background 0.15s, box-shadow 0.15s;
+  transition: background var(--duration-fast), box-shadow var(--duration-fast);
   white-space: nowrap;
 }
 
@@ -186,12 +186,12 @@
   background: var(--color-accent-300); /* #EAF68F */
   font-weight: var(--font-weight-medium);
   border-radius: var(--radius-sm); /* 6px — active */
-  box-shadow: 0px 3px 18px 0px rgba(228, 236, 132, 0.4);
+  box-shadow: var(--shadow-tab-glow);
 }
 
 /* ── Action notification card (Card-row) ── */
 .sp-notifs {
-  padding: 0 24px;
+  padding: 0 var(--space-6);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -203,8 +203,8 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  padding: 10px 16px;
+  gap: var(--space-6);
+  padding: 10px var(--space-4);
   background: var(--color-sage-50); /* #FAFBF7 */
   border-radius: var(--radius-sm);
 }
@@ -213,7 +213,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
   min-width: 0;
 }
 
@@ -282,7 +282,7 @@
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
   line-height: 1.333;
-  color: #686868; /* Figma: Primary Subtitle Color token */
+  color: var(--text-muted);
 }
 
 .sp-dot {
@@ -304,20 +304,20 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--space-2);
   height: 36px;
-  padding: 8px 16px;
+  padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-sm);
   background: var(--color-accent-300); /* #EAF68F */
   border: 0;
-  box-shadow: inset 0 -2px 0 rgba(5, 8, 16, 0.2);
+  box-shadow: var(--shadow-btn-inset);
   font-family: var(--ff-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   line-height: 1.43;
   color: var(--color-neutral-1000);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background var(--duration-fast);
   white-space: nowrap;
 }
 
@@ -346,18 +346,18 @@
 .sp-content-area {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 12px 24px;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-6);
 }
 
 /* ── Data card (Invoice Data, Total Amount) ── */
 .sp-data-card {
   background: var(--color-sage-50); /* #FAFBF7 */
   border-radius: var(--radius-sm);
-  padding: 16px 24px;
+  padding: var(--space-4) var(--space-6);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .sp-data-card-header {
@@ -384,7 +384,7 @@
 
 .sp-data-row--tall {
   align-items: flex-start;
-  padding: 8px 0;
+  padding: var(--space-2) 0;
 }
 
 .sp-data-row:last-child {
@@ -413,12 +413,12 @@
   text-align: left;
   white-space: normal;
   flex: 1;
-  margin-left: 16px;
+  margin-left: var(--space-4);
 }
 
 /* ── Footer ── */
 .sp-footer {
-  padding: 16px 24px;
+  padding: var(--space-4) var(--space-6);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -433,17 +433,17 @@
   justify-content: center;
   width: 100%;
   height: 36px;
-  padding: 8px 16px;
+  padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-sm);
-  border: 1px solid #FECACA;
+  border: 1px solid var(--border-cancel);
   background: transparent;
   font-family: var(--ff-body);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   line-height: 1.43;
-  color: #DC2626;
+  color: var(--text-cancel);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background var(--duration-fast);
 }
 
 .sp-btn-cancel:hover {
@@ -480,8 +480,8 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  padding: 10px 16px;
+  gap: var(--space-6);
+  padding: 10px var(--space-4);
   background: var(--color-sage-50);
   border-radius: var(--radius-sm);
 }
@@ -505,7 +505,7 @@
 
 /* File type assign row actions */
 .sp-file-assign {
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 /* Simplified dropdown mock */
@@ -523,7 +523,7 @@
   color: var(--color-neutral-1000);
   cursor: pointer;
   white-space: nowrap;
-  box-shadow: 0 0 0 4px rgba(248, 252, 219, 1); /* effect-focus from Figma */
+  box-shadow: var(--shadow-focus-ring);
 }
 
 .sp-type-select i[data-lucide],
@@ -562,7 +562,7 @@
 .sp-tl-item {
   display: flex;
   flex-direction: row;
-  gap: 16px;
+  gap: var(--space-4);
   align-items: stretch;
 }
 
@@ -587,8 +587,8 @@
 .sp-tl-line {
   width: 1px;
   flex: 1;
-  background: rgba(5, 8, 16, 0.1);
-  margin-top: 8px;
+  background: var(--stroke-ui);
+  margin-top: var(--space-2);
   min-height: 24px;
 }
 
@@ -601,7 +601,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding-bottom: 24px;
+  padding-bottom: var(--space-6);
   flex: 1;
   min-width: 0;
 }
@@ -615,7 +615,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 .sp-tl-title {

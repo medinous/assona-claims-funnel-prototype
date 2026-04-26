@@ -11,13 +11,13 @@ textarea:invalid {
 /* Screen system: login | home | funnel */
 .view-screen {
   position: fixed;
-  inset: 8px;
+  inset: var(--space-2);
   display: flex;
   align-items: stretch;
   justify-content: stretch;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity var(--duration-slow) cubic-bezier(0.16, 1, 0.3, 1), transform var(--duration-slow) cubic-bezier(0.16, 1, 0.3, 1);
   transform: translateX(24px);
 }
 .view-screen.active {
@@ -47,12 +47,12 @@ textarea:invalid {
 .login-shell {
   width: 100%;
   height: 100%;
-  background: #ffffff;
+  background: var(--color-neutral-0);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-md);
   display: flex;
-  gap: 24px;
-  padding: 24px;
+  gap: var(--space-6);
+  padding: var(--space-6);
   overflow: hidden;
 }
 
@@ -81,16 +81,16 @@ textarea:invalid {
 /* Language toggle above Welcome title (login only) */
 .login-lang-row-above-title {
   align-self: flex-start;
-  margin-bottom: 4px;
+  margin-bottom: var(--space-1);
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base);
 }
 
 .login-form-wrap {
   width: 360px;
   display: flex;
   flex-direction: column;
-  gap: 64px;
+  gap: var(--space-16);
   position: relative;
 }
 /* Soft gradient behind card (Figma: subtle glow behind form card) */
@@ -103,13 +103,13 @@ textarea:invalid {
   transform: translate(-50%, -50%);
   opacity: 0.4;
   pointer-events: none;
-  z-index: 0;
+  z-index: var(--z-ground);
 }
 .login-grad::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(125.5deg, rgba(234, 246, 143, 0.65) 18.7%, rgba(144, 214, 218, 0.55) 68.7%);
+  background: linear-gradient(125.5deg, var(--grad-lime) 18.7%, var(--grad-petrol) 68.7%);
   filter: blur(55px);
   border-radius: 50%;
 }
@@ -117,35 +117,35 @@ textarea:invalid {
 .login-heading {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base);
 }
 .login-title {
   font-family: var(--ff-heading);
-  font-weight: 800;
-  font-size: 32px;
+  font-weight: var(--fw-extrabold);
+  font-size: var(--text-2xl);
   line-height: 40px;
   letter-spacing: -0.19px;
   color: var(--n1000);
 }
 .login-sub {
-  font-size: 16px;
-  font-weight: 400;
+  font-size: var(--text-md);
+  font-weight: var(--fw-regular);
   color: var(--n700);
   line-height: 20px;
 }
 
 .login-card {
-  background: #ffffff;
+  background: var(--color-neutral-0);
   border-radius: var(--r-lg);
-  padding: 24px;
+  padding: var(--space-6);
   box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06));
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-6);
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base);
 }
 /* Form primitives (login scope) */
 .field-group {
@@ -154,8 +154,8 @@ textarea:invalid {
   gap: 6px;
 }
 .field-label {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
   color: var(--n1000);
   line-height: 20px;
 }
@@ -168,12 +168,12 @@ textarea:invalid {
   background: var(--color-sage-50, #fafbf7);
   border: 1px solid transparent;
   border-radius: var(--r-sm);
-  padding: 8px 40px 8px 12px;
+  padding: var(--space-2) var(--space-10) var(--space-2) var(--space-3);
   font-family: var(--ff-body);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--n900);
   outline: none;
-  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  transition: border-color var(--duration-fast), background var(--duration-fast), box-shadow var(--duration-fast);
 }
 .field-input::placeholder {
   color: var(--n600);
@@ -207,8 +207,8 @@ textarea:invalid {
   background: var(--e100);
   border: 1px solid var(--e300);
   border-radius: var(--r-sm);
-  padding: 10px 12px;
-  font-size: 13px;
+  padding: 10px var(--space-3);
+  font-size: var(--text-crumb);
   color: var(--e700);
   line-height: 1.4;
   display: none;
@@ -221,7 +221,7 @@ textarea:invalid {
 .login-card-stack {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 /* Language toggle (DE/EN) in header corner – discrete */
@@ -231,8 +231,8 @@ textarea:invalid {
   gap: 6px;
 }
 .login-lang-label {
-  font-size: 11px;
-  font-weight: 500;
+  font-size: var(--text-2xs);
+  font-weight: var(--fw-medium);
   color: var(--n500, #6b7280);
   letter-spacing: 0.02em;
 }
@@ -240,11 +240,11 @@ textarea:invalid {
   position: relative;
   width: 36px;
   height: 20px;
-  border-radius: 10px;
+  border-radius: var(--radius-card);
   border: 1px solid var(--n300, #d1d5db);
-  background: var(--n200, #e5e7eb);
+  background: var(--n200);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background var(--duration-normal);
 }
 .login-lang-toggle[aria-pressed="false"] {
   background: var(--a300, #EAF68F);
@@ -256,9 +256,9 @@ textarea:invalid {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
-  transition: transform 0.2s;
+  background: var(--color-neutral-0);
+  box-shadow: var(--shadow-xs);
+  transition: transform var(--duration-normal);
 }
 .login-lang-toggle[aria-pressed="false"] .login-lang-knob {
   transform: translateX(18px);
@@ -267,7 +267,7 @@ textarea:invalid {
 .login-actions {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-4);
   align-items: center;
 }
 .btn-primary {
@@ -275,20 +275,20 @@ textarea:invalid {
   height: 36px;
   border-radius: var(--r-sm);
   border: none;
-  border-bottom: 2px solid rgba(5, 8, 16, 0.2);
+  border-bottom: 2px solid var(--stroke-ui-medium);
   background: var(--a300, #EAF68F);
   font-family: var(--ff-body);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
   color: var(--n500, #9BA29B);
   cursor: default;
-  transition: all 0.2s;
+  transition: var(--transition-all-normal);
   letter-spacing: -0.04em;
   pointer-events: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .btn-primary.on {
   color: var(--n900, #282B28);
@@ -306,17 +306,17 @@ textarea:invalid {
 
 .forgot-row {
   display: flex;
-  gap: 4px;
+  gap: var(--space-1);
   align-items: center;
   justify-content: center;
 }
 .forgot-text {
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--n700);
 }
 .forgot-link {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
   color: var(--n1000);
   cursor: pointer;
   text-decoration: none;
@@ -350,7 +350,7 @@ textarea:invalid {
   object-fit: cover;
 }
 .icon-eye {
-  font-size: 18px;
+  font-size: var(--text-lg);
 }
 .icon-eye--hidden {
   display: none;
@@ -363,18 +363,18 @@ textarea:invalid {
 /* Welcome (homepage) card */
 .welcome-heading {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base);
 }
 .welcome-title {
   font-family: var(--ff-heading);
-  font-weight: 800;
-  font-size: 32px;
+  font-weight: var(--fw-extrabold);
+  font-size: var(--text-2xl);
   line-height: 40px;
   letter-spacing: -0.19px;
   color: var(--n1000);
 }
 .welcome-signed {
-  font-size: 16px;
+  font-size: var(--text-md);
   color: var(--n1000);
   line-height: 24px;
 }
@@ -385,25 +385,25 @@ textarea:invalid {
 .welcome-ctas {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-3);
 }
 .btn-cta-primary {
   width: 100%;
   height: 36px;
   border-radius: var(--r-sm);
   border: none;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid var(--stroke-ui-medium);
   background: var(--a300, #EAF68F);
   font-family: var(--ff-body);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
   color: var(--n1000, #0D0F0D);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: var(--transition-all-normal);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .btn-cta-primary:hover {
   background: var(--a500, #D8E554);
@@ -417,18 +417,18 @@ textarea:invalid {
   border-bottom: 2px solid rgba(0, 0, 0, 0.2);
   background: var(--pastelY200);
   font-family: var(--ff-body);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
   color: var(--n1000);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: var(--transition-all-normal);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .btn-cta-secondary:hover {
-  background: #d6d9c0;
+  background: var(--color-sage-300);
   transform: translateY(-1px);
 }
 .btn-logout {
@@ -438,15 +438,15 @@ textarea:invalid {
   border: none;
   background: none;
   font-family: var(--ff-body);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
   color: var(--n1000);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition: background 0.15s;
+  gap: var(--space-2);
+  transition: background var(--duration-fast);
 }
 .btn-logout:hover {
   background: var(--n100);
@@ -457,34 +457,34 @@ textarea:invalid {
 .btn-logout .ti,
 .btn-cta-primary .ti,
 .btn-cta-secondary .ti {
-  font-size: 18px;
+  font-size: var(--text-lg);
 }
 
 /* Hover + focus states for text inputs – matches original prototype */
 .field-input:hover:not(:focus) {
-  background: #fafbf7;
-  border-color: rgba(5, 8, 16, 0.1);
+  background: var(--surface-field);
+  border-color: var(--stroke-ui);
 }
 
 .field-input.err:hover:not(:focus) {
-  background: #fef2f2;
-  border-color: #fca5a5;
+  background: var(--status-error-bg);
+  border-color: var(--border-error);
 }
 
 .field-input:focus {
   outline: 0 !important;
   -webkit-appearance: none;
-  border: 2px solid #e4ec84;
-  box-shadow: 0 0 0 4px #f8fcdb;
-  background: #ffffff;
+  border: 2px solid var(--color-accent-400);
+  box-shadow: var(--shadow-focus-ring);
+  background: var(--color-neutral-0);
 }
 
 .field-input:focus-visible {
   outline: 0 !important;
   -webkit-appearance: none;
-  border: 2px solid #e4ec84;
-  box-shadow: 0 0 0 4px #f8fcdb;
-  background: #ffffff;
+  border: 2px solid var(--color-accent-400);
+  box-shadow: var(--shadow-focus-ring);
+  background: var(--color-neutral-0);
 }
 
 /* ─── Responsive breakpoints ─── */
@@ -492,7 +492,7 @@ textarea:invalid {
 /* Tablet and down: slightly tighter padding */
 @media (max-width: 1023px) {
   .login-shell {
-    padding: 20px;
+    padding: var(--space-5);
   }
 }
 
@@ -504,8 +504,8 @@ textarea:invalid {
 
   .login-shell {
     flex-direction: column;
-    gap: 16px;
-    padding: 16px;
+    gap: var(--space-4);
+    padding: var(--space-4);
     align-items: stretch;
     justify-content: flex-start;
   }
@@ -518,14 +518,14 @@ textarea:invalid {
 
   .login-logo {
     position: static;
-    margin-bottom: 24px;
+    margin-bottom: var(--space-6);
   }
 
   .login-form-wrap {
     width: 100%;
     max-width: 420px;
-    margin: 40px auto 24px;
-    gap: 40px;
+    margin: var(--space-10) auto var(--space-6);
+    gap: var(--space-10);
   }
 
   .login-grad {
@@ -535,12 +535,12 @@ textarea:invalid {
 
   .login-title,
   .welcome-title {
-    font-size: 26px;
+    font-size: var(--text-display-sm);
     line-height: 32px;
   }
 
   .login-card {
-    padding: 20px 16px;
+    padding: var(--space-5) var(--space-4);
   }
 
   .login-right {

@@ -216,7 +216,7 @@ export function getStep4Markup() {
   <div class="review-modal-success" role="dialog" aria-labelledby="success-title">
     <div class="review-success-confetti"></div>
     <div class="review-success-body">
-      <div class="review-success-icon-wrap"><i class="ti ti-circle-check" style="font-size:32px;color:var(--s600)" aria-hidden="true"></i></div>
+      <div class="review-success-icon-wrap"><i class="ti ti-circle-check review-success-icon" aria-hidden="true"></i></div>
       <div class="review-success-title" id="success-title">${t('review.successTitle')}</div>
       <div class="review-success-subtitle">${t('review.successSubtitle')}</div>
       <div class="review-success-id-chip"><i class="ti ti-id" aria-hidden="true"></i> ${t('review.claimNumberLabel')} <strong>${escHtml(CLAIM_ID)}</strong></div>
