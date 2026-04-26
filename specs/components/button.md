@@ -4,7 +4,7 @@
 - **Category:** Action
 - **CSS prefix:** various (no unified prefix; see variants)
 - **Status:** Stable
-- **Files:** `styles/base.css`, `styles/dashboard.css`, `styles/login.css`, `styles/damage.css`, `styles/review.css`, `styles/upload.css`, `styles/validation.css`
+- **Files:** `styles/base.css`, , `styles/login.css`, `styles/damage.css`, `styles/review.css`, `styles/upload.css`, `styles/validation.css`
 
 ## Overview
 

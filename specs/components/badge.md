@@ -4,7 +4,7 @@
 - **Category:** Status Indicator
 - **CSS classes:** `.ds-badge`, `.ds-pill`, `.sp-badge`, `.badge`
 - **Status:** Stable
-- **Files:** `styles/dashboard.css`, `styles/claims.css`, `styles/sidepanel.css`
+- **Files:** , `styles/claims.css`, `styles/sidepanel.css`
 
 ## Overview
 

@@ -4,7 +4,7 @@
 - **Category:** Container
 - **CSS classes:** `.dash-kpi`, `.metric`, `.claims-panel`, `.dash-feedback`, `.activity`, `.upload-card`, `.review-card`
 - **Status:** Stable
-- **Files:** `styles/dashboard.css`, `styles/upload.css`, `styles/review.css`
+- **Files:** , `styles/upload.css`, `styles/review.css`
 
 ## Overview
 

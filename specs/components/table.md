@@ -4,7 +4,7 @@
 - **Category:** Data Display
 - **CSS prefix:** `.ds-table`, `.ds-tr`, `.ds-td`, `.ds-th`; `.val-table`, `.claims-table`
 - **Status:** Stable
-- **Files:** `styles/dashboard.css`, `styles/claims.css`, `styles/validation.css`
+- **Files:** , `styles/claims.css`, `styles/validation.css`
 
 ## Overview
 

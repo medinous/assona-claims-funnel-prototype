@@ -24,13 +24,10 @@ const DRY_RUN = process.argv.includes('--dry-run');
 /* ── Files to process ───────────────────────────────────────── */
 const CSS_FILES = [
   'styles/base.css',
-  'styles/claims.css',
   'styles/damage.css',
-  'styles/dashboard.css',
   'styles/guard.css',
   'styles/login.css',
   'styles/review.css',
-  'styles/sidepanel.css',
   'styles/upload.css',
   'styles/validation.css',
 ];

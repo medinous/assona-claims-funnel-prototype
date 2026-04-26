@@ -2,9 +2,9 @@
 
 ## Project overview
 
-Vanilla HTML + CSS + JS prototype for an insurance claims management platform (bike insurance). No build step. No framework. No npm.
+Vanilla HTML + CSS + JS prototype for the insurance **claims submission funnel** (bike insurance). No build step. No framework. No npm.
 
-**Pages:** `index.html` (funnel), `dashboard.html`, `claims.html`
+**Scope:** `index.html` only — login, welcome screen, and the 4-step claim funnel (Upload → Confirm Damage → Validate → Review & Submit). The backoffice (dashboard, claims list) has moved to a separate project.
 
 **Stack:** Vanilla ES modules, Lucide icons (CDN), Tabler icons (CDN)
 
@@ -56,13 +56,11 @@ Component CSS uses BEM-ish prefixes:
 
 | Prefix | Scope |
 |---|---|
-| `.ds-*` | Shared design system components (table, badge, pill) |
-| `.cl-*` | Claims page specific |
-| `.sb-*` | Sidebar |
-| `.sp-*` | Side panel |
-| `.dash-*` | Dashboard |
 | `.val-*` | Validation step (Step 3) |
 | `.pdf-*` | PDF viewer/toolbar |
+| `.review-*` | Review step (Step 4) |
+| `.upload-*` | Upload step (Step 1) |
+| `.damage-*` | Confirm Damage step (Step 2) |
 
 ---
 
@@ -96,13 +94,11 @@ Component CSS uses BEM-ish prefixes:
 
 | Component | Spec | CSS file |
 |---|---|---|
-| Button | `specs/components/button.md` | Multiple |
-| Badge / Pill | `specs/components/badge.md` | `dashboard.css`, `claims.css` |
-| Tabs | `specs/components/tabs.md` | `dashboard.css`, `sidepanel.css` |
-| Sidebar | `specs/components/sidebar.md` | `dashboard.css` |
-| Side Panel | `specs/components/sidepanel.md` | `sidepanel.css` |
-| Table | `specs/components/table.md` | `dashboard.css`, `validation.css` |
-| Card / KPI | `specs/components/card.md` | `dashboard.css` |
+| Button | `specs/components/button.md` | `base.css`, `login.css`, `upload.css`, `damage.css`, `validation.css`, `review.css` |
+| Badge / Pill | `specs/components/badge.md` | `validation.css` |
+| Tabs | `specs/components/tabs.md` | `validation.css` |
+| Table | `specs/components/table.md` | `validation.css` |
+| Card | `specs/components/card.md` | `upload.css`, `review.css` |
 | Modal | `specs/components/modal.md` | `base.css`, `review.css` |
 | Form Field | `specs/components/form-field.md` | `login.css`, `validation.css` |
 | Stepper | `specs/components/stepper.md` | `base.css` |

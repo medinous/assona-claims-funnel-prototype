@@ -4,7 +4,7 @@
 - **Category:** Navigation
 - **CSS classes:** `.tabs`, `.tab`, `.tab--active`, `.claims-tabs`, `.claims-tab`, `.sp-tab-list`, `.sp-tab`
 - **Status:** Stable
-- **Files:** `styles/dashboard.css`, `styles/sidepanel.css`
+- **Files:** , `styles/sidepanel.css`
 
 ## Overview
 
