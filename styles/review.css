@@ -13,6 +13,47 @@
   background: var(--n0);
 }
 
+/* ─── Alert bar ─── */
+.review-alert-bar {
+  flex-shrink: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-200);
+  border-bottom: 1px solid var(--stroke-ui-subtle);
+}
+.review-alert-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ff-body);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  color: var(--n900);
+  line-height: 16px;
+}
+.review-alert-icon {
+  font-size: var(--text-sm);
+  flex-shrink: 0;
+  color: var(--color-accent-800);
+}
+
+/* ─── Page title row ─── */
+.review-page-title-row {
+  flex-shrink: 0;
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--stroke-ui-subtle);
+}
+.review-page-title {
+  font-family: var(--ff-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--fw-bold);
+  color: var(--n1000);
+  line-height: 24px;
+  letter-spacing: -0.1px;
+}
+
 /* ─── Two-column main area ─── */
 .review-main {
   flex: 1;

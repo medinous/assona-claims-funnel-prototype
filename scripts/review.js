@@ -31,7 +31,7 @@ const REVIEW_ITEMS = [
   { name: 'Montage Bremsscheibe Vorn', cause: 'Abnutzung, Verschleiss', part: 'Bremse', type: 'VR', qty: '1', net: '42,02 EUR', gross: '50,00 EUR' },
 ];
 
-const CLAIM_ID = 'CLM-12345';
+const CLAIM_ID = '189115';
 let submitCheckboxChecked = false;
 let mediaError = false;
 let mediaCount = 0;
@@ -63,6 +63,17 @@ export function getStep4Markup() {
 
   return `
 <div class="review-content">
+
+  <div class="review-alert-bar" role="status">
+    <div class="review-alert-inner">
+      <i class="ti ti-eye review-alert-icon" aria-hidden="true"></i>
+      <span>Vor dem Senden prüfen</span>
+    </div>
+  </div>
+
+  <div class="review-page-title-row">
+    <h2 class="review-page-title">Schadenfall ${CLAIM_ID} überprüfen</h2>
+  </div>
 
   <div class="review-main">
 
@@ -143,7 +154,7 @@ export function getStep4Markup() {
         <span class="review-confirm-label">${t('review.confirmCheckbox')}</span>
       </div>
       <button type="button" class="btn-fertig" id="btn-open-submit-modal">
-        ${t('review.send')} <i class="ti ti-check" aria-hidden="true"></i>
+        Schaden einreichen ${CLAIM_ID} <i class="ti ti-check" aria-hidden="true"></i>
       </button>
     </div>
   </div>
