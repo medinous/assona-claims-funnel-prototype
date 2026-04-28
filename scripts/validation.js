@@ -328,10 +328,18 @@ function openBauteilDropdown(event, idx) {
   requestAnimationFrame(() => searchEl && searchEl.focus());
 }
 
+function flashTrigger(id) {
+  const trigger = document.getElementById(id);
+  if (!trigger) return;
+  trigger.classList.add('just-selected');
+  setTimeout(() => trigger.classList.remove('just-selected'), 1500);
+}
+
 function selectBauteil(idx, val) {
   itemState[idx].bauteil = val;
   closeDropdown();
   buildTable();
+  flashTrigger(`bauteil-trigger-${idx}`);
 }
 
 /* ─── Cause dropdown (Damage Cause column) ─── */
@@ -375,6 +383,7 @@ function selectCause(idx, val) {
   itemState[idx].cause = val;
   closeDropdown();
   buildTable();
+  flashTrigger(`cause-trigger-${idx}`);
 }
 
 function positionDropdown(dd, trigger) {
@@ -515,7 +524,7 @@ function buildTable() {
       </td>
       <td class="val-td val-td--qty${qtyNeedsValidate ? ' val-td--needs-validate' : ''}"
         ${qtyNeedsValidate ? `data-validate-idx="${idx}" data-validate-field="qty"` : ''}>
-        <div class="val-qty-wrap">
+        <div class="val-qty-wrap${qtyNeedsValidate ? ' val-qty-wrap--warn' : ''}">
           <input type="text" inputmode="numeric" class="val-qty-input" id="qty-input-${idx}" value="${state.qty}" data-idx="${idx}" />
           <div class="val-qty-chevrons">
             <button type="button" class="val-qty-btn" data-idx="${idx}" data-delta="1" tabindex="-1" aria-label="Increase">▲</button>

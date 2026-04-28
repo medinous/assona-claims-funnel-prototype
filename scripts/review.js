@@ -1,7 +1,7 @@
 /**
  * Step 4 – Review & Submit
- * Left: PDF viewer. Right: review summary card (invoice data, items accordion, total), footer.
- * Modals: Submit confirmation (comments, upload, checkbox), Success.
+ * Left: read-only table. Right: invoice details panel. Footer: confirm checkbox + Fertig button.
+ * Modals: Submit confirmation (notes, upload), Success.
  */
 
 import { funnelState } from './state.js';
@@ -12,33 +12,29 @@ import {
   pdfNavNext,
   showLoadedPdfInCurrentCard,
   getPdfDoc,
-  getPdfExpandSvg,
-  isMobileViewport,
 } from './pdf-viewer.js';
 import { showHome } from './auth.js';
 import { t } from './i18n.js';
 
 const REVIEW_ITEMS = [
-  { name: 'Campagnolo Record 12-fach 11-12-13-14-15-16-17-18-19-21-23 Zähne', price: '52,50 EUR', cause: 'Abnutzung, Verschleiss', part: 'Antrieb', qty: '1', net: '44,12 EUR', vat: '19,00 %', gross: '52,50 EUR' },
-  { name: 'Kette CN-M9100 126 Glieder HG 12-fach M. Quick-Link', price: '49,95 EUR', cause: 'Abnutzung, Verschleiss', part: 'Antrieb', qty: '1', net: '41,97 EUR', vat: '19,00 %', gross: '49,95 EUR' },
-  { name: 'Kassette SLX CS-M7100 10-fach', price: '129,95 EUR', cause: 'Sturz / Unfall', part: 'Antrieb', qty: '1', net: '109,20 EUR', vat: '19,00 %', gross: '129,95 EUR' },
-  { name: 'Montage (Kette, Kassette, Kettenschaltung)', price: '190,00 EUR', cause: 'Sturz / Unfall', part: 'Antrieb', qty: '1', net: '159,66 EUR', vat: '19,00 %', gross: '190,00 EUR' },
-  { name: 'Griffe', price: '28,95 EUR', cause: 'Abnutzung, Verschleiss', part: 'Lenker', qty: '1', net: '24,33 EUR', vat: '19,00 %', gross: '28,95 EUR' },
-  { name: 'Montage Griffe', price: '20,00 EUR', cause: 'Abnutzung, Verschleiss', part: 'Lenker', qty: '1', net: '16,81 EUR', vat: '19,00 %', gross: '20,00 EUR' },
-  { name: 'Pedale', price: '29,95 EUR', cause: 'Sturz / Unfall', part: 'Antrieb', qty: '1', net: '25,17 EUR', vat: '19,00 %', gross: '29,95 EUR' },
-  { name: 'Montage Pedale', price: '20,00 EUR', cause: 'Sturz / Unfall', part: 'Antrieb', qty: '1', net: '16,81 EUR', vat: '19,00 %', gross: '20,00 EUR' },
-  { name: 'Reifen Hinten', price: '45,00 EUR', cause: 'Sturz / Unfall', part: 'Laufrad', qty: '1', net: '37,82 EUR', vat: '19,00 %', gross: '45,00 EUR' },
-  { name: 'Montage Reifen Hinten', price: '50,00 EUR', cause: 'Sturz / Unfall', part: 'Laufrad', qty: '1', net: '42,02 EUR', vat: '19,00 %', gross: '50,00 EUR' },
-  { name: 'Bremsscheibe Vorn', price: '52,99 EUR', cause: 'Abnutzung, Verschleiss', part: 'Bremse', qty: '1', net: '44,53 EUR', vat: '19,00 %', gross: '52,99 EUR' },
-  { name: 'Montage Bremsscheibe Vorn', price: '50,00 EUR', cause: 'Abnutzung, Verschleiss', part: 'Bremse', qty: '1', net: '42,02 EUR', vat: '19,00 %', gross: '50,00 EUR' },
+  { name: 'Campagnolo Record 12-fach 11-12-13-14-15-16-17-18-19-21-23 Zähne', cause: 'Abnutzung, Verschleiss', part: 'Antrieb', type: null, qty: '1', net: '44,12 EUR', gross: '52,50 EUR' },
+  { name: 'Kette CN-M9100 126 Glieder HG 12-fach M. Quick-Link', cause: 'Abnutzung, Verschleiss', part: 'Antrieb', type: null, qty: '1', net: '41,97 EUR', gross: '49,95 EUR' },
+  { name: 'Kassette SLX CS-M7100 10-fach', cause: 'Sturz / Unfall', part: 'Antrieb', type: null, qty: '1', net: '109,20 EUR', gross: '129,95 EUR' },
+  { name: 'Montage (Kette, Kassette, Kettenschaltung)', cause: 'Sturz / Unfall', part: 'Antrieb', type: null, qty: '1', net: '159,66 EUR', gross: '190,00 EUR' },
+  { name: 'Griffe', cause: 'Abnutzung, Verschleiss', part: 'Lenker', type: null, qty: '1', net: '24,33 EUR', gross: '28,95 EUR' },
+  { name: 'Montage Griffe', cause: 'Abnutzung, Verschleiss', part: 'Lenker', type: null, qty: '1', net: '16,81 EUR', gross: '20,00 EUR' },
+  { name: 'Pedale', cause: 'Sturz / Unfall', part: 'Antrieb', type: null, qty: '1', net: '25,17 EUR', gross: '29,95 EUR' },
+  { name: 'Montage Pedale', cause: 'Sturz / Unfall', part: 'Antrieb', type: null, qty: '1', net: '16,81 EUR', gross: '20,00 EUR' },
+  { name: 'Reifen Hinten', cause: 'Sturz / Unfall', part: 'Laufrad', type: 'HR', qty: '1', net: '37,82 EUR', gross: '45,00 EUR' },
+  { name: 'Montage Reifen Hinten', cause: 'Sturz / Unfall', part: 'Laufrad', type: 'HR', qty: '1', net: '42,02 EUR', gross: '50,00 EUR' },
+  { name: 'Bremsscheibe Vorn', cause: 'Abnutzung, Verschleiss', part: 'Bremse', type: 'VR', qty: '1', net: '44,53 EUR', gross: '52,99 EUR' },
+  { name: 'Montage Bremsscheibe Vorn', cause: 'Abnutzung, Verschleiss', part: 'Bremse', type: 'VR', qty: '1', net: '42,02 EUR', gross: '50,00 EUR' },
 ];
 
 const CLAIM_ID = 'CLM-12345';
-let pdfExpandedReview = false;
 let submitCheckboxChecked = false;
 let mediaError = false;
 let mediaCount = 0;
-
 
 function escHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -52,30 +48,123 @@ export function getStep4Markup() {
     gross: '805,69 EUR',
     taxAmount: '128,41 EUR',
   };
-  const itemsHtml = REVIEW_ITEMS.map(
-    (item) => `
-    <div class="review-accordion-item" data-review-item>
-      <div class="review-accordion-header">
-        <span class="review-accordion-label">${escHtml(item.name)}</span>
-        <div class="review-accordion-right">
-          <span class="review-accordion-price">${escHtml(item.price)}</span>
-          <span class="review-accordion-chevron"><i class="ti ti-chevron-right" aria-hidden="true"></i></span>
-        </div>
-      </div>
-      <div class="review-accordion-body">
-        <div class="review-accordion-detail-row"><span class="review-accordion-detail-label">${t('review.causeLabel')}</span><span class="review-accordion-detail-value">${escHtml(item.cause)}</span></div>
-        <div class="review-accordion-detail-row"><span class="review-accordion-detail-label">${t('review.bauteilLabel')}</span><span class="review-accordion-detail-value">${escHtml(item.part)}</span></div>
-        <div class="review-accordion-detail-row"><span class="review-accordion-detail-label">${t('review.quantity')}</span><span class="review-accordion-detail-value">${escHtml(item.qty)}</span></div>
-        <div class="review-accordion-detail-row"><span class="review-accordion-detail-label">${t('review.netAmount')}</span><span class="review-accordion-detail-value">${escHtml(item.net)}</span></div>
-        <div class="review-accordion-detail-row"><span class="review-accordion-detail-label">${t('review.vatRate')}</span><span class="review-accordion-detail-value">${escHtml(item.vat)}</span></div>
-        <div class="review-accordion-detail-row"><span class="review-accordion-detail-label">${t('review.grossAmount')}</span><span class="review-accordion-detail-value">${escHtml(item.gross)}</span></div>
-      </div>
-    </div>`
-  ).join('');
+
+  const rowsHtml = REVIEW_ITEMS.map(item => `
+    <tr class="review-tr">
+      <td class="review-td review-td--name">${escHtml(item.name)}</td>
+      <td class="review-td review-td--cause">${escHtml(item.cause)}</td>
+      <td class="review-td review-td--component">${escHtml(item.part)}</td>
+      <td class="review-td review-td--type">${item.type ? escHtml(item.type) : '<span class="review-type-none">—</span>'}</td>
+      <td class="review-td review-td--qty">${escHtml(String(item.qty))}</td>
+      <td class="review-td review-td--net">${escHtml(item.net)}</td>
+      <td class="review-td review-td--gross">${escHtml(item.gross)}</td>
+    </tr>
+  `).join('');
 
   return `
 <div class="review-content">
-  <div class="review-left" id="review-left">
+
+  <div class="review-main">
+
+    <div class="review-table-panel">
+      <div class="review-table-title-row">
+        <span class="review-table-title">${REVIEW_ITEMS.length} ${t('review.itemsCount')}</span>
+      </div>
+      <div class="review-table-wrap">
+        <table class="review-table" role="grid">
+          <thead>
+            <tr class="review-thead-row">
+              <th class="review-th review-th--name">Item Name</th>
+              <th class="review-th review-th--cause">Damage Cause</th>
+              <th class="review-th review-th--component">Component</th>
+              <th class="review-th review-th--type">Type</th>
+              <th class="review-th review-th--qty">Quantity</th>
+              <th class="review-th review-th--net">Net Amount</th>
+              <th class="review-th review-th--gross">Gross Amount</th>
+            </tr>
+          </thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="review-details-panel">
+      <div class="review-details-inner">
+        <div class="review-details-title-row">
+          <h2 class="review-details-title">${t('review.invoiceData')}</h2>
+        </div>
+        <div class="review-details-form">
+          <div class="review-detail-row">
+            <span class="review-detail-label">${t('review.frameNumber')}</span>
+            <span class="review-detail-value">00RDLS98221</span>
+          </div>
+          <div class="review-detail-row">
+            <span class="review-detail-label">${t('review.invoiceDate')}</span>
+            <span class="review-detail-value">20.09.2025</span>
+          </div>
+          <div class="review-detail-row">
+            <span class="review-detail-label">${t('review.damageDate')}</span>
+            <span class="review-detail-value">18.09.2025</span>
+          </div>
+          <div class="review-detail-row review-detail-row--desc">
+            <span class="review-detail-label">${t('review.description')}</span>
+            <span class="review-detail-value">Lenker gebrochen nach Sturz durch verklemmte Kette</span>
+          </div>
+          <div class="review-detail-row">
+            <span class="review-detail-label">${t('review.netAmount')}</span>
+            <span class="review-detail-value">${escHtml(totals.net)}</span>
+          </div>
+          <div class="review-detail-row">
+            <span class="review-detail-label">${t('review.vatRate')}</span>
+            <span class="review-detail-value">${escHtml(totals.taxRate)}</span>
+          </div>
+          <div class="review-detail-row review-detail-row--total">
+            <span class="review-detail-label">${t('review.grossAmount')}</span>
+            <span class="review-detail-value">${escHtml(totals.gross)}</span>
+          </div>
+        </div>
+        <button type="button" class="btn-view-pdf" id="btn-view-pdf-review">
+          <i class="ti ti-eye" aria-hidden="true"></i>
+          <span>${t('val.viewPdf')}</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="review-footer">
+    <button type="button" class="btn-back" id="review-btn-back">
+      <i class="ti ti-arrow-left" aria-hidden="true"></i>
+      ${t('review.back')}
+    </button>
+    <div class="review-footer-right">
+      <div class="review-confirm-row" id="review-confirm-row">
+        <div class="review-confirm-box" id="review-confirm-box" aria-hidden="true"></div>
+        <span class="review-confirm-label">${t('review.confirmCheckbox')}</span>
+      </div>
+      <button type="button" class="btn-fertig" id="btn-open-submit-modal">
+        ${t('review.send')} <i class="ti ti-check" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="confirm-overlay" id="overlay-back-review">
+    <div class="confirm-modal" role="dialog" aria-labelledby="confirm-back-review-title">
+      <div class="confirm-modal-header">
+        <div class="confirm-modal-title" id="confirm-back-review-title">${t('review.modalLeaveTitle')}</div>
+      </div>
+      <div class="confirm-modal-body"><p>${t('review.modalLeaveBody')}</p></div>
+      <div class="confirm-modal-footer">
+        <button type="button" class="confirm-btn-secondary" id="btn-back-cancel-review">${t('review.modalStay')}</button>
+        <button type="button" class="confirm-btn-primary" id="btn-back-confirm-review">${t('review.modalBack')}</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="review-pdf-overlay" id="review-pdf-overlay">
+  <div class="review-pdf-overlay-inner">
     <div class="pdf-card" id="pdf-card-review">
       <div class="pdf-toolbar">
         <div class="pdf-nav">
@@ -90,8 +179,8 @@ export function getStep4Markup() {
             <button type="button" class="pdf-zoom-btn" id="pdf-zoom-in" title="${t('review.zoomInTitle')}">+</button>
           </div>
           <div class="pdf-toolbar-divider"></div>
-          <button type="button" class="pdf-expand-btn" id="pdf-expand-btn-review" title="${t('review.closeAria')}" aria-label="${t('review.closeAria')}">
-            <span id="pdf-expand-icon-review" aria-hidden="true"></span>
+          <button type="button" class="pdf-expand-btn" id="pdf-close-btn-review" title="${t('review.closeAria')}" aria-label="${t('review.closeAria')}">
+            <i class="ti ti-x" aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -107,75 +196,8 @@ export function getStep4Markup() {
       </div>
     </div>
   </div>
-  <div class="review-right" id="review-right">
-    <div class="review-right-inner">
-        <button type="button" class="pdf-trigger-bar" id="pdf-open-overlay-review">
-          <span>${t('review.pdfTrigger')}</span>
-          <i class="ti ti-eye-check pdf-trigger-bar-icon" aria-hidden="true"></i>
-        </button>
-        <div class="review-card">
-        <div class="review-card-header">
-          <div class="review-claim-id">${escHtml(CLAIM_ID)}</div>
-          <div class="review-title">${t('review.title')}</div>
-          <div class="review-subtitle">${t('review.subtitle')}</div>
-        </div>
-        <div class="review-card-body">
-          <div class="summary-section">
-            <div class="section-row-head">
-              <span class="section-row-title">${t('review.invoiceData')}</span>
-              <button type="button" class="section-edit-btn" title="${t('review.editInvoiceData')}" data-edit="invoice"><i class="ti ti-pencil" aria-hidden="true"></i></button>
-            </div>
-            <div class="data-rows">
-              <div class="data-row"><span class="data-label">${t('review.frameNumber')}</span><span class="data-value">00RDLS98221</span></div>
-              <div class="data-row"><span class="data-label">${t('review.invoiceDate')}</span><span class="data-value">20/09/2025</span></div>
-              <div class="data-row"><span class="data-label">${t('review.damageDate')}</span><span class="data-value">18/09/2025</span></div>
-              <div class="data-row description"><span class="data-label">${t('review.description')}</span><span class="data-value">Lenker gebrochen nach Sturz durch verklemmte Kette</span></div>
-            </div>
-          </div>
-          <div class="summary-section">
-            <div class="section-row-head">
-              <span class="section-row-title">${REVIEW_ITEMS.length} ${t('review.itemsCount')}</span>
-              <button type="button" class="section-edit-btn" title="${t('review.editItems')}" data-edit="items"><i class="ti ti-pencil" aria-hidden="true"></i></button>
-            </div>
-            <div class="review-accordion-list" id="review-accordion-list">${itemsHtml}</div>
-          </div>
-          <div class="summary-section">
-            <div class="section-row-head">
-              <span class="section-row-title">${t('review.totalAmount')}</span>
-              <button type="button" class="section-edit-btn" title="${t('review.editTotal')}" data-edit="total"><i class="ti ti-pencil" aria-hidden="true"></i></button>
-            </div>
-            <div class="data-rows">
-              <div class="total-row"><span class="total-label">${t('review.netAmount')}</span><span class="total-value" id="review-total-net">${escHtml(totals.net)}</span></div>
-              <div class="total-row"><span class="total-label">${t('review.vatRate')}</span><span class="total-value" id="review-total-tax">${escHtml(totals.taxAmount ? `${totals.taxAmount} (${totals.taxRate})` : totals.taxRate)}</span></div>
-              <div class="total-row gross"><span class="total-label">${t('review.grossAmount')}</span><span class="total-value" id="review-total-gross">${escHtml(totals.gross)}</span></div>
-            </div>
-          </div>
-        </div>
-        </div>
-        <div class="review-footer-inline">
-          <button type="button" class="btn-back" id="review-btn-back">${t('review.back')}</button>
-          <button type="button" class="btn-submit-main" id="btn-open-submit-modal">${t('review.submitToAssona')}</button>
-        </div>
-      </div>
-  </div>
 </div>
 
-<div class="confirm-overlay" id="overlay-back-review">
-  <div class="confirm-modal" role="dialog" aria-labelledby="confirm-back-review-title">
-    <div class="confirm-modal-header">
-      <div class="confirm-modal-title" id="confirm-back-review-title">${t('review.modalLeaveTitle')}</div>
-    </div>
-    <div class="confirm-modal-body">
-      <p>${t('review.modalLeaveBody')}</p>
-    </div>
-    <div class="confirm-modal-footer">
-      <button type="button" class="confirm-btn-secondary" id="btn-back-cancel-review">${t('review.modalStay')}</button>
-      <button type="button" class="confirm-btn-primary" id="btn-back-confirm-review">${t('review.modalBack')}</button>
-    </div>
-  </div>
-</div>
-
-<!-- Submit confirmation overlay -->
 <div class="review-overlay" id="overlay-submit">
   <div class="review-modal-popover" id="modal-submit" role="dialog" aria-labelledby="modal-submit-title">
     <div class="review-modal-header">
@@ -195,15 +217,11 @@ export function getStep4Markup() {
         <button type="button" class="btn-upload-media" id="btn-upload-media"><i class="ti ti-upload" aria-hidden="true"></i> ${t('review.uploadBtn')}</button>
       </div>
       <div class="review-media-list" id="review-media-list" aria-label="${t('review.mediaListAria')}"></div>
-      <div class="review-checkbox-row" id="checkbox-row">
-        <div class="review-checkbox-box" id="checkbox-box" aria-hidden="true"></div>
-        <span class="review-checkbox-label">${t('review.confirmCheckbox')}</span>
-      </div>
       <p class="review-media-error" id="review-media-error"></p>
     </div>
     <div class="review-modal-footer">
       <button type="button" class="btn-not-yet" id="btn-not-yet">${t('review.notYet')}</button>
-      <button type="button" class="btn-submit-final" id="btn-submit-final" disabled>
+      <button type="button" class="btn-submit-final active" id="btn-submit-final">
         <span id="submit-btn-label">${t('review.send')}</span>
         <i class="ti ti-send" id="submit-send-icon" aria-hidden="true"></i>
       </button>
@@ -211,7 +229,6 @@ export function getStep4Markup() {
   </div>
 </div>
 
-<!-- Success overlay -->
 <div class="review-overlay" id="overlay-success">
   <div class="review-modal-success" role="dialog" aria-labelledby="success-title">
     <div class="review-success-confetti"></div>
@@ -228,19 +245,9 @@ export function getStep4Markup() {
 </div>`;
 }
 
-function wireReviewAccordion() {
-  document.querySelectorAll('.review-accordion-item[data-review-item]').forEach((el) => {
-    el.addEventListener('click', () => {
-      const wasOpen = el.classList.contains('open');
-      document.querySelectorAll('.review-accordion-item.open').forEach((o) => {
-        if (o !== el) o.classList.remove('open');
-      });
-      el.classList.toggle('open', !wasOpen);
-    });
-  });
-}
-
 function openSubmitModal() {
+  submitCheckboxChecked = true;
+  updateSubmitButton();
   document.getElementById('overlay-submit')?.classList.add('visible');
 }
 function closeSubmitModal() {
@@ -251,19 +258,11 @@ function closeSuccessModal() {
 }
 
 function updateSubmitButton() {
-  const btnFinal = document.getElementById('btn-submit-final');
-  if (!btnFinal) return;
+  const btn = document.getElementById('btn-submit-final');
+  if (!btn) return;
   const canSubmit = submitCheckboxChecked && !mediaError;
-  btnFinal.classList.toggle('active', canSubmit);
-  btnFinal.disabled = !canSubmit;
-}
-
-function toggleSubmitCheckbox() {
-  submitCheckboxChecked = !submitCheckboxChecked;
-  const box = document.getElementById('checkbox-box');
-  if (box) box.classList.toggle('checked', submitCheckboxChecked);
-  if (box) box.innerHTML = submitCheckboxChecked ? '<i class="ti ti-check" style="font-size:12px;color:var(--n1000)" aria-hidden="true"></i>' : '';
-  updateSubmitButton();
+  btn.classList.toggle('active', canSubmit);
+  btn.disabled = !canSubmit;
 }
 
 function setMediaError(message) {
@@ -279,11 +278,9 @@ function setMediaError(message) {
 function updateMediaDescription() {
   const sub = document.getElementById('review-upload-sub');
   if (!sub) return;
-  if (mediaCount > 0) {
-    sub.textContent = t('review.mediaUploadedCount', { n: mediaCount });
-  } else {
-    sub.textContent = t('review.mediaUploadSub');
-  }
+  sub.textContent = mediaCount > 0
+    ? t('review.mediaUploadedCount', { n: mediaCount })
+    : t('review.mediaUploadSub');
 }
 
 function triggerSubmit() {
@@ -303,17 +300,9 @@ function triggerSubmit() {
     closeSubmitModal();
     setTimeout(() => {
       const overlay = document.getElementById('overlay-success');
-      if (overlay) {
-        overlay.classList.add('visible');
-      }
+      if (overlay) overlay.classList.add('visible');
       if (typeof window.confetti === 'function') {
-        window.confetti({
-          particleCount: 160,
-          spread: 90,
-          startVelocity: 45,
-          scalar: 0.9,
-          origin: { y: 0.4 }
-        });
+        window.confetti({ particleCount: 160, spread: 90, startVelocity: 45, scalar: 0.9, origin: { y: 0.4 } });
       }
     }, 200);
     if (label) label.textContent = t('review.send');
@@ -321,113 +310,87 @@ function triggerSubmit() {
     if (btn.contains(spinner)) btn.removeChild(spinner);
     btn.disabled = false;
     submitCheckboxChecked = false;
-    const box = document.getElementById('checkbox-box');
-    if (box) {
-      box.classList.remove('checked');
-      box.innerHTML = '';
-    }
     mediaError = false;
-    mediaCount = document.getElementById('review-media-list')?.querySelectorAll('.review-media-item').length || 0;
+    mediaCount = 0;
     updateMediaDescription();
     updateSubmitButton();
   }, 1600);
 }
 
 export function wireReviewStep(goToStep) {
+  // PDF zoom/nav
   if (getPdfDoc()) showLoadedPdfInCurrentCard('pdf-fallback-review');
-  const zoomIn = document.getElementById('pdf-zoom-in');
+  const zoomIn  = document.getElementById('pdf-zoom-in');
   const zoomOut = document.getElementById('pdf-zoom-out');
   const navPrev = document.getElementById('pdf-nav-prev');
   const navNext = document.getElementById('pdf-nav-next');
-  if (zoomIn) zoomIn.addEventListener('click', () => pdfZoomChange(1));
+  if (zoomIn)  zoomIn.addEventListener('click', () => pdfZoomChange(1));
   if (zoomOut) zoomOut.addEventListener('click', () => pdfZoomChange(-1));
   if (navPrev) navPrev.addEventListener('click', pdfNavPrev);
   if (navNext) navNext.addEventListener('click', pdfNavNext);
   pdfZoomApply();
 
-  const expandBtn = document.getElementById('pdf-expand-btn-review');
-  const card = document.getElementById('pdf-card-review');
-  const left = document.getElementById('review-left');
-  if (expandBtn && card && left) {
-    // Initialize desktop icon as expand (maximize); keep X icon on mobile/tablet
-    const iconHost = document.getElementById('pdf-expand-icon-review');
-    if (iconHost) {
-      if (!isMobileViewport()) {
-        iconHost.outerHTML = getPdfExpandSvg(false, 'pdf-expand-icon-review');
-      } else {
-        iconHost.innerHTML = '<i class="ti ti-x" aria-hidden="true"></i>';
-      }
-    }
+  // PDF overlay open / close
+  const btnViewPdf  = document.getElementById('btn-view-pdf-review');
+  const pdfOverlay  = document.getElementById('review-pdf-overlay');
+  const btnClosePdf = document.getElementById('pdf-close-btn-review');
+  if (btnViewPdf && pdfOverlay) {
+    btnViewPdf.addEventListener('click', () => {
+      pdfOverlay.classList.add('visible');
+      if (getPdfDoc()) showLoadedPdfInCurrentCard('pdf-fallback-review');
+    });
+  }
+  if (btnClosePdf && pdfOverlay) {
+    btnClosePdf.addEventListener('click', () => pdfOverlay.classList.remove('visible'));
+  }
 
-    expandBtn.addEventListener('click', () => {
-      // On tablet/mobile, treat expand as "close overlay"
-      if (isMobileViewport()) {
-        const icon = document.getElementById('pdf-expand-icon-review');
-        if (icon) {
-          icon.innerHTML = '<i class="ti ti-x" aria-hidden="true"></i>';
-        }
-        left.classList.remove('active');
-        return;
+  // Footer confirmation checkbox
+  let confirmChecked = false;
+  const confirmRow = document.getElementById('review-confirm-row');
+  const confirmBox = document.getElementById('review-confirm-box');
+  const btnFertig  = document.getElementById('btn-open-submit-modal');
+
+  function updateFertig() {
+    if (btnFertig) btnFertig.classList.toggle('active', confirmChecked);
+  }
+
+  if (confirmRow) {
+    confirmRow.addEventListener('click', () => {
+      confirmChecked = !confirmChecked;
+      if (confirmBox) {
+        confirmBox.classList.toggle('checked', confirmChecked);
+        confirmBox.innerHTML = confirmChecked
+          ? '<i class="ti ti-check" style="font-size:12px;color:var(--n1000)" aria-hidden="true"></i>'
+          : '';
       }
-      pdfExpandedReview = !pdfExpandedReview;
-      left.classList.toggle('pdf-expanded', pdfExpandedReview);
-      card.classList.toggle('expanded', pdfExpandedReview);
-      expandBtn.setAttribute('aria-label', pdfExpandedReview ? t('val.collapsePdfAria') : t('val.expandPdfAria'));
-      const icon = document.getElementById('pdf-expand-icon-review');
-      if (icon) {
-        icon.outerHTML = getPdfExpandSvg(pdfExpandedReview, 'pdf-expand-icon-review');
-      }
+      updateFertig();
     });
   }
 
-  const pdfOpenOverlayBtn = document.getElementById('pdf-open-overlay-review');
-  const pdfLeftPanel = document.getElementById('review-left');
-  if (pdfOpenOverlayBtn && pdfLeftPanel) {
-    pdfOpenOverlayBtn.addEventListener('click', () => {
-      pdfLeftPanel.classList.add('active');
-      if (getPdfDoc()) {
-        showLoadedPdfInCurrentCard('pdf-fallback-review');
-      }
+  if (btnFertig) {
+    btnFertig.addEventListener('click', () => {
+      if (confirmChecked) openSubmitModal();
     });
   }
 
-  wireReviewAccordion();
-
-  const btnBack = document.getElementById('review-btn-back');
+  // Back
+  const btnBack     = document.getElementById('review-btn-back');
   const backOverlay = document.getElementById('overlay-back-review');
-  const backCancel = document.getElementById('btn-back-cancel-review');
+  const backCancel  = document.getElementById('btn-back-cancel-review');
   const backConfirm = document.getElementById('btn-back-confirm-review');
-  if (btnBack && backOverlay) {
-    btnBack.addEventListener('click', () => {
-      backOverlay.classList.add('visible');
-    });
-  }
-  if (backCancel && backOverlay) {
-    backCancel.addEventListener('click', () => {
-      backOverlay.classList.remove('visible');
-    });
-  }
+  if (btnBack && backOverlay)   btnBack.addEventListener('click', () => backOverlay.classList.add('visible'));
+  if (backCancel && backOverlay) backCancel.addEventListener('click', () => backOverlay.classList.remove('visible'));
   if (backConfirm && backOverlay) {
-    backConfirm.addEventListener('click', () => {
-      backOverlay.classList.remove('visible');
-      goToStep(3);
-    });
+    backConfirm.addEventListener('click', () => { backOverlay.classList.remove('visible'); goToStep(3); });
   }
-  if (backOverlay) {
-    backOverlay.addEventListener('click', (e) => {
-      if (e.target === backOverlay) backOverlay.classList.remove('visible');
-    });
-  }
-  const btnOpenModal = document.getElementById('btn-open-submit-modal');
-  if (btnOpenModal) btnOpenModal.addEventListener('click', openSubmitModal);
+  if (backOverlay) backOverlay.addEventListener('click', (e) => { if (e.target === backOverlay) backOverlay.classList.remove('visible'); });
 
+  // Submit modal
   document.getElementById('close-submit-modal')?.addEventListener('click', closeSubmitModal);
   document.getElementById('btn-not-yet')?.addEventListener('click', closeSubmitModal);
-  document.getElementById('checkbox-row')?.addEventListener('click', (e) => {
-    if (e.target.closest('.review-checkbox-box') || e.target.closest('.review-checkbox-label')) toggleSubmitCheckbox();
-  });
-  document.getElementById('btn-submit-final')?.addEventListener('click', () => triggerSubmit());
+  document.getElementById('btn-submit-final')?.addEventListener('click', triggerSubmit);
 
+  // Media upload
   const btnUpload = document.getElementById('btn-upload-media');
   if (btnUpload) {
     btnUpload.addEventListener('click', () => {
@@ -439,23 +402,14 @@ export function wireReviewStep(goToStep) {
         const files = input.files;
         const list = document.getElementById('review-media-list');
         if (!files || !files.length || !list) return;
-
         const existing = list.querySelectorAll('.review-media-item').length;
         const max = 9;
-          if (existing >= max) {
-            setMediaError(t('review.mediaMaxError'));
-          return;
-        }
-
-                  const remaining = max - existing;
-                  const incoming = Array.from(files);
-                  if (incoming.length > remaining) {
-                    setMediaError(t('review.mediaMaxError'));
-        } else {
-          setMediaError('');
-        }
-
-        incoming.slice(0, remaining).forEach((file) => {
+        if (existing >= max) { setMediaError(t('review.mediaMaxError')); return; }
+        const remaining = max - existing;
+        const incoming = Array.from(files);
+        if (incoming.length > remaining) setMediaError(t('review.mediaMaxError'));
+        else setMediaError('');
+        incoming.slice(0, remaining).forEach(file => {
           if (file.type && file.type.startsWith('image/')) {
             const reader = new FileReader();
             const item = document.createElement('div');
@@ -464,7 +418,6 @@ export function wireReviewStep(goToStep) {
             spinner.className = 'review-media-spinner';
             item.appendChild(spinner);
             list.appendChild(item);
-
             reader.onload = (e) => {
               item.classList.remove('loading');
               item.innerHTML = '';
@@ -478,7 +431,6 @@ export function wireReviewStep(goToStep) {
             mediaCount += 1;
           }
         });
-
         updateMediaDescription();
       };
       input.click();
@@ -501,6 +453,9 @@ export function wireReviewStep(goToStep) {
     if (e.key === 'Escape') {
       closeSubmitModal();
       closeSuccessModal();
+      if (pdfOverlay) pdfOverlay.classList.remove('visible');
     }
   });
+
+  updateFertig();
 }

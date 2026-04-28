@@ -26,7 +26,8 @@
   background: var(--color-warning-50);
 }
 .val-alert-bar.success {
-  background: var(--pastelY100, #f0f6d8);
+  background: var(--s100);
+  border-bottom: none;
 }
 .val-alert-inner {
   display: flex;
@@ -218,6 +219,7 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: auto;
+  margin-top: var(--space-4);
   padding: 0 var(--space-6) var(--space-6) var(--space-4);
 }
 .val-table-wrap::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -226,7 +228,7 @@
 
 .val-table {
   width: 100%;
-  min-width: 800px;
+  min-width: 890px;
   border-collapse: collapse;
   table-layout: fixed;
 }
@@ -251,7 +253,7 @@
   white-space: nowrap;
   user-select: none;
 }
-.val-th--name   { width: auto; min-width: 200px; }
+.val-th--name   { width: auto; min-width: 120px; }
 .val-th--cause  { width: 150px; }
 .val-th--component { width: 150px; }
 .val-th--type   { width: 110px; }
@@ -264,9 +266,10 @@
 .val-tr {
   border-bottom: 1px solid var(--stroke-ui-micro);
 }
-.val-tr--warn {
-  background: var(--w50);
+.val-tr:hover {
+  background: var(--n50);
 }
+.val-tr--warn {}
 
 .val-td {
   padding: 0 var(--space-2);
@@ -277,6 +280,7 @@
   vertical-align: middle;
 }
 .val-td--name {
+  min-width: 120px;
   font-size: var(--text-crumb);
   font-weight: var(--fw-medium);
   overflow: hidden;
@@ -294,9 +298,7 @@
 }
 
 /* ─── Needs-validate cell highlight ─── */
-.val-td--needs-validate {
-  background: var(--w50);
-}
+.val-td--needs-validate {}
 
 /* ─── Dropdown triggers (Cause & Component columns) ─── */
 .val-dropdown-trigger {
@@ -322,7 +324,8 @@
 .val-dropdown-trigger:hover {
   border-color: var(--stroke-ui);
 }
-.val-dropdown-trigger.open {
+.val-dropdown-trigger.open,
+.val-dropdown-trigger.just-selected {
   border: 2px solid var(--a400);
   box-shadow: 0 0 0 3px var(--color-accent-100);
   background: var(--color-neutral-0);
@@ -406,13 +409,16 @@
   overflow: hidden;
   transition: border-color var(--duration-fast);
 }
+.val-qty-wrap:hover:not(:focus-within) {
+  border-color: var(--stroke-ui);
+}
 .val-qty-wrap:focus-within {
   border: 2px solid var(--a400);
   box-shadow: 0 0 0 3px var(--color-accent-100);
   background: var(--color-neutral-0);
 }
-.val-td--needs-validate .val-qty-wrap {
-  background: var(--w50);
+.val-qty-wrap--warn {
+  background: var(--w100);
   border-color: rgba(230, 119, 0, 0.3);
 }
 .val-qty-input {
@@ -422,7 +428,7 @@
   border: none;
   background: transparent;
   font-family: var(--ff-body);
-  font-size: var(--text-crumb);
+  font-size: var(--text-xs);
   color: var(--n900);
   outline: none;
   padding: 0 6px;
@@ -460,10 +466,13 @@
   gap: var(--space-1);
   height: 30px;
   background: var(--pastelY50, #fafbf7);
-  border: 1px solid var(--stroke-ui);
+  border: 1px solid transparent;
   border-radius: var(--r-sm);
   padding: 0 6px 0 var(--space-2);
   transition: border-color var(--duration-fast), box-shadow var(--duration-fast), background var(--duration-fast);
+}
+.val-amount-wrap:hover:not(:focus-within) {
+  border-color: var(--stroke-ui);
 }
 .val-amount-wrap:focus-within {
   border: 2px solid var(--a400);
@@ -480,7 +489,7 @@
   font-size: var(--text-xs);
   color: var(--n900);
   outline: none;
-  text-align: right;
+  text-align: left;
 }
 .val-amount-suffix {
   flex-shrink: 0;
