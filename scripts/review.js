@@ -64,15 +64,14 @@ export function getStep4Markup() {
   return `
 <div class="review-content">
 
-  <div class="review-alert-bar" role="status">
-    <div class="review-alert-inner">
-      <i class="ti ti-eye review-alert-icon" aria-hidden="true"></i>
-      <span>Vor dem Senden prüfen</span>
-    </div>
-  </div>
-
   <div class="review-page-title-row">
     <h2 class="review-page-title">Schadenfall ${CLAIM_ID} überprüfen</h2>
+    <div class="review-alert-bar" role="status">
+      <div class="review-alert-inner">
+        <i class="ti ti-eye review-alert-icon" aria-hidden="true"></i>
+        <span>Vor dem Senden prüfen</span>
+      </div>
+    </div>
   </div>
 
   <div class="review-main">

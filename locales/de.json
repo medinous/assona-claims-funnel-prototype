@@ -37,7 +37,7 @@
     "step1": "Upload",
     "step2": "Schaden bestätigen",
     "step3": "Validieren",
-    "step4": "Prüfen & senden"
+    "step4": "Überprüfen"
   },
   "proto": {
     "flow": "Flow",
@@ -46,7 +46,7 @@
     "step1": "Schritt 1: Upload",
     "step2": "Schritt 2: Schaden bestätigen",
     "step3": "Schritt 3: Validieren",
-    "step4": "Schritt 4: Prüfen & senden"
+    "step4": "Schritt 4: Überprüfen"
   },
   "upload": {
     "pdfError": {
@@ -116,7 +116,7 @@
     "alertTitleRequired": "Pflichtfelder ausfüllen",
     "alertSubFill": "Bitte fülle alle fehlenden Felder aus um fortzufahren.",
     "alertSubCheck": "Bitte prüfe die markierten Felder.",
-    "alertSubCanContinue": "Du kannst zum Schritt „Prüfen & senden“ fortfahren.",
+    "alertSubCanContinue": "Du kannst zum Schritt „Überprüfen” fortfahren.",
     "btnCheckFields": "Felder prüfen",
     "btnCheckMissing": "Fehlende Felder prüfen",
     "btnExpandAll": "Alle ausklappen",
@@ -218,7 +218,7 @@
   "router": {
     "step2Heading": "Schritt 2 – Schaden bestätigen",
     "step3Heading": "Schritt 3 – Validieren",
-    "step4Heading": "Schritt 4 – Prüfen & senden",
+    "step4Heading": "Schritt 4 – Überprüfen",
     "placeholderHeading": "Assona-Funnel-Prototyp",
     "placeholderText": "Platzhalter für Schritt {step}. Die vollständige UI wird im nächsten Schritt übernommen."
   }

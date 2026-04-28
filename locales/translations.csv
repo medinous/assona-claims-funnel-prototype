@@ -26,14 +26,14 @@ nav.closeAria,Schließen,Close,Nav,approved
 stepper.step1,Upload,Upload,Stepper,approved
 stepper.step2,Schaden bestätigen,Confirm damage,Stepper,approved
 stepper.step3,Validieren,Validate,Stepper,approved
-stepper.step4,Prüfen & senden,Review & submit,Stepper,approved
+stepper.step4,Überprüfen,Review & submit,Stepper,approved
 proto.flow,Flow,Flow,Proto nav,approved
 proto.login,Login,Login,Proto nav,approved
 proto.home,Startseite,Home,Proto nav,approved
 proto.step1,Schritt 1: Upload,Step 1: Upload,Proto nav,approved
 proto.step2,Schritt 2: Schaden bestätigen,Step 2: Confirm damage,Proto nav,approved
 proto.step3,Schritt 3: Validieren,Step 3: Validate,Proto nav,approved
-proto.step4,Schritt 4: Prüfen & senden,Step 4: Review & submit,Proto nav,approved
+proto.step4,Schritt 4: Überprüfen,Step 4: Review & submit,Proto nav,approved
 upload.pdfError.title,Wir konnten keine Daten aus deiner Rechnung extrahieren,We could not extract data from your invoice,PDF error overlay,approved
 upload.pdfError.body,"Bitte versuche es mit einem neuen Datei-Upload erneut oder fahre mit der manuellen Bearbeitung im aktuellen Portal fort.","Please try again with a new file upload or continue with manual entry in the current portal.",PDF error overlay,approved
 upload.pdfError.uploadNew,Neue Rechnung hochladen,Upload new invoice,PDF error overlay,approved
@@ -93,7 +93,7 @@ val.alertTitleMissingAndValidate,"{missing} fehlende Felder {count} zu prüfen",
 val.alertTitleRequired,Pflichtfelder ausfüllen,Fill required fields,Step 3 alert,approved
 val.alertSubFill,Bitte fülle alle fehlenden Felder aus um fortzufahren.,Please fill in all missing fields to continue.,Step 3 alert,approved
 val.alertSubCheck,Bitte prüfe die markierten Felder.,Please check the marked fields.,Step 3 alert,approved
-val.alertSubCanContinue,Du kannst zum Schritt „Prüfen & senden“ fortfahren.,You can proceed to Review & submit.,Step 3 alert,approved
+val.alertSubCanContinue,Du kannst zum Schritt „Überprüfen” fortfahren.,You can proceed to Review & submit.,Step 3 alert,approved
 val.btnCheckFields,Felder prüfen,Check fields,Step 3,approved
 val.btnCheckMissing,Fehlende Felder prüfen,Check missing fields,Step 3,approved
 val.btnExpandAll,Alle ausklappen,Expand all,Step 3,approved
@@ -190,7 +190,7 @@ review.mediaMaxError,Maximal 9 Mediendateien erlaubt.,Maximum 9 media files allo
 review.mediaListAria,Vorschau der hochgeladenen Medien,Preview of uploaded media,Step 4 submit modal,approved
 router.step2Heading,Schritt 2 – Schaden bestätigen,Step 2 – Confirm damage,Router fallback,approved
 router.step3Heading,Schritt 3 – Validieren,Step 3 – Validate,Router fallback,approved
-router.step4Heading,Schritt 4 – Prüfen & senden,Step 4 – Review & submit,Router fallback,approved
+router.step4Heading,Schritt 4 – Überprüfen,Step 4 – Review & submit,Router fallback,approved
 router.placeholderHeading,Assona-Funnel-Prototyp,Assona Funnel Prototype,Router fallback,approved
 router.placeholderText,"Platzhalter für Schritt {step}. Die vollständige UI wird im nächsten Schritt übernommen.","Placeholder for step {step}. Full UI will be implemented next.",Router fallback,approved
 
