@@ -13,21 +13,39 @@
   background: var(--n0);
 }
 
-/* ─── Alert bar ─── */
-.val-alert-bar {
+/* ─── Page title row + inline alert pill ─── */
+.val-page-title-row {
   flex-shrink: 0;
-  height: 32px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
   border-bottom: 1px solid var(--stroke-ui-subtle);
 }
+.val-page-title {
+  font-family: var(--ff-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--fw-bold);
+  color: var(--n1000);
+  line-height: 24px;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+}
+
+/* ─── Alert bar (inline pill inside title row) ─── */
+.val-alert-bar {
+  flex-shrink: 0;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-3);
+  border-radius: var(--r-sm);
+}
 .val-alert-bar.warn {
-  background: var(--color-warning-50);
+  background: var(--color-warning-100);
 }
 .val-alert-bar.success {
   background: var(--s100);
-  border-bottom: none;
 }
 .val-alert-inner {
   display: flex;
@@ -332,12 +350,9 @@
 }
 .val-dropdown-trigger.val-dropdown--empty {
   background: var(--w100);
-  border-color: rgba(230, 119, 0, 0.3);
 }
 .val-dropdown-trigger.val-dropdown--validate {
   background: var(--w100);
-  border-color: rgba(230, 119, 0, 0.5);
-  box-shadow: 0 0 0 2px rgba(230, 119, 0, 0.1);
 }
 .val-dropdown-label {
   flex: 1;
@@ -419,7 +434,6 @@
 }
 .val-qty-wrap--warn {
   background: var(--w100);
-  border-color: rgba(230, 119, 0, 0.3);
 }
 .val-qty-input {
   flex: 1;
@@ -693,8 +707,6 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0; position: ab
 }
 .amount-field-input-wrap.error {
   background: var(--w100) !important;
-  border: 1.5px solid var(--w300) !important;
-  box-shadow: none !important;
 }
 .amount-input {
   flex: 1;

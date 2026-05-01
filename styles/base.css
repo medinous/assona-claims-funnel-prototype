@@ -76,17 +76,15 @@ button {
   box-shadow: none;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-}
-
-@media (max-width: 1023px) {
-  .modal-shell {
-    overflow-y: auto;
-  }
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Nav header */
 .nav-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-topbar);
   background: var(--n0);
   height: 40px;
   display: flex;
@@ -269,15 +267,17 @@ h4 {
   font-weight: var(--fw-regular);
 }
 
-/* Content area */
+/* Content area — sticky below nav-header; stepper scrolls away behind it */
 .modal-content {
+  position: sticky;
+  top: var(--space-10);
   flex: 1;
-  min-height: 0;
+  min-height: calc(100vh - var(--space-10) - var(--space-2) - var(--space-2));
   display: flex;
   align-items: stretch;
   overflow-y: auto;
   overflow-x: hidden;
-  position: relative;
+  background: var(--n0);
 }
 
 #step-root {

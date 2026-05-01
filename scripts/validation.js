@@ -85,15 +85,25 @@ function needsValidate(idx, field) {
   return ITEMS[idx].validate.includes(field) && !itemState[idx].validatedFields.has(field);
 }
 
+const CLAIM_ID = '189115';
+
 /* ─── Step 3 markup ─── */
 export function getStep3Markup() {
+  const docType = funnelState.upload?.documentType || 'invoice';
+  const pageTitle = docType === 'estimate'
+    ? 'Kostenvoranschlagsfelder validieren'
+    : 'Rechnungsfelder validieren';
+
   return `
 <div class="validate-content">
 
-  <div class="val-alert-bar warn" id="val-alert" role="alert">
-    <div class="val-alert-inner">
-      <i class="ti ti-alert-triangle val-alert-icon" aria-hidden="true" id="val-alert-icon"></i>
-      <span id="alert-title">${t('val.alertTitleMissingAndValidate', { missing: '2', count: '6' })}</span>
+  <div class="val-page-title-row">
+    <h2 class="val-page-title">${pageTitle}</h2>
+    <div class="val-alert-bar warn" id="val-alert" role="alert">
+      <div class="val-alert-inner">
+        <i class="ti ti-alert-triangle val-alert-icon" aria-hidden="true" id="val-alert-icon"></i>
+        <span id="alert-title">${t('val.alertTitleMissingAndValidate', { missing: '2', count: '6' })}</span>
+      </div>
     </div>
   </div>
 

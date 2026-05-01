@@ -205,6 +205,7 @@ export function wireUploadStep(goToStep) {
 
     const fname = file.name;
     funnelState.upload.pdfName = fname;
+    funnelState.upload.documentType = fname.toLowerCase().includes('kostenvoranschlag') ? 'estimate' : 'invoice';
     document.querySelectorAll('.all-pdf-filenames').forEach((el) => { el.textContent = fname; });
     document.querySelectorAll('.all-alert-filenames').forEach((el) => { el.textContent = fname; });
     fileInput.value = '';

@@ -5,6 +5,7 @@ export const funnelState = {
   currentStep: 1, // 1–4
   upload: {
     pdfName: 'Rechnung-003.pdf',
+    documentType: 'invoice', // 'invoice' | 'estimate'
     // In a real app you might store a Blob or URL here
     pdfData: null,
   },
