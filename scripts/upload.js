@@ -15,6 +15,7 @@ import {
   getPdfExpandSvg,
 } from './pdf-viewer.js';
 import { t } from './i18n.js';
+import { getDamageRightMarkup, wireDamageStep } from './damage.js';
 
 const PDF_FALLBACK_HTML = `
 <div class="pdf-fb-header">
@@ -129,12 +130,40 @@ export function getStep1Markup() {
       <span>${t('upload.agentAddress')}</span>
     </div>
     </div>
+    <div id="upload-damage-section" class="upload-damage-section"></div>
   </div>
 </div>
 `;
 }
 
 let agentAnimating = false;
+
+function updateStepper(targetStep) {
+  document.querySelectorAll('.step-item').forEach((item, index) => {
+    const n = index + 1;
+    const dot = item.querySelector('.step-dot');
+    const label = item.querySelector('.step-label');
+    const lines = item.querySelectorAll('.step-line');
+    if (!dot || !label) return;
+    dot.classList.remove('active', 'done');
+    label.classList.remove('active', 'done');
+    lines.forEach(l => l.classList.remove('done'));
+    if (n < targetStep) {
+      dot.classList.add('done');
+      label.classList.add('done');
+      lines.forEach(l => l.classList.add('done'));
+      dot.innerHTML = '<i class="ti ti-check" aria-hidden="true"></i>';
+    } else {
+      dot.textContent = String(n);
+      if (n === targetStep) {
+        dot.classList.add('active');
+        label.classList.add('active');
+        const prevLine = item.querySelector('.step-line');
+        if (prevLine) prevLine.classList.add('done');
+      }
+    }
+  });
+}
 
 function setStepChecking(id, label) {
   const el = document.getElementById(id);
@@ -339,11 +368,20 @@ function startAgentAnim(goToStep) {
     }, delays[i]);
   });
 
+  // Reveal damage confirmation section after first step completes
+  setTimeout(() => {
+    const dmgSection = document.getElementById('upload-damage-section');
+    if (dmgSection && !dmgSection.innerHTML.trim()) {
+      dmgSection.innerHTML = getDamageRightMarkup();
+      dmgSection.classList.add('visible');
+      wireDamageStep(goToStep);
+      updateStepper(2);
+    }
+  }, 1400);
+
+  // Finish animation — user stays on this view and clicks Weiter when ready
   setTimeout(() => {
     setStepDone('vc-4', t('upload.agentAddressDone'));
-    setTimeout(() => {
-      agentAnimating = false;
-      goToStep(2);
-    }, 800);
+    agentAnimating = false;
   }, 4800);
 }

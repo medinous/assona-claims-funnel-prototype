@@ -6,6 +6,7 @@
 
 import { funnelState } from './state.js';
 import { t } from './i18n.js';
+import { getPdfUrl } from './pdf-viewer.js';
 
 /* ─── Data ─── */
 const ITEMS = [
@@ -21,6 +22,16 @@ const ITEMS = [
   { name: 'Bremsscheibe Vorn', gross: '63,06', net: '52,99', status: 'ok', cause: 'Fall/Sturz/Unfall mit Beteiligung', bauteil: 'Bremse', type: 'VR', qty: 1, causes: ['Fall/Sturz/Unfall mit Beteiligung', 'Fall/Sturz/Unfall ohne Beteiligung'], validate: [] },
   { name: 'Montage Bremsscheibe', gross: '59,50', net: '50,00', status: 'warn', cause: '', bauteil: '', type: null, qty: 1, causes: ['Fall/Sturz/Unfall mit Beteiligung', 'Abnutzung, Verschleiss'], validate: ['bauteil'] },
   { name: 'Pedale', gross: '35,64', net: '29,95', status: 'ok', cause: 'Fall/Sturz/Unfall ohne Beteiligung', bauteil: 'Pedal', type: null, qty: 1, causes: ['Fall/Sturz/Unfall ohne Beteiligung', 'Bedienfehler/Ungeschicklichkeit'], validate: [] },
+];
+
+const ALL_CAUSES = [
+  'Abnutzung, Verschleiss',
+  'Fall/Sturz/Unfall ohne Beteiligung',
+];
+
+const ARBEIT_ITEMS = [
+  'Arbeit an Komponenten',
+  'Sonstige Arbeit',
 ];
 
 const BAUTEIL_GROUPS = [
@@ -89,28 +100,72 @@ const CLAIM_ID = '189115';
 
 /* ─── Step 3 markup ─── */
 export function getStep3Markup() {
-  const docType = funnelState.upload?.documentType || 'invoice';
-  const pageTitle = docType === 'estimate'
-    ? 'Kostenvoranschlagsfelder validieren'
-    : 'Rechnungsfelder validieren';
-
   return `
 <div class="validate-content">
 
-  <div class="val-page-title-row">
-    <h2 class="val-page-title">${pageTitle}</h2>
-    <div class="val-alert-bar warn" id="val-alert" role="alert">
-      <div class="val-alert-inner">
-        <i class="ti ti-alert-triangle val-alert-icon" aria-hidden="true" id="val-alert-icon"></i>
-        <span id="alert-title">${t('val.alertTitleMissingAndValidate', { missing: '2', count: '6' })}</span>
+  <!-- ── Title bar ── -->
+  <div class="val-title-bar">
+    <div class="val-title-left">
+      <h2 class="val-page-title">Validieren</h2>
+      <div class="val-alert-bar warn" id="val-alert" role="alert">
+        <div class="val-alert-inner">
+          <i class="ti ti-alert-triangle val-alert-icon" aria-hidden="true" id="val-alert-icon"></i>
+          <span id="alert-title">${t('val.alertTitleMissingAndValidate', { missing: '2', count: '6' })}</span>
+        </div>
+      </div>
+    </div>
+    <div class="val-title-right">
+      <h4 class="val-rechnung-h3">
+        <button type="button" class="val-rechnung-toggle" id="val-rechnung-toggle" aria-expanded="true" aria-controls="val-rechnung-bar">
+          <span>${t('val.sectionInvoiceDetails')}</span>
+          <i class="ti ti-chevron-up val-rechnung-chevron" aria-hidden="true"></i>
+        </button>
+      </h4>
+      <button type="button" class="btn-view-pdf" id="btn-view-pdf-val">
+        <i class="ti ti-eye" aria-hidden="true"></i>
+        <span>${t('val.viewPdf')}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Collapsible invoice details bar (expanded by default) ── -->
+  <div class="val-rechnung-bar" id="val-rechnung-bar">
+    <div class="val-rechnung-form">
+      <div class="val-rechnung-field">
+        <span class="val-rechnung-label">${t('val.frameId')}</span>
+        <div class="field-input-sm disabled">00RDLS98221</div>
+      </div>
+      <div class="val-rechnung-field">
+        <span class="val-rechnung-label">${t('val.invoiceDate')}<span class="form-label-hint" id="hint-invoice-date">${t('val.hintSelect')}</span></span>
+        <div class="field-with-icon date-field-wrap">
+          <button type="button" class="date-picker-btn" data-for="invoice-date-input" aria-label="${t('val.datePickerAria')}"><i class="ti ti-calendar" aria-hidden="true"></i></button>
+          <div class="date-field-input-area">
+            <span class="date-display" id="invoice-date-display">20.09.2025</span>
+            <input type="date" id="invoice-date-input" value="2025-09-20" class="date-input-native" aria-label="${t('val.invoiceDate')}" />
+          </div>
+        </div>
+      </div>
+      <div class="val-rechnung-field">
+        <span class="val-rechnung-label">${t('val.damageDate')}<span class="form-label-hint" id="hint-damage-date">${t('val.hintSelect')}</span></span>
+        <div class="field-with-icon date-field-wrap">
+          <button type="button" class="date-picker-btn" data-for="damage-date-input" aria-label="${t('val.datePickerAria')}"><i class="ti ti-calendar" aria-hidden="true"></i></button>
+          <div class="date-field-input-area">
+            <span class="date-display" id="damage-date-display">20.09.2025</span>
+            <input type="date" id="damage-date-input" value="2025-09-20" class="date-input-native" aria-label="${t('val.damageDate')}" />
+          </div>
+        </div>
+      </div>
+      <div class="val-rechnung-field val-rechnung-field--grow">
+        <span class="val-rechnung-label">${t('val.damageDesc')}<span class="form-label-hint" id="hint-damage-desc">${t('val.hintEnter')}</span></span>
+        <textarea class="val-rechnung-textarea" id="damage-desc-input" placeholder="${t('val.placeholderDamageDesc')}">Lenker gebrochen nach Sturz durch verklemmte Kette</textarea>
       </div>
     </div>
   </div>
 
-  <div class="val-main">
-
-    <div class="val-table-panel">
-      <div class="val-table-title-row">
+  <!-- ── Scrollable table area ── -->
+  <div class="val-scroll-area">
+    <div class="val-table-section">
+      <div class="val-table-titlebar">
         <span class="val-table-title"><span id="items-count">${ITEMS.length}</span> ${t('val.sectionItems')}</span>
         <div class="val-table-controls">
           <span class="controller-label">${t('val.showAmountsAs')}</span>
@@ -133,105 +188,44 @@ export function getStep3Markup() {
         <table class="val-table" role="grid">
           <thead>
             <tr class="val-thead-row">
-              <th class="val-th val-th--name">Item Name</th>
-              <th class="val-th val-th--cause">Damage Cause</th>
-              <th class="val-th val-th--component">Component</th>
-              <th class="val-th val-th--type">Type</th>
-              <th class="val-th val-th--qty">Quantity</th>
-              <th class="val-th val-th--net">Net Amount</th>
-              <th class="val-th val-th--gross">Gross Amount</th>
-              <th class="val-th val-th--status" aria-label="Status"></th>
+              <th class="val-th val-th--name">${t('val.thItemName')}</th>
+              <th class="val-th val-th--cause">${t('val.thDamageCause')}</th>
+              <th class="val-th val-th--component">${t('val.thComponent')}</th>
+              <th class="val-th val-th--type">${t('val.thType')}</th>
+              <th class="val-th val-th--qty">${t('val.thQuantity')}</th>
+              <th class="val-th val-th--net">${t('val.thNetAmount')}</th>
+              <th class="val-th val-th--gross">${t('val.thGrossAmount')}</th>
             </tr>
           </thead>
           <tbody id="val-table-body"></tbody>
         </table>
       </div>
     </div>
+  </div>
 
-    <div class="val-invoice-panel">
-      <div class="val-invoice-panel-inner">
-        <div class="val-panel-title-row">
-          <h2 class="val-panel-title">${t('val.sectionInvoiceDetails')}</h2>
-        </div>
-        <div class="val-panel-form">
-
-          <div class="val-form-row">
-            <label class="val-form-label">${t('val.frameId')}</label>
-            <div class="val-form-field"><div class="field-input-sm disabled">00RDLS98221</div></div>
-          </div>
-
-          <div class="val-form-row val-form-row--date">
-            <label class="val-form-label">${t('val.invoiceDate')}<span class="form-label-hint" id="hint-invoice-date">${t('val.hintSelect')}</span></label>
-            <div class="val-form-field">
-              <div class="field-with-icon date-field-wrap">
-                <button type="button" class="date-picker-btn" data-for="invoice-date-input" aria-label="${t('val.datePickerAria')}"><i class="ti ti-calendar" aria-hidden="true"></i></button>
-                <div class="date-field-input-area">
-                  <span class="date-display" id="invoice-date-display">20.09.2025</span>
-                  <input type="date" id="invoice-date-input" value="2025-09-20" class="date-input-native" aria-label="${t('val.invoiceDate')}" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="val-form-row val-form-row--date">
-            <label class="val-form-label">${t('val.damageDate')}<span class="form-label-hint" id="hint-damage-date">${t('val.hintSelect')}</span></label>
-            <div class="val-form-field">
-              <div class="field-with-icon date-field-wrap">
-                <button type="button" class="date-picker-btn" data-for="damage-date-input" aria-label="${t('val.datePickerAria')}"><i class="ti ti-calendar" aria-hidden="true"></i></button>
-                <div class="date-field-input-area">
-                  <span class="date-display" id="damage-date-display">20.09.2025</span>
-                  <input type="date" id="damage-date-input" value="2025-09-20" class="date-input-native" aria-label="${t('val.damageDate')}" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="val-form-row val-form-row--textarea">
-            <label class="val-form-label">${t('val.damageDesc')}<span class="form-label-hint" id="hint-damage-desc">${t('val.hintEnter')}</span></label>
-            <div class="val-form-field">
-              <textarea class="field-textarea" id="damage-desc-input" placeholder="${t('val.placeholderDamageDesc')}">Lenker gebrochen nach Sturz durch verklemmte Kette</textarea>
-            </div>
-          </div>
-
-          <div class="val-form-row">
-            <label class="val-form-label">${t('val.totalNetLabel')}</label>
-            <div class="val-form-field">
-              <div class="amount-field-input-wrap disabled">
-                <span id="total-net-display" class="amount-value-disabled">677,28</span>
-                <span class="amount-suffix">EUR</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="val-form-row">
-            <label class="val-form-label">${t('val.taxRateLabel')}</label>
-            <div class="val-form-field">
-              <div class="amount-field-input-wrap disabled">
-                <span id="total-tax-display" class="amount-value-disabled">19,00</span>
-                <span class="amount-suffix">%</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="val-form-row">
-            <label class="val-form-label">${t('val.totalGrossLabel')}</label>
-            <div class="val-form-field">
-              <div class="amount-field-input-wrap disabled">
-                <span id="total-gross-display" class="amount-value-disabled">805,69</span>
-                <span class="amount-suffix">EUR</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        <button type="button" class="btn-view-pdf" id="btn-view-pdf-val">
-          <i class="ti ti-eye" aria-hidden="true"></i>
-          <span>${t('val.viewPdf')}</span>
-        </button>
+  <!-- ── Totals bar (sticky) ── -->
+  <div class="val-totals-bar">
+    <span class="val-totals-title">${t('val.totalTitle')}</span>
+    <div class="val-totals-fields">
+      <div class="val-totals-field">
+        <span class="val-totals-label">${t('val.totalNetLabel')}</span>
+        <span class="val-totals-value" id="total-net-display">677,28</span>
+        <span class="val-totals-suffix">EUR</span>
+      </div>
+      <div class="val-totals-field">
+        <span class="val-totals-label">${t('val.taxRateLabel')}</span>
+        <span class="val-totals-value" id="total-tax-display">19,00</span>
+        <span class="val-totals-suffix">%</span>
+      </div>
+      <div class="val-totals-field">
+        <span class="val-totals-label">${t('val.totalGrossLabel')}</span>
+        <span class="val-totals-value" id="total-gross-display">805,69</span>
+        <span class="val-totals-suffix">EUR</span>
       </div>
     </div>
   </div>
 
+  <!-- ── Footer (sticky) ── -->
   <div class="val-footer">
     <button type="button" class="btn-back" id="btn-back-val">
       <i class="ti ti-arrow-left" aria-hidden="true"></i>
@@ -268,27 +262,52 @@ function renderBauteilList(query, currentVal) {
   const q = (query || '').trim().toLowerCase();
   let html = '';
   let totalVisible = 0;
-  BAUTEIL_GROUPS.forEach((group, gi) => {
+
+  // ── ARBEIT section ──
+  const arbeitHeaderMatch = q && 'arbeit'.includes(q);
+  const arbeitMatches = ARBEIT_ITEMS.filter(item =>
+    !q || arbeitHeaderMatch || item.toLowerCase().includes(q)
+  );
+  if (arbeitMatches.length > 0) {
+    html += `<div class="dd-section">ARBEIT</div>`;
+    arbeitMatches.forEach(item => {
+      const sel = currentVal === item ? ' selected' : '';
+      const label = q && !arbeitHeaderMatch
+        ? item.replace(new RegExp(`(${escRe(q)})`, 'gi'), '<mark class="dd-highlight">$1</mark>')
+        : item;
+      html += `<div class="dd-item-wrap"><div class="dd-item${sel}" data-bauteil-value="${escHtml(item)}" role="option">${label}</div></div>`;
+      totalVisible++;
+    });
+  }
+
+  // ── KOMPONENTEN section ──
+  let komHtml = '';
+  let komCount = 0;
+  BAUTEIL_GROUPS.forEach((group) => {
     const categoryMatches = q && group.section.toLowerCase().includes(q);
     const matchingItems = group.items.filter(item =>
       !q || categoryMatches || item.toLowerCase().includes(q)
     );
     if (matchingItems.length === 0) return;
-    if (gi > 0 && totalVisible > 0) html += '<div class="dd-divider"></div>';
-    const sectionLabel = q && categoryMatches
-      ? group.section.replace(new RegExp(`(${escRe(q)})`, 'gi'), '<mark class="dd-highlight">$1</mark>')
-      : group.section;
-    html += `<div class="dd-section">${sectionLabel}</div>`;
     matchingItems.forEach(item => {
       const sel = currentVal === item ? ' selected' : '';
-      const itemLabel = q && !categoryMatches
+      const label = q && !categoryMatches
         ? item.replace(new RegExp(`(${escRe(q)})`, 'gi'), '<mark class="dd-highlight">$1</mark>')
         : item;
-      html += `<div class="dd-item-wrap"><div class="dd-item${sel}" data-bauteil-value="${escHtml(item)}" role="option"><span class="dd-check"><i class="ti ti-check" aria-hidden="true"></i></span>${itemLabel}</div></div>`;
+      komHtml += `<div class="dd-item-wrap"><div class="dd-item${sel}" data-bauteil-value="${escHtml(item)}" role="option">${label}</div></div>`;
+      komCount++;
       totalVisible++;
     });
   });
-  if (totalVisible === 0) html = `<div class="dd-empty">${t('val.noResultsFor', { query: '<strong>' + escHtml(query || '') + '</strong>' })}</div>`;
+  if (komCount > 0) {
+    if (arbeitMatches.length > 0) html += '<div class="dd-divider"></div>';
+    html += `<div class="dd-section">KOMPONENTEN</div>`;
+    html += komHtml;
+  }
+
+  if (totalVisible === 0) {
+    html = `<div class="dd-empty">${t('val.noResultsFor', { query: '<strong>' + escHtml(query || '') + '</strong>' })}</div>`;
+  }
   list.innerHTML = html;
   const selEl = list.querySelector('.dd-item.selected');
   if (selEl) selEl.scrollIntoView({ block: 'nearest' });
@@ -347,8 +366,15 @@ function flashTrigger(id) {
 
 function selectBauteil(idx, val) {
   itemState[idx].bauteil = val;
+  if (ARBEIT_ITEMS.includes(val)) {
+    itemState[idx].cause = '–';
+    itemState[idx].types = [];
+    ITEMS[idx].type = null;
+  }
   closeDropdown();
   buildTable();
+  updateTotals();
+  updateValidation();
   flashTrigger(`bauteil-trigger-${idx}`);
 }
 
@@ -377,9 +403,9 @@ function openCauseDropdown(event, idx) {
   activeCauseIdx = idx;
   dropdownMode = 'cause';
 
-  const options = item.causes.map(c => {
+  const options = ALL_CAUSES.map(c => {
     const sel = state.cause === c ? ' selected' : '';
-    return `<div class="dd-item-wrap"><div class="dd-item${sel}" data-cause-value="${escHtml(c)}" role="option"><span class="dd-check"><i class="ti ti-check" aria-hidden="true"></i></span>${escHtml(c)}</div></div>`;
+    return `<div class="dd-item-wrap"><div class="dd-item${sel}" data-cause-value="${escHtml(c)}" role="option">${escHtml(c)}</div></div>`;
   }).join('');
 
   dd.innerHTML = `<div class="dd-list" role="listbox" style="padding: 4px 0;">${options}</div>`;
@@ -464,6 +490,8 @@ function buildTable() {
   const tbody = document.getElementById('val-table-body');
   if (!tbody) return;
   tbody.innerHTML = '';
+  const countEl = document.getElementById('items-count');
+  if (countEl) countEl.textContent = String(ITEMS.length);
 
   ITEMS.forEach((item, idx) => {
     const state = itemState[idx];
@@ -477,9 +505,7 @@ function buildTable() {
     const isWarn = needsCause || needsBauteil || needsType || hasUnvalidated;
 
     // Cause trigger
-    const causeDisplay = state.cause
-      ? (state.cause.length > 14 ? state.cause.slice(0, 13) + '…' : state.cause)
-      : t('val.selectOne');
+    const causeDisplay = state.cause || t('val.selectOne');
     const causeBtnClass = [
       'val-dropdown-trigger',
       needsCause ? 'val-dropdown--empty' : '',
@@ -497,7 +523,7 @@ function buildTable() {
     // Type cell
     let typeHtml = '';
     if (item.type === null) {
-      typeHtml = `<span class="val-type-none">None</span>`;
+      typeHtml = `<span class="val-type-none">${t('val.typeNone')}</span>`;
     } else {
       const btns = ['VR', 'HR'].map(tp => {
         const sel = state.types.includes(tp) ? ' selected' : '';
@@ -506,15 +532,21 @@ function buildTable() {
       typeHtml = `<div class="val-type-wrap">${btns}</div>`;
     }
 
-    const statusHtml = isWarn
-      ? `<i class="ti ti-alert-triangle val-status-warn" aria-hidden="true"></i>`
-      : `<i class="ti ti-check val-status-ok" aria-hidden="true"></i>`;
+
+    const nameCellHtml = item.isNew
+      ? `<td class="val-td val-td--name val-td--new-row">
+           <button type="button" class="val-row-delete" data-delete-idx="${idx}" aria-label="Zeile löschen">
+             <i class="ti ti-trash" aria-hidden="true"></i>
+           </button>
+           <input type="text" class="val-name-input" id="name-input-${idx}" value="${escHtml(item.name)}" placeholder="${t('val.newItemPlaceholder')}" data-idx="${idx}" />
+         </td>`
+      : `<td class="val-td val-td--name">${escHtml(item.name)}</td>`;
 
     const tr = document.createElement('tr');
     tr.className = `val-tr${isWarn ? ' val-tr--warn' : ''}`;
     tr.dataset.idx = String(idx);
     tr.innerHTML = `
-      <td class="val-td val-td--name">${escHtml(item.name)}</td>
+      ${nameCellHtml}
       <td class="val-td val-td--cause">
         <button type="button" class="${causeBtnClass}" id="cause-trigger-${idx}" data-idx="${idx}" data-dropdown="cause"
           ${causeNeedsValidate ? `data-validate-idx="${idx}" data-validate-field="cause"` : ''}>
@@ -537,8 +569,8 @@ function buildTable() {
         <div class="val-qty-wrap${qtyNeedsValidate ? ' val-qty-wrap--warn' : ''}">
           <input type="text" inputmode="numeric" class="val-qty-input" id="qty-input-${idx}" value="${state.qty}" data-idx="${idx}" />
           <div class="val-qty-chevrons">
-            <button type="button" class="val-qty-btn" data-idx="${idx}" data-delta="1" tabindex="-1" aria-label="Increase">▲</button>
-            <button type="button" class="val-qty-btn" data-idx="${idx}" data-delta="-1" tabindex="-1" aria-label="Decrease">▼</button>
+            <button type="button" class="val-qty-btn" data-idx="${idx}" data-delta="1" tabindex="-1" aria-label="${t('val.qtyIncrease')}">▲</button>
+            <button type="button" class="val-qty-btn" data-idx="${idx}" data-delta="-1" tabindex="-1" aria-label="${t('val.qtyDecrease')}">▼</button>
           </div>
         </div>
       </td>
@@ -550,7 +582,6 @@ function buildTable() {
         ? `<td class="val-td val-td--gross"><div class="val-amount-wrap"><input type="text" inputmode="decimal" class="val-amount-input" id="gross-input-${idx}" value="${escHtml(state.gross)}" data-idx="${idx}" /><span class="val-amount-suffix">EUR</span></div></td>`
         : `<td class="val-td val-td--gross"><span class="val-amount-text" id="gross-display-${idx}">${escHtml(state.gross)} EUR</span></td>`
       }
-      <td class="val-td val-td--status">${statusHtml}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -560,6 +591,15 @@ function buildTable() {
     if (qtyEl) {
       qtyEl.addEventListener('input', () => { qtyEl.value = qtyEl.value.replace(/[^0-9]/g, ''); });
       qtyEl.addEventListener('blur', () => { setQty(idx, qtyEl.value); updateValidation(); buildTable(); });
+    }
+  });
+
+  // Wire name input for new (manually added) rows
+  ITEMS.forEach((item, idx) => {
+    if (!item.isNew) return;
+    const nameEl = document.getElementById(`name-input-${idx}`);
+    if (nameEl) {
+      nameEl.addEventListener('input', () => { ITEMS[idx].name = nameEl.value; });
     }
   });
 
@@ -780,6 +820,18 @@ export function wireValidationStep(goToStep) {
   updateTotals();
   updateValidation();
 
+  // Rechnungsdetails toggle
+  const rechnungToggle = document.getElementById('val-rechnung-toggle');
+  const rechnungBar = document.getElementById('val-rechnung-bar');
+  if (rechnungToggle && rechnungBar) {
+    rechnungToggle.addEventListener('click', () => {
+      const collapsed = rechnungBar.classList.toggle('collapsed');
+      rechnungToggle.setAttribute('aria-expanded', String(!collapsed));
+      const chevron = rechnungToggle.querySelector('.val-rechnung-chevron');
+      if (chevron) chevron.classList.toggle('collapsed', collapsed);
+    });
+  }
+
   // Date pickers
   [document.getElementById('invoice-date-input'), document.getElementById('damage-date-input')].forEach(input => {
     if (!input) return;
@@ -827,6 +879,19 @@ export function wireValidationStep(goToStep) {
   const tbody = document.getElementById('val-table-body');
   if (tbody) {
     tbody.addEventListener('click', (e) => {
+      const deleteBtn = e.target.closest('.val-row-delete');
+      if (deleteBtn) {
+        const idx = parseInt(deleteBtn.dataset.deleteIdx, 10);
+        if (!isNaN(idx)) {
+          ITEMS.splice(idx, 1);
+          itemState.splice(idx, 1);
+          buildTable();
+          updateTotals();
+          updateValidation();
+        }
+        return;
+      }
+
       const dropdownTrigger = e.target.closest('[data-dropdown]');
       const typeBtn = e.target.closest('.val-type-btn');
       const qtyBtn = e.target.closest('.val-qty-btn');
@@ -853,6 +918,42 @@ export function wireValidationStep(goToStep) {
     });
   }
 
+  // Tab navigation within a row
+  if (tbody) {
+    tbody.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const row = e.target.closest('tr[data-idx]');
+      if (!row) return;
+
+      const tabbable = Array.from(
+        row.querySelectorAll('input:not([tabindex="-1"]), button:not([tabindex="-1"])')
+      ).filter(el => !el.disabled);
+
+      const currentIdx = tabbable.indexOf(e.target);
+      if (currentIdx === -1) return;
+
+      e.preventDefault();
+      closeDropdown();
+
+      if (e.shiftKey) {
+        if (currentIdx > 0) tabbable[currentIdx - 1].focus();
+      } else {
+        if (currentIdx < tabbable.length - 1) {
+          tabbable[currentIdx + 1].focus();
+        } else {
+          // Last field in row → jump to first tabbable of next row
+          const allRows = Array.from(document.querySelectorAll('#val-table-body tr[data-idx]'));
+          const rowIdx = allRows.indexOf(row);
+          const nextRow = allRows[rowIdx + 1];
+          if (nextRow) {
+            const first = nextRow.querySelector('input:not([tabindex="-1"]), button:not([tabindex="-1"])');
+            if (first) first.focus();
+          }
+        }
+      }
+    });
+  }
+
   // Global dropdown close + item selection
   document.addEventListener('click', (e) => {
     const dd = document.getElementById('bauteil-dropdown');
@@ -871,6 +972,34 @@ export function wireValidationStep(goToStep) {
     }
     if (!dd.contains(e.target) && !e.target.closest('[data-dropdown]')) closeDropdown();
   });
+
+  // PDF – open in new tab
+  const btnViewPdfVal = document.getElementById('btn-view-pdf-val');
+  if (btnViewPdfVal) {
+    btnViewPdfVal.addEventListener('click', () => {
+      const url = getPdfUrl();
+      if (url) window.open(url, '_blank', 'noopener');
+    });
+  }
+
+  // Add item row
+  const btnAddItem = document.querySelector('.btn-add-item');
+  if (btnAddItem) {
+    btnAddItem.addEventListener('click', () => {
+      ITEMS.push({ name: '', gross: '0,00', net: '0,00', status: 'warn', cause: '', bauteil: '', type: null, qty: 1, causes: ALL_CAUSES, validate: [], isNew: true });
+      itemState.push({ cause: '', bauteil: '', types: [], qty: 1, gross: '0,00', net: '0,00', validatedFields: new Set() });
+      buildTable();
+      updateTotals();
+      updateValidation();
+      requestAnimationFrame(() => {
+        const lastRow = document.getElementById('val-table-body')?.lastElementChild;
+        if (lastRow) {
+          lastRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          lastRow.querySelector('.val-name-input')?.focus();
+        }
+      });
+    });
+  }
 
   // Back / Continue
   const btnBack = document.getElementById('btn-back-val');

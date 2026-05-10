@@ -12,6 +12,7 @@ import {
   pdfNavNext,
   showLoadedPdfInCurrentCard,
   getPdfDoc,
+  getPdfUrl,
 } from './pdf-viewer.js';
 import { showHome } from './auth.js';
 import { t } from './i18n.js';
@@ -64,45 +65,55 @@ export function getStep4Markup() {
   return `
 <div class="review-content">
 
-  <div class="review-page-title-row">
+  <!-- ── Title bar ── -->
+  <div class="review-title-bar">
     <h2 class="review-page-title">Schadenfall ${CLAIM_ID} überprüfen</h2>
-    <div class="review-alert-bar" role="status">
-      <div class="review-alert-inner">
-        <i class="ti ti-eye review-alert-icon" aria-hidden="true"></i>
-        <span>Vor dem Senden prüfen</span>
-      </div>
+    <div class="review-title-actions">
+      <button type="button" class="btn-back-to-edit" id="btn-back-to-edit-title">
+        <i class="ti ti-pencil" aria-hidden="true"></i>
+        <span>${t('review.goBackToEdit')}</span>
+      </button>
+      <button type="button" class="btn-view-pdf" id="btn-view-pdf-review">
+        <i class="ti ti-eye" aria-hidden="true"></i>
+        <span>${t('val.viewPdf')}</span>
+      </button>
     </div>
   </div>
 
+  <!-- ── 2-column main ── -->
   <div class="review-main">
 
-    <div class="review-table-panel">
-      <div class="review-table-title-row">
-        <span class="review-table-title">${REVIEW_ITEMS.length} ${t('review.itemsCount')}</span>
-      </div>
-      <div class="review-table-wrap">
-        <table class="review-table" role="grid">
-          <thead>
-            <tr class="review-thead-row">
-              <th class="review-th review-th--name">Item Name</th>
-              <th class="review-th review-th--cause">Damage Cause</th>
-              <th class="review-th review-th--component">Component</th>
-              <th class="review-th review-th--type">Type</th>
-              <th class="review-th review-th--qty">Quantity</th>
-              <th class="review-th review-th--net">Net Amount</th>
-              <th class="review-th review-th--gross">Gross Amount</th>
-            </tr>
-          </thead>
-          <tbody>${rowsHtml}</tbody>
-        </table>
+    <!-- Left: scrollable table -->
+    <div class="review-scroll-area">
+      <div class="review-table-section">
+        <div class="review-table-card">
+          <div class="review-table-card-header">
+            <span class="review-table-title">${REVIEW_ITEMS.length} ${t('review.itemsCount')}</span>
+          </div>
+          <div class="review-table-wrap">
+          <table class="review-table" role="grid">
+            <thead>
+              <tr class="review-thead-row">
+                <th class="review-th review-th--name">${t('val.thItemName')}</th>
+                <th class="review-th review-th--cause">${t('val.thDamageCause')}</th>
+                <th class="review-th review-th--component">${t('val.thComponent')}</th>
+                <th class="review-th review-th--type">${t('val.thType')}</th>
+                <th class="review-th review-th--qty">${t('val.thQuantity')}</th>
+                <th class="review-th review-th--net">${t('val.thNetAmount')}</th>
+                <th class="review-th review-th--gross">${t('val.thGrossAmount')}</th>
+              </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+          </div>
+        </div>
       </div>
     </div>
 
+    <!-- Right: details card -->
     <div class="review-details-panel">
       <div class="review-details-inner">
-        <div class="review-details-title-row">
-          <h2 class="review-details-title">${t('review.invoiceData')}</h2>
-        </div>
+        <h3 class="review-details-title">${t('review.invoiceData')}</h3>
         <div class="review-details-form">
           <div class="review-detail-row">
             <span class="review-detail-label">${t('review.frameNumber')}</span>
@@ -133,29 +144,26 @@ export function getStep4Markup() {
             <span class="review-detail-value">${escHtml(totals.gross)}</span>
           </div>
         </div>
-        <button type="button" class="btn-view-pdf" id="btn-view-pdf-review">
-          <i class="ti ti-eye" aria-hidden="true"></i>
-          <span>${t('val.viewPdf')}</span>
-        </button>
+        <div class="review-details-footer">
+          <div class="review-confirm-row" id="review-confirm-row">
+            <div class="review-confirm-box" id="review-confirm-box" aria-hidden="true"></div>
+            <span class="review-confirm-label">${t('review.confirmCheckbox')}</span>
+          </div>
+          <button type="button" class="btn-fertig" id="btn-open-submit-modal">
+            Fertig <i class="ti ti-check" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
     </div>
 
   </div>
 
+  <!-- ── Footer ── -->
   <div class="review-footer">
     <button type="button" class="btn-back" id="review-btn-back">
       <i class="ti ti-arrow-left" aria-hidden="true"></i>
       ${t('review.back')}
     </button>
-    <div class="review-footer-right">
-      <div class="review-confirm-row" id="review-confirm-row">
-        <div class="review-confirm-box" id="review-confirm-box" aria-hidden="true"></div>
-        <span class="review-confirm-label">${t('review.confirmCheckbox')}</span>
-      </div>
-      <button type="button" class="btn-fertig" id="btn-open-submit-modal">
-        Schaden einreichen ${CLAIM_ID} <i class="ti ti-check" aria-hidden="true"></i>
-      </button>
-    </div>
   </div>
 
   <div class="confirm-overlay" id="overlay-back-review">
@@ -215,10 +223,7 @@ export function getStep4Markup() {
       <button type="button" class="review-modal-close-btn" id="close-submit-modal" aria-label="${t('review.closeAria')}"><i class="ti ti-x" aria-hidden="true"></i></button>
     </div>
     <div class="review-modal-body">
-      <div>
-        <div class="field-label">${t('review.additionalNotes')}</div>
-        <textarea class="field-textarea" id="modal-comments" placeholder="${t('review.notesPlaceholder')}"></textarea>
-      </div>
+      <textarea class="field-textarea" id="modal-comments" placeholder="${t('review.notesPlaceholder')}"></textarea>
       <div class="review-upload-row">
         <div class="review-upload-row-text">
           <div class="review-upload-row-title">${t('review.mediaUpload')}</div>
@@ -230,7 +235,6 @@ export function getStep4Markup() {
       <p class="review-media-error" id="review-media-error"></p>
     </div>
     <div class="review-modal-footer">
-      <button type="button" class="btn-not-yet" id="btn-not-yet">${t('review.notYet')}</button>
       <button type="button" class="btn-submit-final active" id="btn-submit-final">
         <span id="submit-btn-label">${t('review.send')}</span>
         <i class="ti ti-send" id="submit-send-icon" aria-hidden="true"></i>
@@ -244,9 +248,8 @@ export function getStep4Markup() {
     <div class="review-success-confetti"></div>
     <div class="review-success-body">
       <div class="review-success-icon-wrap"><i class="ti ti-circle-check review-success-icon" aria-hidden="true"></i></div>
-      <div class="review-success-title" id="success-title">${t('review.successTitle')}</div>
+      <div class="review-success-title" id="success-title">${t('review.successTitle', { claimId: CLAIM_ID })}</div>
       <div class="review-success-subtitle">${t('review.successSubtitle')}</div>
-      <div class="review-success-id-chip"><i class="ti ti-id" aria-hidden="true"></i> ${t('review.claimNumberLabel')} <strong>${escHtml(CLAIM_ID)}</strong></div>
       <div class="review-success-actions">
         <button type="button" class="btn-success-primary" id="btn-go-home">${t('review.goHome')}</button>
       </div>
@@ -259,6 +262,7 @@ function openSubmitModal() {
   submitCheckboxChecked = true;
   updateSubmitButton();
   document.getElementById('overlay-submit')?.classList.add('visible');
+  requestAnimationFrame(() => document.getElementById('modal-comments')?.focus());
 }
 function closeSubmitModal() {
   document.getElementById('overlay-submit')?.classList.remove('visible');
@@ -340,18 +344,13 @@ export function wireReviewStep(goToStep) {
   if (navNext) navNext.addEventListener('click', pdfNavNext);
   pdfZoomApply();
 
-  // PDF overlay open / close
-  const btnViewPdf  = document.getElementById('btn-view-pdf-review');
-  const pdfOverlay  = document.getElementById('review-pdf-overlay');
-  const btnClosePdf = document.getElementById('pdf-close-btn-review');
-  if (btnViewPdf && pdfOverlay) {
+  // PDF – open in new tab
+  const btnViewPdf = document.getElementById('btn-view-pdf-review');
+  if (btnViewPdf) {
     btnViewPdf.addEventListener('click', () => {
-      pdfOverlay.classList.add('visible');
-      if (getPdfDoc()) showLoadedPdfInCurrentCard('pdf-fallback-review');
+      const url = getPdfUrl();
+      if (url) window.open(url, '_blank', 'noopener');
     });
-  }
-  if (btnClosePdf && pdfOverlay) {
-    btnClosePdf.addEventListener('click', () => pdfOverlay.classList.remove('visible'));
   }
 
   // Footer confirmation checkbox
@@ -389,6 +388,10 @@ export function wireReviewStep(goToStep) {
   const backCancel  = document.getElementById('btn-back-cancel-review');
   const backConfirm = document.getElementById('btn-back-confirm-review');
   if (btnBack && backOverlay)   btnBack.addEventListener('click', () => backOverlay.classList.add('visible'));
+
+  // "Go back to editing" in title bar also opens the same confirmation modal
+  const btnBackToEdit = document.getElementById('btn-back-to-edit-title');
+  if (btnBackToEdit && backOverlay) btnBackToEdit.addEventListener('click', () => backOverlay.classList.add('visible'));
   if (backCancel && backOverlay) backCancel.addEventListener('click', () => backOverlay.classList.remove('visible'));
   if (backConfirm && backOverlay) {
     backConfirm.addEventListener('click', () => { backOverlay.classList.remove('visible'); goToStep(3); });
@@ -397,7 +400,6 @@ export function wireReviewStep(goToStep) {
 
   // Submit modal
   document.getElementById('close-submit-modal')?.addEventListener('click', closeSubmitModal);
-  document.getElementById('btn-not-yet')?.addEventListener('click', closeSubmitModal);
   document.getElementById('btn-submit-final')?.addEventListener('click', triggerSubmit);
 
   // Media upload
@@ -407,7 +409,7 @@ export function wireReviewStep(goToStep) {
       const input = document.createElement('input');
       input.type = 'file';
       input.multiple = true;
-      input.accept = 'image/*,video/*';
+      input.accept = 'image/*,video/*,application/pdf';
       input.onchange = () => {
         const files = input.files;
         const list = document.getElementById('review-media-list');
@@ -419,8 +421,30 @@ export function wireReviewStep(goToStep) {
         const incoming = Array.from(files);
         if (incoming.length > remaining) setMediaError(t('review.mediaMaxError'));
         else setMediaError('');
+
+        function makeRemoveBtn(item) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'review-media-remove';
+          btn.setAttribute('aria-label', 'Entfernen');
+          btn.innerHTML = '<i class="ti ti-x" aria-hidden="true"></i>';
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            item.remove();
+            mediaCount = Math.max(0, mediaCount - 1);
+            const cnt = list.querySelectorAll('.review-media-item').length;
+            if (cnt < max) setMediaError('');
+            updateMediaDescription();
+          });
+          return btn;
+        }
+
         incoming.slice(0, remaining).forEach(file => {
-          if (file.type && file.type.startsWith('image/')) {
+          const isPdf = file.type === 'application/pdf';
+          const isImage = file.type && file.type.startsWith('image/');
+          const isVideo = file.type && file.type.startsWith('video/');
+
+          if (isImage) {
             const reader = new FileReader();
             const item = document.createElement('div');
             item.className = 'review-media-item loading';
@@ -428,6 +452,7 @@ export function wireReviewStep(goToStep) {
             spinner.className = 'review-media-spinner';
             item.appendChild(spinner);
             list.appendChild(item);
+            const removeBtn = makeRemoveBtn(item);
             reader.onload = (e) => {
               item.classList.remove('loading');
               item.innerHTML = '';
@@ -436,8 +461,21 @@ export function wireReviewStep(goToStep) {
               img.src = String(e.target?.result || '');
               img.alt = file.name || 'Uploaded image';
               item.appendChild(img);
+              item.appendChild(removeBtn);
             };
             reader.readAsDataURL(file);
+            mediaCount += 1;
+          } else if (isPdf || isVideo) {
+            const item = document.createElement('div');
+            item.className = 'review-media-item review-media-item--doc';
+            const iconName = isPdf ? 'ti-file-type-pdf' : 'ti-file-type-video';
+            const shortName = file.name.length > 14 ? file.name.slice(0, 12) + '…' : file.name;
+            item.innerHTML = `
+              <i class="ti ${iconName} review-media-doc-icon" aria-hidden="true"></i>
+              <span class="review-media-doc-name">${escHtml(shortName)}</span>
+            `;
+            item.appendChild(makeRemoveBtn(item));
+            list.appendChild(item);
             mediaCount += 1;
           }
         });

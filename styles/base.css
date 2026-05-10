@@ -69,6 +69,7 @@ button {
 
 .modal-shell {
   position: relative;
+  isolation: isolate;
   width: 100%;
   height: 100%;
   background: var(--n0);
@@ -252,19 +253,40 @@ button {
   color: var(--n700);
 }
 
-/* Global heading typography – Uni Neue */
-h1,
-h2,
-h3 {
+/* Global heading typography – Uni Neue (matches Figma type scale) */
+h1, h2, h3, h4 {
   font-family: 'Uni Neue', var(--ff-heading), system-ui, -apple-system,
     BlinkMacSystemFont, sans-serif;
+  margin: 0;
+  color: var(--text-primary, var(--n1000));
+}
+
+h1 {
+  font-size: var(--text-2xl);    /* 32px */
   font-weight: var(--fw-bold);
+  line-height: 40px;
+  letter-spacing: -0.192px;
+}
+
+h2 {
+  font-size: var(--text-xl);     /* 24px */
+  font-weight: var(--fw-bold);
+  line-height: 24px;
+  letter-spacing: -0.144px;
+}
+
+h3 {
+  font-size: var(--text-lg);     /* 18px */
+  font-weight: var(--fw-bold);
+  line-height: 24px;
+  letter-spacing: -0.108px;
 }
 
 h4 {
-  font-family: 'Uni Neue', var(--ff-heading), system-ui, -apple-system,
-    BlinkMacSystemFont, sans-serif;
+  font-size: var(--text-md);     /* 16px */
   font-weight: var(--fw-regular);
+  line-height: 20px;
+  letter-spacing: -0.096px;
 }
 
 /* Content area — sticky below nav-header; stepper scrolls away behind it */
@@ -369,6 +391,28 @@ h4 {
   background: var(--a400);
   transform: translateY(-1px);
 }
+
+/* ─── Secondary button (muted lime + depth shadow) ─── */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 40px;
+  padding: 0 var(--space-4);
+  border-radius: var(--r-sm);
+  border: none;
+  border-bottom: 2px solid var(--stroke-ui-medium);
+  background: var(--pastelY100);
+  font-family: var(--ff-body);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--n1000);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--duration-fast);
+}
+.btn-secondary:hover { background: var(--pastelY200); }
 
 /* Proto nav (bottom floating bar) */
 .proto-nav {

@@ -230,13 +230,13 @@
 }
 .upload-agent-right-inner {
   width: 100%;
-  max-width: 208px;
+  max-width: 416px;
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
 }
 
-/* Right panel: 50%. Steps block anchored to the left edge (align-items: flex-start). */
+/* Right panel: 50%. Content anchored to the left edge, mirroring the PDF panel. */
 .upload-agent-right {
   flex: 1 1 0;
   min-width: 0;
@@ -245,7 +245,27 @@
   align-items: flex-start;
   justify-content: flex-start;
   padding: 0;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ─── Damage section injected below agent steps ─── */
+.upload-damage-section {
+  width: 100%;
+  max-width: 416px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-6) 0 var(--space-6);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+.upload-damage-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
 }
 
 /* ─── PDF card (same as index_03: expand/collapse) ─── */

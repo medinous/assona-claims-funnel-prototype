@@ -13,6 +13,7 @@ let pdfZoomIdx = PDF_ZOOM_STEPS.indexOf(1.0);
 let pdfDoc = null;
 let pdfPageNum = 1;
 let _renderTask = null;
+let _pdfBlobUrl = null;
 
 // Shared SVG paths for desktop expand / minimize icons
 export const PDF_EXPAND_SVG = {
@@ -139,8 +140,14 @@ function pdfFitToWidth(attempt) {
  * @param {File} file
  * @param {object} opts - { fallbackSelector: string } optional selector for fallback to hide
  */
+export function getPdfUrl() {
+  return _pdfBlobUrl;
+}
+
 export function loadPdfFromFile(file, opts = {}) {
   if (!file || typeof pdfjsLib === 'undefined') return Promise.reject(new Error('No file or PDF.js'));
+  if (_pdfBlobUrl) URL.revokeObjectURL(_pdfBlobUrl);
+  _pdfBlobUrl = URL.createObjectURL(file);
   const fallbackSelector = opts.fallbackSelector || '#pdf-fallback-upload';
   const reader = new FileReader();
   return new Promise((resolve, reject) => {

@@ -98,14 +98,6 @@ export function getStep2Markup() {
             <div class="alert-icon"><i class="ti ti-circle-check" aria-hidden="true"></i></div>
             <div class="alert-title">${t('damage.alertTitle')} <span class="alert-filename" id="alert-filename">${filename}</span></div>
           </div>
-          <button type="button" class="alert-close" id="alert-close" aria-label="${t('damage.closeAria')}">×</button>
-        </div>
-        <div class="alert-sub">${t('damage.alertSub')}</div>
-        <div class="alert-action">
-          <button type="button" class="btn-reupload" id="btn-reupload">
-            <i class="ti ti-upload" aria-hidden="true"></i>
-            ${t('damage.reupload')}
-          </button>
         </div>
       </div>
       <div class="damage-section" id="dmg-type-section">
@@ -131,6 +123,39 @@ export function getStep2Markup() {
   </div>
 </div>
 `;
+}
+
+export function getDamageRightMarkup() {
+  const filename = funnelState.upload?.pdfName || 'Rechnung-003.pdf';
+  return `
+    <div class="alert-banner" id="alert-banner">
+      <div class="alert-top">
+        <div class="alert-title-row">
+          <div class="alert-icon"><i class="ti ti-circle-check" aria-hidden="true"></i></div>
+          <div class="alert-title">${t('damage.alertTitle')} <span class="alert-filename" id="alert-filename">${filename}</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="damage-section" id="dmg-type-section">
+      <div class="damage-section-title">${t('damage.confirmType')}</div>
+      <div class="tags-wrap">
+        <div class="tag selected" id="dt-partial" data-type="partial">${t('damage.partial')} <span class="tag-x">×</span></div>
+        <div class="tag" id="dt-uvv" data-type="uvv">${t('damage.uvv')} <span class="tag-x">×</span></div>
+        <div class="tag disabled" id="dt-insp" data-type="inspection" title="${t('damage.inspectionTooltip')}">${t('damage.inspection')}</div>
+      </div>
+    </div>
+    <div class="damage-section" id="causes-section">
+      <div class="damage-section-title">${t('damage.confirmCauses')}</div>
+      <div class="tags-wrap" id="causes-wrap"></div>
+    </div>
+    <div class="cta-row">
+      <button type="button" class="btn-continue" id="btn-continue">
+        ${t('damage.continue')}
+        <i class="ti ti-arrow-right" aria-hidden="true"></i>
+      </button>
+      <span class="continue-hint" id="continue-hint">${t('damage.continueHintSelectCause')}</span>
+    </div>
+  `;
 }
 
 function render() {
@@ -291,16 +316,7 @@ function wirePdfZoomAndNav() {
 }
 
 export function wireDamageStep(goToStep) {
-  const alertBanner = document.getElementById('alert-banner');
-  const alertClose = document.getElementById('alert-close');
-  const btnReupload = document.getElementById('btn-reupload');
   const btnContinue = document.getElementById('btn-continue');
-
-  if (alertClose)
-    alertClose.addEventListener('click', () => {
-      if (alertBanner) alertBanner.style.display = 'none';
-    });
-  if (btnReupload) btnReupload.addEventListener('click', () => goToStep(1));
   if (btnContinue)
     btnContinue.addEventListener('click', () => {
       if (!btnContinue.classList.contains('on')) return;

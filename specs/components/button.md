@@ -65,14 +65,31 @@ color:      var(--text-on-primary);
 border-bottom-color: var(--stroke-ui-medium);
 ```
 
-### Secondary (Outline)
-Secondary actions, back buttons.
+### Secondary (Muted)
+Muted lime background with depth shadow. Use for secondary CTAs that share visual weight with the page (e.g. upload, reupload, auxiliary actions).
 
 ```css
-/* .dash-btn--secondary, .btn-back, .pager-btn, .confirm-btn-secondary */
-background:   var(--surface-card);
-border:       1px solid var(--border-default);
-color:        var(--text-secondary);
+/* .btn-secondary — defined in base.css */
+background:    var(--pastelY100);
+border:        none;
+border-bottom: 2px solid var(--stroke-ui-medium);
+color:         var(--n1000);
+
+/* Hover */
+background: var(--pastelY200);
+```
+
+### Secondary (Outline)
+Secondary actions, back buttons, and cancel-style navigation. White background with a 1px all-around border.
+
+```css
+/* .btn-back, .btn-back-to-edit, .confirm-btn-secondary */
+background:   var(--n0);
+border:       1px solid var(--n200);
+color:        var(--n700);
+
+/* Hover */
+background: var(--n50);
 ```
 
 ### Ghost
@@ -128,21 +145,22 @@ border:        none;
 
 | Property | Token |
 |---|---|
-| background (default) | `--surface-card` |
-| background (lime CTA) | `--surface-accent` |
-| background (lime hover) | `--surface-accent-hover` |
+| background (lime CTA) | `--a300` / `--surface-accent` |
+| background (lime hover) | `--a400` / `--surface-accent-hover` |
+| background (secondary muted) | `--pastelY100` |
+| background (secondary muted hover) | `--pastelY200` |
+| background (outline / back) | `--n0` |
 | background (teal) | `--color-primary-600` |
-| color (on lime) | `--text-on-accent` |
+| color (on lime / muted) | `--n1000` / `--text-on-accent` |
 | color (on teal) | `--text-on-primary` |
-| color (secondary) | `--text-secondary` |
-| border | `--border-default` |
-| border-bottom (depth) | `2px solid var(--stroke-ui-medium)` |
-| box-shadow (depth) | `--shadow-btn-inset` |
-| border-radius | `--radius-btn` |
-| font-family | `--font-body` |
-| font-size | `--text-sm` |
-| font-weight | `--fw-medium` |
-| transition | `--transition-all-fast` |
+| color (outline) | `--n700` |
+| border (outline) | `1px solid var(--n200)` |
+| border-bottom (depth shadow) | `2px solid var(--stroke-ui-medium)` |
+| border-radius | `--r-sm` (6px) |
+| font-family | `--ff-body` |
+| font-size | `--text-sm` (14px) |
+| font-weight | `--fw-medium` (500) |
+| transition | `--duration-fast` |
 
 ---
 
@@ -163,12 +181,17 @@ border:        none;
 ```html
 <!-- Primary lime CTA -->
 <button class="btn-continue on">
-  Continue <i data-lucide="arrow-right"></i>
+  Continue <i class="ti ti-arrow-right"></i>
 </button>
 
-<!-- Secondary / back -->
+<!-- Secondary (muted lime + depth shadow) -->
+<button class="btn-secondary">
+  <i class="ti ti-upload"></i> Neue Datei hochladen
+</button>
+
+<!-- Secondary (outline / back) -->
 <button class="btn-back">
-  <i data-lucide="arrow-left"></i> Back
+  <i class="ti ti-arrow-left"></i> Back
 </button>
 
 <!-- Destructive -->

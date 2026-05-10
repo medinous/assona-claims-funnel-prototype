@@ -139,25 +139,8 @@
   color: var(--n900);
 }
 
-.btn-reupload {
-  height: 36px;
-  padding: 0 var(--space-4);
-  border-radius: var(--r-sm);
-  border: 1px solid var(--n100);
-  background: var(--n0);
-  font-family: var(--ff-body);
-  font-size: var(--text-sm);
-  font-weight: var(--fw-medium);
-  color: var(--n1000);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  transition: background var(--duration-fast);
-}
-.btn-reupload:hover {
-  background: var(--n50);
-}
+/* btn-reupload inherits .btn-secondary from base.css */
+.btn-reupload { height: 36px; }
 
 /* ─── Damage sections ─── */
 .damage-section {
@@ -180,8 +163,8 @@
 
 /* Tag: default, selected, disabled. Use transparent border so hover outline doesn’t shift text. */
 .tag {
-  height: 28px;
-  padding: 0 9px;
+  min-height: 28px;
+  padding: var(--space-1) 9px;
   border-radius: var(--radius-full);
   border: 1px solid transparent;
   background: var(--pastelY50, #fafbf7);
@@ -189,7 +172,7 @@
   font-weight: var(--fw-medium);
   color: var(--n1000);
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: var(--space-2);
   transition: background var(--duration-fast), border-color var(--duration-fast), box-shadow var(--duration-fast);
@@ -205,7 +188,7 @@
   background: var(--a300, #eaf68f);
   border: 1px solid transparent;
   border-bottom: 2px solid var(--stroke-ui-medium);
-  padding: 0 9px;
+  padding: var(--space-1) 9px;
   color: var(--n1000);
 }
 .tag.selected:hover {
@@ -213,7 +196,7 @@
     linear-gradient(90deg, var(--a300) 0%, var(--a300) 100%);
   border: 1px solid transparent;
   border-bottom: none;
-  padding: 0 9px;
+  padding: var(--space-1) 9px;
 }
 .tag-x {
   display: none;

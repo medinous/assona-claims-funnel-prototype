@@ -502,6 +502,11 @@ textarea:invalid {
     inset: 0;
   }
 
+  /* Keep inset on funnel so all four rounded corners remain visible against sage-50 bg */
+  #view-funnel {
+    inset: var(--space-2);
+  }
+
   .login-shell {
     flex-direction: column;
     gap: var(--space-4);

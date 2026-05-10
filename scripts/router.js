@@ -72,7 +72,19 @@ function renderProtoNav(step) {
     });
 }
 
+const STEP4_OVERLAY_IDS = ['overlay-submit', 'overlay-success', 'review-pdf-overlay', 'overlay-back-review'];
+
+function cleanupStep4Overlays() {
+  const shell = document.querySelector('.modal-shell');
+  if (!shell) return;
+  STEP4_OVERLAY_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.parentElement === shell) el.remove();
+  });
+}
+
 function renderStepContent(step) {
+  cleanupStep4Overlays();
   const root = document.getElementById('step-root');
   if (!root) return;
 
@@ -96,6 +108,14 @@ function renderStepContent(step) {
 
   if (step === 4) {
     root.innerHTML = getStep4Markup();
+    // Overlays must be modal-shell children, not inside modal-content (sticky creates a stacking context trapping them below nav-header)
+    const shell = document.querySelector('.modal-shell');
+    if (shell) {
+      STEP4_OVERLAY_IDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) shell.appendChild(el);
+      });
+    }
     wireReviewStep(goToStep);
     return;
   }
